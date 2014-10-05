@@ -1,5 +1,5 @@
-# PHP Compatibility wrapper
+# PHP Compatibility layer
 
-A header for PHP extension that will allow writing code for PHP 5 and PHP 7 without using many `ifdef` conditions.
+A header for PHP extensions that will allow writing code for PHP 5 and PHP 7 without using too many `ifdef` compiler conditions.
 
-See [TODO list](https://github.com/bukka/phpc/blob/master/TODO.md) for more details about planned features.
+See [the TODO list](https://github.com/bukka/phpc/blob/master/TODO.md) for more details about planned features.
