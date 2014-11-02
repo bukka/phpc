@@ -71,9 +71,22 @@ typedef int  phpc_str_size_t;
 #define PHPC_ZPP_PATH_FLAG "p"
 #endif
 
+
+/* HASH */
+#define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
+		HashPosition _pos; \
+		for (zend_hash_internal_pointer_reset_ex(ht, &_pos); \
+			zend_hash_get_current_data_ex(ht, (void **) &_val, &_pos) == SUCCESS; \
+			zend_hash_move_forward_ex(ht, &_pos) )
+
+#define PHPC_HASH_FOREACH_END() } while (0)
+
+
 /* ZVAL */
 typedef zval * phpc_val;
-typedef zval ** phpc_pval;
+
+#define PHPC_TYPE   Z_TYPE_P
+#define PHPC_TYPE_P Z_TYPE_PP
 
 #define PHPC_VAL_TO_ZVAL(_pv, _zv) _zv = *(_pv)
 #define PHPC_VAL_TO_PZVAL(_pv, _zv) (void) _pv
@@ -102,6 +115,7 @@ typedef zend_long phpc_long_t;
 #define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc, _exc)
 #define PHPC_LONG_TO_LONG(_plv, _lv) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _lv = LONG_MAX, _lv = LONG_MIN)
 
+
 /* STRING */
 /* length type */
 typedef size_t    phpc_str_size_t;
@@ -122,9 +136,17 @@ typedef size_t    phpc_str_size_t;
 /* ZPP path flag */
 #define PHPC_PATH_ZPP_FLAG "p"
 
+
+/* HASH */
+#define PHPC_HASH_FOREACH_VAL ZEND_HASH_FOREACH_VAL
+#define PHPC_HASH_FOREACH_END ZEND_HASH_FOREACH_END
+
+
 /* ZVAL */
 typedef zval  phpc_val;
-typedef zval * phpc_val_ptr;
+
+#define PHPC_TYPE   Z_TYPE
+#define PHPC_TYPE_P Z_TYPE_P
 
 #define PHPC_VAL_TO_ZVAL(_pv, _zv) (void) _pv
 #define PHPC_VAL_TO_PZVAL(_pv, _zv) _zv = &(_pv)
