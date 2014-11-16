@@ -45,6 +45,7 @@ typedef int  phpc_str_size_t;
 /* accessor macros */
 #define PHPC_STR_VAL(_name) _name##__val
 #define PHPC_STR_LEN(_name) _name##__len
+#define PHPC_STR_LEN_UNUSED(_name) (void) PHPC_STR_LEN(_name);
 #define PHPC_STR_LEN_FMT "d"
 #define PHPC_STR_DECLARE(_name) char *PHPC_STR_VAL(_name); int PHPC_STR_LEN(_name)
 #define PHPC_STR_ARG(_name) char *PHPC_STR_VAL(_name), int PHPC_STR_LEN(_name)
@@ -74,12 +75,22 @@ typedef int  phpc_str_size_t;
 
 /* HASH */
 #define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
-		HashPosition _pos; \
-		for (zend_hash_internal_pointer_reset_ex(ht, &_pos); \
-			zend_hash_get_current_data_ex(ht, (void **) &_val, &_pos) == SUCCESS; \
-			zend_hash_move_forward_ex(ht, &_pos) )
+	HashPosition _pos; \
+	for (zend_hash_internal_pointer_reset_ex((ht), &_pos); \
+			zend_hash_get_current_data_ex((ht), (void **) &(_val), &_pos) == SUCCESS; \
+			zend_hash_move_forward_ex((ht), &_pos) ) {
 
-#define PHPC_HASH_FOREACH_END() } while (0)
+#define PHPC_HASH_FOREACH_KEY_VAL(ht, _h, _key, _val) \
+	PHPC_HASH_FOREACH_VAL(ht, _val) \
+		uint _str_length; \
+		ulong _num_index; ulong *_pnum_index = _h ? _h : &_num_index; \
+		zend_hash_get_current_key_ex(ht, &PHPC_STR_VAL(_key), &_str_length, _pnum_index, 0, &_pos); \
+		PHPC_STR_LEN(_key) = (int) _str_length; php_printf("%d\n", (int) _str_length);
+
+#define PHPC_HASH_FOREACH_STR_KEY_VAL(ht, _key, _val) \
+	PHPC_HASH_FOREACH_KEY_VAL(ht, NULL, _key, _val)
+
+#define PHPC_HASH_FOREACH_END() } } while (0)
 
 
 /* ZVAL */
@@ -153,8 +164,10 @@ typedef size_t    phpc_str_size_t;
 
 
 /* HASH */
-#define PHPC_HASH_FOREACH_VAL ZEND_HASH_FOREACH_VAL
-#define PHPC_HASH_FOREACH_END ZEND_HASH_FOREACH_END
+#define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL
+#define PHPC_HASH_FOREACH_KEY_VAL         ZEND_HASH_FOREACH_KEY_VAL
+#define PHPC_HASH_FOREACH_STR_KEY_VAL     ZEND_HASH_FOREACH_STR_KEY_VAL
+#define PHPC_HASH_FOREACH_END             ZEND_HASH_FOREACH_END
 
 
 /* ZVAL */

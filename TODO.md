@@ -5,13 +5,13 @@
 
 ## ZVAL 
 - MAKE_STD_ZVAL -> PHPC_MAKE_VAL (works phpcval and do nothing for PHP 7)
-- Z_*_PP : Z_*_P -> PHPC_*
-  - Z_TYPE_PP : Z_TYPE_P -> PHPC_TYPE
-  - ...
 
 ## ZPP (phpc_parse_parameters)
 - P, S (is it needed?)
 - Z is not supported
 
 ## HashTable
-- FOREACH macros
+- check key type (num or string) 
+  - it segfaults for string operation if num key...
+- fix possible overflow for key length (cast from `uint` to `int`)
+- add possibility to duplicate key (`zend_hash_get_current_key_ex`)
