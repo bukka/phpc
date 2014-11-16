@@ -29,6 +29,9 @@
 #error "Only PHP 5.2+ supported"
 #endif
 
+/* no operation */
+#define PHPC_NOOP ((void) 0)
+
 #if PHP_MAJOR_VERSION == 5
 
 /* LONG */
@@ -148,6 +151,7 @@ typedef size_t    phpc_str_size_t;
 /* accessor macros */
 #define PHPC_STR_VAL(_name) (_name)->val
 #define PHPC_STR_LEN(_name) (_name)->len
+#define PHPC_STR_LEN_UNUSED(_name) PHPC_NOOP
 #define PHPC_STR_LEN_FMT "zu"
 #define PHPC_STR_DECLARE(_name) zend_string *_name
 #define PHPC_STR_ARG(_name) zend_string *_name
