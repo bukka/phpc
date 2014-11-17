@@ -11,7 +11,5 @@
 - Z is not supported
 
 ## HashTable
-- check key type (num or string) 
-  - it segfaults for string operation if num key...
 - fix possible overflow for key length (cast from `uint` to `int`)
 - add possibility to duplicate key (`zend_hash_get_current_key_ex`)

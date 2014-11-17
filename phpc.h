@@ -35,7 +35,8 @@
 #if PHP_MAJOR_VERSION == 5
 
 /* LONG */
-typedef long phpc_long_t;
+typedef long  phpc_long_t;
+typedef ulong phpc_ulong_t;
 
 #define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) _lv = _plv
 #define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc, _exc)
@@ -83,15 +84,28 @@ typedef int  phpc_str_size_t;
 			zend_hash_get_current_data_ex((ht), (void **) &(_val), &_pos) == SUCCESS; \
 			zend_hash_move_forward_ex((ht), &_pos) ) {
 
-#define PHPC_HASH_FOREACH_KEY_VAL(ht, _h, _key, _val) \
+#define _PHPC_HASH_FOREACH_KEY_VAL(ht, _ph, _key, _val, _use_h) \
 	PHPC_HASH_FOREACH_VAL(ht, _val) \
 		uint _str_length; \
-		ulong _num_index; ulong *_pnum_index = _h ? _h : &_num_index; \
-		zend_hash_get_current_key_ex(ht, &PHPC_STR_VAL(_key), &_str_length, _pnum_index, 0, &_pos); \
-		PHPC_STR_LEN(_key) = (int) _str_length; php_printf("%d\n", (int) _str_length);
+		ulong _num_index, *_pnum_index; \
+		if (_use_h) { \
+			_pnum_index = _ph; \
+		} else { \
+			_pnum_index = &_num_index; \
+		} \
+		int _key_type = zend_hash_get_current_key_ex(ht, &PHPC_STR_VAL(_key), &_str_length, _pnum_index, 0, &_pos); \
+		if (_key_type == HASH_KEY_IS_STRING) { \
+			PHPC_STR_LEN(_key) = (int) _str_length; \
+		} else { \
+			PHPC_STR_VAL(_key) = NULL; \
+			PHPC_STR_LEN(_key) = 0; \
+		}
+
+#define PHPC_HASH_FOREACH_KEY_VAL(ht, _h, _key, _val) \
+	_PHPC_HASH_FOREACH_KEY_VAL(ht, &_h, _key, _val, 1)
 
 #define PHPC_HASH_FOREACH_STR_KEY_VAL(ht, _key, _val) \
-	PHPC_HASH_FOREACH_KEY_VAL(ht, NULL, _key, _val)
+	_PHPC_HASH_FOREACH_KEY_VAL(ht, NULL, _key, _val, 0)
 
 #define PHPC_HASH_FOREACH_END() } } while (0)
 
@@ -132,7 +146,8 @@ typedef zval * phpc_val;
 #else /* PHP 7 */
 
 /* LONG */
-typedef zend_long phpc_long_t;
+typedef zend_long  phpc_long_t;
+typedef zend_ulong phpc_ulong_t;
 
 #define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) \
 	if (_lv > LONG_MAX) { \
