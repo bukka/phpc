@@ -51,7 +51,7 @@ typedef int  phpc_str_size_t;
 #define PHPC_STR_LEN(_name) _name##__len
 #define PHPC_STR_LEN_UNUSED(_name) (void) PHPC_STR_LEN(_name);
 #define PHPC_STR_LEN_FMT "d"
-#defien PHPC_STR_EXISTS(_name) PHPC_STR_VAL(_name)
+#define PHPC_STR_EXISTS(_name) PHPC_STR_VAL(_name)
 #define PHPC_STR_DECLARE(_name) char *PHPC_STR_VAL(_name); int PHPC_STR_LEN(_name)
 #define PHPC_STR_ARG(_name) char *PHPC_STR_VAL(_name), int PHPC_STR_LEN(_name)
 #define PHPC_STR_PASS(_name) PHPC_STR_VAL(_name), PHPC_STR_LEN(_name)
