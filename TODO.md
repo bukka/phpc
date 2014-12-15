@@ -23,7 +23,7 @@
 
 ### Class and handler callbacks
 
-#### create_object (ex method for clone and new)
+#### create_object_ex (ex method for clone and new)
 - return
   - 5: `zend_object_value  (retval)`
   - 7: `zend_object *      (&intern->std)`
@@ -42,3 +42,11 @@
 - object store
   - 5: `zend_objects_store_put(intern, (zend_objects_store_dtor_t)zend_objects_destroy_object, (zend_objects_free_object_storage_t) object_free_storage_function, NULL TSRMLS_CC)`
   - 7: none (it's set in init)
+
+#### create_object
+- return
+  - 5: `zend_object_value  (retval)`
+  - 7: `zend_object *      (&intern->std)`
+- 2nd argument
+  - 5: NULL (intern reference)
+  - 7: 1    (whether to init props)
