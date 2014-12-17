@@ -34,3 +34,17 @@
 - 2nd argument
   - 5: NULL (intern reference)
   - 7: 1    (whether to init props)
+
+#### clone_obj
+- return
+  - 5: `zend_object_value  (retval)`
+  - 7: `zend_object *      (&intern->std)`
+- new object : `new_obj`
+  - 5: reference arg to create_object_ex
+  - 7: XtOffsetOf of the create_object_ex result
+- new object value : `new_ov`
+  - 5: result of create_object_ex
+  - 7: none
+- clone members
+  - 5: `zend_objects_clone_members(&new_obj->std, new_ov, &old_obj->std, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC)`
+  - 7: `zend_objects_clone_members(&new_obj->std, &old_obj->std TSRMLS_CC)`
