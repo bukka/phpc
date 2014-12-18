@@ -48,3 +48,8 @@
 - clone members
   - 5: `zend_objects_clone_members(&new_obj->std, new_ov, &old_obj->std, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC)`
   - 7: `zend_objects_clone_members(&new_obj->std, &old_obj->std TSRMLS_CC)`
+
+#### compare_object
+- get object from `zval`s
+  - 5: zend_object_store_get_object(d1 TSRMLS_CC)
+  - 7: from offset : `((char*)(obj) - XtOffsetOf(php_object_struct, std))`
