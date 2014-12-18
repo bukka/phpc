@@ -52,4 +52,4 @@
 #### compare_object
 - get object from `zval`s
   - 5: zend_object_store_get_object(d1 TSRMLS_CC)
-  - 7: from offset : `((char*)(obj) - XtOffsetOf(php_object_struct, std))`
+  - 7: from offset : `(php_object_struct *)((char*)(obj) - XtOffsetOf(php_object_struct, std))`
