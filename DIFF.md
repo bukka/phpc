@@ -2,7 +2,13 @@
 
 ## Object
 
-### Class and handler callbacks
+### Common
+- get object from `zval`s
+  - 5: zend_object_store_get_object(d1 TSRMLS_CC)
+  - 7: from offset : `(php_object_struct *)((char*)(obj) - XtOffsetOf(php_object_struct, std))`
+
+
+### Handlers
 - extra handlers in 7
   - `handlers.offset = XtOffsetOf(php_object_struct, std)`
   - `handlers.free_obj = object_free_storage_function
@@ -50,27 +56,26 @@
   - 7: `zend_objects_clone_members(&new_obj->std, &old_obj->std TSRMLS_CC)`
 
 #### compare_object
-- get object from `zval`s
-  - 5: zend_object_store_get_object(d1 TSRMLS_CC)
-  - 7: from offset : `(php_object_struct *)((char*)(obj) - XtOffsetOf(php_object_struct, std))`
+- get object from `zval`s (see above)
 
 #### get_gc
 - table pointer (second argument)
   - 5: `zval ***table`
   - 7: `zval **table`
 
-### get_properties
-- get object from `zval`s
-  - 5: zend_object_store_get_object(d1 TSRMLS_CC)
-  - 7: from offset : `(php_object_struct *)((char*)(obj) - XtOffsetOf(php_object_struct, std))`
+#### get_properties
 - modifying existing props from `zend_std_get_properties`
   - 5: `zval *`: use `MAKE_STD_ZVAL` and then save
   - 7: `zval`: save as it is
 
-### free_storage
-- get object from `zval`s
-  - 5: zend_object_store_get_object(d1 TSRMLS_CC)
-  - 7: from offset : `(php_object_struct *)((char*)(obj) - XtOffsetOf(php_object_struct, std))`
+#### free_storage
+- get object from `zval`s (see above)
 - free object
   - 5: `efree(intern)`
   - 7: do nothing
+
+### Methods
+- all have the common issue for getting object from zval (see above)
+
+### __construct
+- 7: It is possible to call `ZEND_CTOR_MAKE_NULL()` if init fails
