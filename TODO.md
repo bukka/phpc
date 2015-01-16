@@ -13,3 +13,8 @@
 ## HashTable
 - fix possible overflow for key length (cast from `uint` to `int`)
 - add possibility to duplicate key (`zend_hash_get_current_key_ex`)
+
+## Object
+
+### Init
+- Add macros for differences defined in [the DIFF list](DIFF.md)
