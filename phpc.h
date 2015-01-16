@@ -78,6 +78,11 @@ typedef int  phpc_str_size_t;
 #endif
 
 
+/* OBJECT */
+#define PHPC_OBJECT_MEMBER_FIRST zend_object std;
+#define PHPC_OBJECT_MEMBER_LAST
+
+
 /* HASH */
 #define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
 	HashPosition _pos; \
@@ -182,6 +187,11 @@ typedef size_t    phpc_str_size_t;
 
 /* ZPP path flag */
 #define PHPC_PATH_ZPP_FLAG "p"
+
+
+/* OBJECT */
+#define PHPC_OBJECT_MEMBER_FIRST
+#define PHPC_OBJECT_MEMBER_LAST zend_object std;
 
 
 /* HASH */
