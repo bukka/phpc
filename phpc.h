@@ -78,18 +78,36 @@ typedef int  phpc_str_size_t;
 #endif
 
 
+/* -------------- start  tmp common ---------------*/
+#define PHPC_OBJ_GET_HANDLER_NAME(_name, _type) _name##__##_type
+#define PHPC_OBJ_GET_HANDLER_FCE_DEF(_rtype, _name, _type) \
+	static _rtype PHPC_OBJ_GET_HANDLER_NAME(_name, _type)
+/* -------------- finish tmp common ---------------*/
+
 /* OBJECT */
+#define PHPC_CLASS_REGISTER_EX(_orig_class_entry, _parent_ce, _parent_name) \
+	zend_register_internal_class_ex(&_orig_class_entry, _parent_ce, _parent_name TSRMLS_CC)
+#define PHPC_CLASS_REGISTER(_orig_class_entry) \
+	zend_register_internal_class(&_orig_class_entry TSRMLS_CC)
+
 #define PHPC_OBJ_MEMBER_FIRST zend_object std;
 #define PHPC_OBJ_MEMBER_LAST
 
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) PHPC_NOOP
 #define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) PHPC_NOOP
 
-#define PHPC_CLASS_REGISTER_EX(_orig_class_entry, _parent_ce, _parent_name) \
-	zend_register_internal_class_ex(&_orig_class_entry, _parent_ce, _parent_name TSRMLS_CC)
-#define PHPC_CLASS_REGISTER(_orig_class_entry) \
-	zend_register_internal_class(&_orig_class_entry TSRMLS_CC)
+/* free object handler */
+#define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
+	PHPC_OBJ_GET_HANDLER_FCE_DEF(void, _name, free_obj)(void *_phpc_object TSRMLS_DC)
 
+
+/* -------------- start  tmp 7 ---------------*/
+#if 0
+#define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
+	PHPC_OBJ_GET_HANDLER_NAME(void, _name, free_obj)(zend_object *_phpc_object)
+
+#endif
+/* -------------- finish tmp 7 ---------------*/
 
 /* HASH */
 #define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
