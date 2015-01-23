@@ -93,6 +93,11 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_MEMBER_FIRST zend_object std;
 #define PHPC_OBJ_MEMBER_LAST
 
+#define PHPC_OBJ_FROM_ZOBJ(_object, _struct) \
+	(_struct *) _object
+#define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_struct) \
+	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _struct)
+
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) PHPC_NOOP
 #define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) PHPC_NOOP
 
@@ -103,6 +108,11 @@ typedef int  phpc_str_size_t;
 
 /* -------------- start  tmp 7 ---------------*/
 #if 0
+#define PHPC_OBJ_FROM_ZOBJ(_object, _struct) \
+	 (_struct*)((char*)(_object) - XtOffsetOf(_struct, std))
+#define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_struct) \
+	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _struct)
+
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
 	PHPC_OBJ_GET_HANDLER_NAME(void, _name, free_obj)(zend_object *_phpc_object)
 
