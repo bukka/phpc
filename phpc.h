@@ -104,6 +104,11 @@ typedef int  phpc_str_size_t;
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
 	PHPC_OBJ_GET_HANDLER_FCE_DEF(void, _name, free_obj)(void *_phpc_object TSRMLS_DC)
+#define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
+	do { \
+		zend_object_std_dtor(&(_intern)->std TSRMLS_CC); \
+		efree(_intern); \
+	while(0)
 
 
 /* -------------- start  tmp 7 ---------------*/
@@ -113,8 +118,14 @@ typedef int  phpc_str_size_t;
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_struct) \
 	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _struct)
 
+#define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) _handlers.offset = XtOffsetOf(_struct, std)
+#define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) handlers.free_obj = _callback
+
+/* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
 	PHPC_OBJ_GET_HANDLER_NAME(void, _name, free_obj)(zend_object *_phpc_object)
+#define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
+	zend_object_std_dtor(&(_intern)->std)
 
 #endif
 /* -------------- finish tmp 7 ---------------*/
@@ -226,16 +237,15 @@ typedef size_t    phpc_str_size_t;
 
 
 /* OBJECT */
-#define PHPC_OBJ_MEMBER_FIRST
-#define PHPC_OBJ_MEMBER_LAST zend_object std;
-
-#define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) _handlers.offset = XtOffsetOf(_struct, std)
-#define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) handlers.free_obj = _callback
-
 #define PHPC_CLASS_REGISTER_EX(_orig_class_entry, _parent_ce, _parent_name) \
 	zend_register_internal_class_ex(&_orig_class_entry, _parent_ce)
 #define PHPC_CLASS_REGISTER(_orig_class_entry) \
 	zend_register_internal_class(&_orig_class_entry)
+
+#define PHPC_OBJ_MEMBER_FIRST
+#define PHPC_OBJ_MEMBER_LAST zend_object std;
+
+/* tmp */
 
 /* HASH */
 #define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL
