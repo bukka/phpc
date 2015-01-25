@@ -95,6 +95,10 @@ typedef int  phpc_str_size_t;
 
 #define PHPC_OBJ_FROM_ZOBJ(_object, _struct) \
 	(_struct *) _object
+#define PHPC_OBJ_FROM_ZVAL(_zv, _struct) \
+	(_struct *) zend_object_store_get_object(_zv TSRMLS_CC)
+#define PHPC_OBJ_FROM_THIS(_struct) \
+	PHPC_OBJ_FROM_ZVAL(_phpc_this, _struct)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_struct) \
 	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _struct)
 
@@ -114,9 +118,14 @@ typedef int  phpc_str_size_t;
 /* -------------- start  tmp 7 ---------------*/
 #if 0
 #define PHPC_OBJ_FROM_ZOBJ(_object, _struct) \
-	 (_struct*)((char*)(_object) - XtOffsetOf(_struct, std))
+	(_struct*)((char*)(_object) - XtOffsetOf(_struct, std))
+#define PHPC_OBJ_FROM_ZVAL(_zv, _struct) \
+	PHPC_OBJ_FROM_ZOBJ(Z_OBJ_P((_zv), _struct)
+#define PHPC_OBJ_FROM_THIS(_struct) \
+	PHPC_OBJ_FROM_ZVAL(_phpc_this, _struct)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_struct) \
 	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _struct)
+
 
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) _handlers.offset = XtOffsetOf(_struct, std)
 #define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) handlers.free_obj = _callback
