@@ -82,6 +82,8 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_GET_HANDLER_NAME(_name, _type) _name##__##_type
 #define PHPC_OBJ_GET_HANDLER_FCE_DEF(_rtype, _name, _type) \
 	static _rtype PHPC_OBJ_GET_HANDLER_NAME(_name, _type)
+#define PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(_rtype, _name, _type) \
+	PHPC_OBJ_GET_HANDLER_FCE_DEF(inline _rtype, _name, _type)
 /* -------------- finish tmp common ---------------*/
 
 /* OBJECT */
@@ -104,6 +106,12 @@ typedef int  phpc_str_size_t;
 
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) PHPC_NOOP
 #define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) PHPC_NOOP
+
+/* create_ex object handler helper */
+#define PHPC_OBJ_HANDLER_CREATE_EX(_name, _struct) \
+	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object_value, _name, create_ex) \
+	(zend_class_entry *_phpc_class_type, _struct **_phpc_objptr TSRMLS_DC)
+#define PHPC_OBJ_HANDLER_CREATE_EX_INIT zend_object_value _phpc_retval
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
@@ -129,6 +137,12 @@ typedef int  phpc_str_size_t;
 
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _struct) _handlers.offset = XtOffsetOf(_struct, std)
 #define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) handlers.free_obj = _callback
+
+/* create_ex object handler helper */
+#define PHPC_OBJ_HANDLER_CREATE_EX(_name, _struct) \
+	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object *, _name, create_ex) \
+	(zend_class_entry *_phpc_class_type, int _phpc_init_props)
+#define PHPC_OBJ_HANDLER_CREATE_EX_INIT PHPC_NOOP
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
