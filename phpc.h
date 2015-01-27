@@ -112,6 +112,16 @@ typedef int  phpc_str_size_t;
 	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object_value, _name, create_ex) \
 	(zend_class_entry *_phpc_class_type, _struct **_phpc_objptr TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_CREATE_EX_INIT zend_object_value _phpc_retval
+#define PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_struct) \
+	 ecalloc(1, sizeof(_struct));
+#define PHPC_OBJ_HANDLER_INIT_CREATE_EX_PROPS(_intern) \
+	do { \
+		if (_phpc_objptr) { \
+			*_phpc_objptr = _intern; \
+		} \
+		zend_object_std_init(&_intern->std, _phpc_class_type TSRMLS_CC); \
+		object_properties_init(&_intern->std, _phpc_class_type); \
+	while(0)
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
@@ -143,6 +153,15 @@ typedef int  phpc_str_size_t;
 	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object *, _name, create_ex) \
 	(zend_class_entry *_phpc_class_type, int _phpc_init_props)
 #define PHPC_OBJ_HANDLER_CREATE_EX_INIT PHPC_NOOP
+#define PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_struct) \
+	 ecalloc(1, sizeof(_struct) + sizeof(zval) * (_phpc_class_type->default_properties_count - 1));
+#define PHPC_OBJ_HANDLER_INIT_CREATE_EX_PROPS(_intern) \
+	do { \
+		zend_object_std_init(&_intern->std, _phpc_class_type); \
+		if (_phpc_init_props) { \
+			object_properties_init(&_intern->std, _phpc_class_type); \
+		} \
+	while(0)
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
