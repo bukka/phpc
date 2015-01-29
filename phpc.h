@@ -79,11 +79,15 @@ typedef int  phpc_str_size_t;
 
 
 /* -------------- start  tmp common ---------------*/
-#define PHPC_OBJ_GET_HANDLER_NAME(_name, _type) _name##__##_type
+#define PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, _type) _name##__##_type
 #define PHPC_OBJ_GET_HANDLER_FCE_DEF(_rtype, _name, _type) \
-	static _rtype PHPC_OBJ_GET_HANDLER_NAME(_name, _type)
+	static _rtype PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, _type)
 #define PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(_rtype, _name, _type) \
 	PHPC_OBJ_GET_HANDLER_FCE_DEF(inline _rtype, _name, _type)
+#define PHPC_OBJ_GET_HANDLER_VAR_NAME(_name) _name##___handler
+#define PHPC_OBJ_GET_HANDLER_VAR_DEF(_name) \
+	static zend_object_handlers PHPC_OBJ_GET_HANDLER_VAR_NAME(_name)
+
 /* -------------- finish tmp common ---------------*/
 
 /* OBJECT */
@@ -121,6 +125,15 @@ typedef int  phpc_str_size_t;
 		} \
 		zend_object_std_init(&_intern->std, _phpc_class_type TSRMLS_CC); \
 		object_properties_init(&_intern->std, _phpc_class_type); \
+	while(0)
+#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN(_name, _intern) \
+	do { \
+		_phpc_retval.handle = zend_objects_store_put((_intern), \
+			(zend_objects_store_dtor_t) zend_objects_destroy_object, \
+			(zend_objects_free_object_storage_t) PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, free_obj), \
+			NULL TSRMLS_CC); \
+		_phpc_retval.handlers = &PHPC_OBJ_GET_HANDLER_VAR_NAME(_name); \
+		return _phpc_retval; \
 	while(0)
 
 /* free object handler */
@@ -162,10 +175,15 @@ typedef int  phpc_str_size_t;
 			object_properties_init(&_intern->std, _phpc_class_type); \
 		} \
 	while(0)
+#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN(_name, _intern) \
+	do { \
+		_intern->std.handlers = &PHPC_OBJ_GET_HANDLER_VAR_NAME(_name); \
+		return &_intern->std; \
+	while(0)
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_GET_HANDLER_NAME(void, _name, free_obj)(zend_object *_phpc_object)
+	PHPC_OBJ_GET_HANDLER_FCE_DEF(void, _name, free_obj)(zend_object *_phpc_object)
 #define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
 	zend_object_std_dtor(&(_intern)->std)
 
