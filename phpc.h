@@ -136,6 +136,13 @@ typedef int  phpc_str_size_t;
 		return _phpc_retval; \
 	while(0)
 
+/* create object handler */
+#define PHPC_OBJ_HANDLER_CREATE(_name, _struct) \
+	PHPC_OBJ_GET_HANDLER_FCE_DEF(zend_object_value, _name, create) \
+	(zend_class_entry *_phpc_class_type, _struct **_phpc_objptr TSRMLS_DC)
+#define PHPC_OBJ_HANDLER_CREATE_RETURN(_name) \
+	return PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create_ex)(_phpc_class_type, 1)
+
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
 	PHPC_OBJ_GET_HANDLER_FCE_DEF(void, _name, free_obj)(void *_phpc_object TSRMLS_DC)
@@ -180,6 +187,13 @@ typedef int  phpc_str_size_t;
 		_intern->std.handlers = &PHPC_OBJ_GET_HANDLER_VAR_NAME(_name); \
 		return &_intern->std; \
 	while(0)
+
+/* create object handler */
+#define PHPC_OBJ_HANDLER_CREATE(_name, _struct) \
+	PHPC_OBJ_GET_HANDLER_FCE_DEF(zend_object *, _name, create) \
+	(zend_class_entry *_phpc_class_type)
+#define PHPC_OBJ_HANDLER_CREATE_RETURN(_name) \
+	return PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create_ex)(_phpc_class_type, NULL TSRMLS_CC)
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
