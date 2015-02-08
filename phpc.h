@@ -169,8 +169,8 @@ typedef int  phpc_str_size_t;
 	} while(0)
 
 /* handler setters */
-#define PHPC_OBJ_SET_HANDLER_OFFSET(_handlers, _name) PHPC_NOOP
-#define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_handlers, _callback) PHPC_NOOP
+#define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
+#define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_name) PHPC_NOOP
 
 
 /* HASH */
