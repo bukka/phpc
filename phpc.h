@@ -35,16 +35,16 @@
 /* common object macros */
 #define PHPC_OBJ_STRUCT_NAME(_name) struct _phpc_##_name##__obj
 #define PHPC_OBJ_STRUCT_PTR(_name, _ptr) PHPC_OBJ_STRUCT_NAME(_name) *_ptr
-#define PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, _type) _name##__##_type
-#define PHPC_OBJ_GET_HANDLER_FCE_DEF(_rtype, _name, _type) \
-	static _rtype PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, _type)
+#define PHPC_OBJ_GET_HANDLER_FCE(_name, _type) _name##__##_type
+#define PHPC_OBJ_DEFINE_HANDLER_FCE(_rtype, _name, _type) \
+	static _rtype PHPC_OBJ_GET_HANDLER_FCE(_name, _type)
 #define PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(_rtype, _name, _type) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(inline _rtype, _name, _type)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(inline _rtype, _name, _type)
 #define PHPC_OBJ_GET_HANDLER_VAR_NAME(_name) _name##___handler
-#define PHPC_OBJ_GET_HANDLER_VAR_DEF(_name) \
+#define PHPC_OBJ_DEFINE_HANDLER_VAR(_name) \
 	static zend_object_handlers PHPC_OBJ_GET_HANDLER_VAR_NAME(_name)
 #define PHPC_CLASS_SET_HANDLER_CREATE(_class_entry, _name) \
-	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create)
+	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE(_name, create)
 
 
 #if PHP_MAJOR_VERSION == 5
@@ -135,7 +135,7 @@ typedef int  phpc_str_size_t;
 	do { \
 		_phpc_retval.handle = zend_objects_store_put((_intern), \
 			(zend_objects_store_dtor_t) zend_objects_destroy_object, \
-			(zend_objects_free_object_storage_t) PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, free_obj), \
+			(zend_objects_free_object_storage_t) PHPC_OBJ_GET_HANDLER_FCE(_name, free_obj), \
 			NULL TSRMLS_CC); \
 		_phpc_retval.handlers = &PHPC_OBJ_GET_HANDLER_VAR_NAME(_name); \
 		return _phpc_retval; \
@@ -143,25 +143,25 @@ typedef int  phpc_str_size_t;
 
 /* create object handler */
 #define PHPC_OBJ_HANDLER_CREATE(_name) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(zend_object_value, _name, create) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, create) \
 	(zend_class_entry *_phpc_class_type TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_CREATE_RETURN(_name) \
-	return PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create_ex)(_phpc_class_type, NULL TSRMLS_CC)
+	return PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_phpc_class_type, NULL TSRMLS_CC)
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(zend_object_value, _name, clone)(zval *_phpc_this TSRMLS_DC)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *_phpc_this TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_CLONE_INIT() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
-		_phpc_retval = PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create_ex)(_old_obj->std.ce, &_new_obj TSRMLS_CC); \
+		_phpc_retval = PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, &_new_obj TSRMLS_CC); \
 		zend_objects_clone_members(&_new_obj->std, _phpc_retval, &_old_obj->std, Z_OBJ_HANDLE_P(_phpc_this) TSRMLS_CC); \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return _phpc_retval
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(void, _name, free_obj)(void *_phpc_object TSRMLS_DC)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free_obj)(void *_phpc_object TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
 	do { \
 		zend_object_std_dtor(&(_intern)->std TSRMLS_CC); \
@@ -324,25 +324,25 @@ typedef size_t    phpc_str_size_t;
 
 /* create object handler */
 #define PHPC_OBJ_HANDLER_CREATE(_name) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(zend_object *, _name, create) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, create) \
 	(zend_class_entry *_phpc_class_type)
 #define PHPC_OBJ_HANDLER_CREATE_RETURN(_name) \
-	return PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create_ex)(_phpc_class_type, 1)
+	return PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_phpc_class_type, 1)
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(zend_object *, _name, clone)(zval *_phpc_this)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *_phpc_this)
 #define PHPC_OBJ_HANDLER_CLONE_INIT() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
-		_new_obj = PHPC_OBJ_FROM_ZOBJ(PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, create_ex)(_old_obj->std.ce, 0), _name); \
+		_new_obj = PHPC_OBJ_FROM_ZOBJ(PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, 0), _name); \
 		zend_objects_clone_members(&_new_obj->std, &_old_obj->std); \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return &_new_obj->std;
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_GET_HANDLER_FCE_DEF(void, _name, free_obj)(zend_object *_phpc_object)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free_obj)(zend_object *_phpc_object)
 #define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
 	zend_object_std_dtor(&(_intern)->std)
 
@@ -350,7 +350,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).offset = XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std)
 #define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).free_obj = PHPC_OBJ_GET_HANDLER_FCE_NAME(_name, free_obj)
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free_obj)
 
 
 /* HASH */
