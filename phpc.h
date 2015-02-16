@@ -135,7 +135,7 @@ typedef int  phpc_str_size_t;
 	do { \
 		_phpc_retval.handle = zend_objects_store_put((_intern), \
 			(zend_objects_store_dtor_t) zend_objects_destroy_object, \
-			(zend_objects_free_object_storage_t) PHPC_OBJ_GET_HANDLER_FCE(_name, free_obj), \
+			(zend_objects_free_object_storage_t) PHPC_OBJ_GET_HANDLER_FCE(_name, free), \
 			NULL TSRMLS_CC); \
 		_phpc_retval.handlers = &PHPC_OBJ_GET_HANDLER_VAR_NAME(_name); \
 		return _phpc_retval; \
@@ -160,9 +160,9 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return _phpc_retval
 
 /* free object handler */
-#define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free_obj)(void *_phpc_object TSRMLS_DC)
-#define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
+#define PHPC_OBJ_HANDLER_FREE(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free)(void *_phpc_object TSRMLS_DC)
+#define PHPC_OBJ_HANDLER_FREE_DTOR(_intern) \
 	do { \
 		zend_object_std_dtor(&(_intern)->std TSRMLS_CC); \
 		efree(_intern); \
@@ -170,7 +170,7 @@ typedef int  phpc_str_size_t;
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
-#define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_name) PHPC_NOOP
+#define PHPC_OBJ_SET_HANDLER_FREE(_name) PHPC_NOOP
 
 
 /* HASH */
@@ -341,16 +341,16 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return &_new_obj->std;
 
 /* free object handler */
-#define PHPC_OBJ_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free_obj)(zend_object *_phpc_object)
-#define PHPC_OBJ_HANDLER_FREE_OBJ_FREE(_intern) \
+#define PHPC_OBJ_HANDLER_FREE(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free)(zend_object *_phpc_object)
+#define PHPC_OBJ_HANDLER_FREE_DTOR(_intern) \
 	zend_object_std_dtor(&(_intern)->std)
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).offset = XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std)
-#define PHPC_OBJ_SET_HANDLER_FREE_OBJ(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free_obj)
+#define PHPC_OBJ_SET_HANDLER_FREE(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free)
 
 
 /* HASH */
