@@ -45,6 +45,8 @@
 	static zend_object_handlers PHPC_OBJ_GET_HANDLER_VAR_NAME(_name)
 #define PHPC_CLASS_SET_HANDLER_CREATE(_class_entry, _name) \
 	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE(_name, create)
+#define PHPC_OBJ_SET_HANDLER_CLONE(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).clone_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, clone)
 
 
 #if PHP_MAJOR_VERSION == 5
