@@ -32,6 +32,8 @@
 /* no operation */
 #define PHPC_NOOP ((void) 0)
 
+/* COMMON (used definitions) */
+
 /* common object macros */
 #define PHPC_OBJ_STRUCT_NAME(_name) struct _phpc_##_name##__obj
 #define PHPC_OBJ_STRUCT_PTR(_name, _ptr) PHPC_OBJ_STRUCT_NAME(_name) *_ptr
@@ -109,6 +111,7 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_STRUCT_END() \
 	PHPC_OBJ_STRUCT_MEMBER_LAST };
 
+/* object convertors */
 #define PHPC_OBJ_FROM_ZOBJ(_object, _name) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *) _object
 #define PHPC_OBJ_FROM_ZVAL(_zv, _name) \
@@ -391,6 +394,17 @@ typedef zval  phpc_val;
 
 
 #endif /* PHP_MAJOR_VERSION */
+
+
+/* COMMON (dependent definitions) */
+
+/* this object */
+#define PHPC_THIS _phpc_this
+#define PHPC_THIS_DECLARE(_name) PHPC_OBJ_STRUCT_PTR(_name, PHPC_THIS)
+#define PHPC_THIS_FETCH(_name) PHPC_THIS = PHPC_OBJ_FROM_ZVAL(getThis(), extest_compat)
+#define PHPC_THIS_DECLARE_AND_FETCH(_name) \
+	PHPC_THIS_DECLARE(_name); \
+	PHPC_THIS_FETCH(_name);
 
 #endif	/* PHPC_H */
 
