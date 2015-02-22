@@ -113,8 +113,8 @@ typedef int  phpc_str_size_t;
 	(PHPC_OBJ_STRUCT_NAME(_name) *) _object
 #define PHPC_OBJ_FROM_ZVAL(_zv, _name) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *) zend_object_store_get_object(_zv TSRMLS_CC)
-#define PHPC_OBJ_FROM_THIS(_name) \
-	PHPC_OBJ_FROM_ZVAL(_phpc_this, _name)
+#define PHPC_OBJ_FROM_SELF(_name) \
+	PHPC_OBJ_FROM_ZVAL(_phpc_self, _name)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
 	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _name)
 
@@ -152,12 +152,12 @@ typedef int  phpc_str_size_t;
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *_phpc_this TSRMLS_DC)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *_phpc_self TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_CLONE_INIT() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
 		_phpc_retval = PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, &_new_obj TSRMLS_CC); \
-		zend_objects_clone_members(&_new_obj->std, _phpc_retval, &_old_obj->std, Z_OBJ_HANDLE_P(_phpc_this) TSRMLS_CC); \
+		zend_objects_clone_members(&_new_obj->std, _phpc_retval, &_old_obj->std, Z_OBJ_HANDLE_P(_phpc_self) TSRMLS_CC); \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return _phpc_retval
 
@@ -299,8 +299,8 @@ typedef size_t    phpc_str_size_t;
 	(PHPC_OBJ_STRUCT_NAME(_name) *)((char*)(_object) - XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std))
 #define PHPC_OBJ_FROM_ZVAL(_zv, _name) \
 	PHPC_OBJ_FROM_ZOBJ(Z_OBJ_P(_zv), _name)
-#define PHPC_OBJ_FROM_THIS(_name) \
-	PHPC_OBJ_FROM_ZVAL(_phpc_this, _name)
+#define PHPC_OBJ_FROM_SELF(_name) \
+	PHPC_OBJ_FROM_ZVAL(_phpc_self, _name)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
 	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _name)
 
@@ -333,7 +333,7 @@ typedef size_t    phpc_str_size_t;
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *_phpc_this)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *_phpc_self)
 #define PHPC_OBJ_HANDLER_CLONE_INIT() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
