@@ -173,6 +173,12 @@ typedef int  phpc_str_size_t;
 		efree(_intern); \
 	} while(0)
 
+/* compare object handler */
+#define PHPC_OBJ_HANDLER_COMPARE(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(int, _name, compare)(zval *_phpc_obj1, zval *_phpc_obj2 TSRMLS_DC)
+#define PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, _id, _obj) \
+	PHPC_OBJ_STRUCT_PTR(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
+
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
 #define PHPC_OBJ_SET_HANDLER_FREE(_name) PHPC_NOOP
@@ -350,6 +356,12 @@ typedef size_t    phpc_str_size_t;
 	PHPC_OBJ_DEFINE_HANDLER_FCE(void, _name, free)(zend_object *_phpc_object)
 #define PHPC_OBJ_HANDLER_FREE_DTOR(_intern) \
 	zend_object_std_dtor(&(_intern)->std)
+
+/* compare object handler */
+#define PHPC_OBJ_HANDLER_COMPARE(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(int, _name, compare)(zval *_phpc_obj1, zval *_phpc_obj2)
+#define PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, _id, _obj) \
+	PHPC_OBJ_STRUCT_PTR(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
