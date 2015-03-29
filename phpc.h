@@ -49,6 +49,8 @@
 	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE(_name, create)
 #define PHPC_OBJ_SET_HANDLER_CLONE(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).clone_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, clone)
+#define PHPC_OBJ_SET_HANDLER_COMPARE(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
 
 
 #if PHP_MAJOR_VERSION == 5
