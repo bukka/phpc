@@ -415,7 +415,7 @@ typedef zval  phpc_val;
 /* this object */
 #define PHPC_THIS _phpc_this
 #define PHPC_THIS_DECLARE(_name) PHPC_OBJ_STRUCT_PTR(_name, PHPC_THIS)
-#define PHPC_THIS_FETCH(_name) PHPC_THIS = PHPC_OBJ_FROM_ZVAL(getThis(), extest_compat)
+#define PHPC_THIS_FETCH(_name) PHPC_THIS = PHPC_OBJ_FROM_ZVAL(getThis(), _name)
 #define PHPC_THIS_DECLARE_AND_FETCH(_name) \
 	PHPC_THIS_DECLARE(_name); \
 	PHPC_THIS_FETCH(_name);
