@@ -36,7 +36,7 @@
 
 /* common object macros */
 #define PHPC_OBJ_STRUCT_NAME(_name) struct _phpc_##_name##__obj
-#define PHPC_OBJ_STRUCT_PTR(_name, _ptr) PHPC_OBJ_STRUCT_NAME(_name) *_ptr
+#define PHPC_OBJ_STRUCT_DECLARE(_name, _ptr) PHPC_OBJ_STRUCT_NAME(_name) *_ptr
 #define PHPC_OBJ_GET_HANDLER_FCE(_name, _type) _name##__##_type
 #define PHPC_OBJ_DEFINE_HANDLER_FCE(_rtype, _name, _type) \
 	static _rtype PHPC_OBJ_GET_HANDLER_FCE(_name, _type)
@@ -179,7 +179,7 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(int, _name, compare)(zval *_phpc_obj1, zval *_phpc_obj2 TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, _id, _obj) \
-	PHPC_OBJ_STRUCT_PTR(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
+	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
@@ -363,7 +363,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(int, _name, compare)(zval *_phpc_obj1, zval *_phpc_obj2)
 #define PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, _id, _obj) \
-	PHPC_OBJ_STRUCT_PTR(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
+	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
@@ -412,9 +412,13 @@ typedef zval  phpc_val;
 
 /* COMMON (dependent definitions) */
 
+/* object structure */
+#define PHPC_OBJ_STRUCT_DECLARE_AND_FETCH_FROM_ZOBJ(_name, _ptr) \
+	PHPC_OBJ_STRUCT_DECLARE(_name, _ptr) = PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name)
+
 /* this object */
 #define PHPC_THIS _phpc_this
-#define PHPC_THIS_DECLARE(_name) PHPC_OBJ_STRUCT_PTR(_name, PHPC_THIS)
+#define PHPC_THIS_DECLARE(_name) PHPC_OBJ_STRUCT_DECLARE(_name, PHPC_THIS)
 #define PHPC_THIS_FETCH(_name) PHPC_THIS = PHPC_OBJ_FROM_ZVAL(getThis(), extest_compat)
 #define PHPC_THIS_DECLARE_AND_FETCH(_name) \
 	PHPC_THIS_DECLARE(_name); \
