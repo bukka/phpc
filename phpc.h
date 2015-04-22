@@ -45,6 +45,9 @@
 #define PHPC_OBJ_GET_HANDLER_VAR_NAME(_name) _name##___handler
 #define PHPC_OBJ_DEFINE_HANDLER_VAR(_name) \
 	static zend_object_handlers PHPC_OBJ_GET_HANDLER_VAR_NAME(_name)
+#define PHPC_OBJ_INIT_HANDLERS(_name) \
+	memcpy(&PHPC_OBJ_GET_HANDLER_VAR_NAME(extest_compat), \
+		zend_get_std_object_handlers(), sizeof(zend_object_handlers))
 #define PHPC_CLASS_SET_HANDLER_CREATE(_class_entry, _name) \
 	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE(_name, create)
 #define PHPC_OBJ_SET_HANDLER_CLONE(_name) \
