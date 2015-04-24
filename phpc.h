@@ -92,6 +92,10 @@ typedef int  phpc_str_size_t;
 		PHPC_STR_VAL(_name) = emalloc(_len + 1); \
 		PHPC_STR_LEN(_name) = _len; \
 	} while (0)
+#define PHPC_STR_REALLOC(_name, _len) do { \
+		PHPC_STR_VAL(_name) = erealloc(PHPC_STR_VAL(_name), _len + 1); \
+		PHPC_STR_LEN(_name) = _len; \
+	} while (0)
 #define PHPC_STR_RELEASE(_name) efree(PHPC_STR_VAL(_name))
 
 /* ZPP path flag */
@@ -289,6 +293,7 @@ typedef size_t    phpc_str_size_t;
 /* wrapper macros */
 #define PHPC_STR_INIT(_name, _cstr, _len) _name = zend_string_init(_cstr, _len, 0)
 #define PHPC_STR_ALLOC(_name, _len) _name = zend_string_alloc(_len, 0)
+#define PHPC_STR_REALLOC(_name, _len) _name = zend_string_realloc(_name, _len, 0)
 #define PHPC_STR_RELEASE(_name) zend_string_release(_name)
 
 /* ZPP path flag */
