@@ -98,6 +98,10 @@ typedef int  phpc_str_size_t;
 	} while (0)
 #define PHPC_STR_RELEASE(_name) efree(PHPC_STR_VAL(_name))
 
+/* C string */
+#define PHPC_CSTR_WITH_LEN_RETURN(_name, _len) RETURN_STRINGL(_name, _len, 1)
+#define PHPC_CSTR_RETURN(_name, _len) RETURN_STRING(_name, 1)
+
 /* ZPP path flag */
 #if PHP_VERSION_ID < 50399
 #define PHPC_ZPP_PATH_FLAG "s"
@@ -295,6 +299,10 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_STR_ALLOC(_name, _len) _name = zend_string_alloc(_len, 0)
 #define PHPC_STR_REALLOC(_name, _len) _name = zend_string_realloc(_name, _len, 0)
 #define PHPC_STR_RELEASE(_name) zend_string_release(_name)
+
+/* C string */
+#define PHPC_CSTR_WITH_LEN_RETURN(_name, _len) RETURN_STRINGL(_name, _len)
+#define PHPC_CSTR_RETURN(_name, _len) RETURN_STRING(_name)
 
 /* ZPP path flag */
 #define PHPC_PATH_ZPP_FLAG "p"
