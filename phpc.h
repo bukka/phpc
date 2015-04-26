@@ -100,7 +100,7 @@ typedef int  phpc_str_size_t;
 
 /* C string */
 #define PHPC_CSTR_WITH_LEN_RETURN(_name, _len) RETURN_STRINGL(_name, _len, 1)
-#define PHPC_CSTR_RETURN(_name, _len) RETURN_STRING(_name, 1)
+#define PHPC_CSTR_RETURN(_name) RETURN_STRING(_name, 1)
 
 /* ZPP path flag */
 #if PHP_VERSION_ID < 50399
@@ -302,7 +302,7 @@ typedef size_t    phpc_str_size_t;
 
 /* C string */
 #define PHPC_CSTR_WITH_LEN_RETURN(_name, _len) RETURN_STRINGL(_name, _len)
-#define PHPC_CSTR_RETURN(_name, _len) RETURN_STRING(_name)
+#define PHPC_CSTR_RETURN(_name) RETURN_STRING(_name)
 
 /* ZPP path flag */
 #define PHPC_PATH_ZPP_FLAG "p"
