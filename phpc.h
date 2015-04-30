@@ -138,7 +138,7 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
 	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object_value, _name, create_ex) \
 	(zend_class_entry *_phpc_class_type, PHPC_OBJ_STRUCT_NAME(_name) **_phpc_objptr TSRMLS_DC)
-#define PHPC_OBJ_HANDLER_CREATE_EX_INIT() zend_object_value _phpc_retval
+#define PHPC_OBJ_HANDLER_CREATE_EX_DECLARE() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_name) \
 	 ecalloc(1, sizeof(PHPC_OBJ_STRUCT_NAME(_name)));
 #define PHPC_OBJ_HANDLER_INIT_CREATE_EX_PROPS(_intern) \
@@ -149,7 +149,7 @@ typedef int  phpc_str_size_t;
 		zend_object_std_init(&_intern->std, _phpc_class_type TSRMLS_CC); \
 		object_properties_init(&_intern->std, _phpc_class_type); \
 	} while(0)
-#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN(_name, _intern) \
+#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN_EX(_name, _intern) \
 	do { \
 		_phpc_retval.handle = zend_objects_store_put((_intern), \
 			(zend_objects_store_dtor_t) zend_objects_destroy_object, \
@@ -169,13 +169,13 @@ typedef int  phpc_str_size_t;
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *_phpc_self TSRMLS_DC)
-#define PHPC_OBJ_HANDLER_CLONE_INIT() zend_object_value _phpc_retval
+#define PHPC_OBJ_HANDLER_CLONE_DECLARE() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
 		_phpc_retval = PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, &_new_obj TSRMLS_CC); \
 		zend_objects_clone_members(&_new_obj->std, _phpc_retval, &_old_obj->std, Z_OBJ_HANDLE_P(_phpc_self) TSRMLS_CC); \
 	} while(0)
-#define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return _phpc_retval
+#define PHPC_OBJ_HANDLER_CLONE_RETURN_EX(_new_obj) return _phpc_retval
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE(_name) \
@@ -335,7 +335,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
 	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object *, _name, create_ex) \
 	(zend_class_entry *_phpc_class_type, int _phpc_init_props)
-#define PHPC_OBJ_HANDLER_CREATE_EX_INIT() PHPC_NOOP
+#define PHPC_OBJ_HANDLER_CREATE_EX_DECLARE() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_name) \
 	 ecalloc(1, sizeof(PHPC_OBJ_STRUCT_NAME(_name)) + sizeof(zval) * (_phpc_class_type->default_properties_count - 1));
 #define PHPC_OBJ_HANDLER_INIT_CREATE_EX_PROPS(_intern) \
@@ -345,7 +345,7 @@ typedef size_t    phpc_str_size_t;
 			object_properties_init(&_intern->std, _phpc_class_type); \
 		} \
 	} while(0)
-#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN(_name, _intern) \
+#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN_EX(_name, _intern) \
 	do { \
 		_intern->std.handlers = &PHPC_OBJ_GET_HANDLER_VAR_NAME(_name); \
 		return &_intern->std; \
@@ -361,13 +361,13 @@ typedef size_t    phpc_str_size_t;
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *_phpc_self)
-#define PHPC_OBJ_HANDLER_CLONE_INIT() PHPC_NOOP
+#define PHPC_OBJ_HANDLER_CLONE_DECLARE() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
 		_new_obj = PHPC_OBJ_FROM_ZOBJ(PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, 0), _name); \
 		zend_objects_clone_members(&_new_obj->std, &_old_obj->std); \
 	} while(0)
-#define PHPC_OBJ_HANDLER_CLONE_RETURN(_new_obj) return &_new_obj->std;
+#define PHPC_OBJ_HANDLER_CLONE_RETURN_EX(_new_obj) return &_new_obj->std;
 
 /* free object handler */
 #define PHPC_OBJ_HANDLER_FREE(_name) \
@@ -439,6 +439,40 @@ typedef zval  phpc_val;
 #define PHPC_THIS_DECLARE_AND_FETCH(_name) \
 	PHPC_THIS_DECLARE(_name); \
 	PHPC_THIS_FETCH(_name);
+
+/* that object */
+#define PHPC_THAT _phpc_that
+#define PHPC_THAT_DECLARE(_name) PHPC_OBJ_STRUCT_DECLARE(_name, PHPC_THAT)
+
+/* object helper create_ex */
+#define PHPC_OBJ_HANDLER_CREATE_EX_INIT(_name) \
+	PHPC_OBJ_HANDLER_CREATE_EX_DECLARE(); \
+	PHPC_THIS_DECLARE(_name); \
+	PHPC_THIS = PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_name); \
+	PHPC_OBJ_HANDLER_INIT_CREATE_EX_PROPS(PHPC_THIS)
+#define PHPC_OBJ_HANDLER_CREATE_EX_RETURN(_name) \
+	PHPC_OBJ_HANDLER_CREATE_EX_RETURN_EX(_name, PHPC_THIS)
+
+/* object handler clone */
+#define PHPC_OBJ_HANDLER_CLONE_INIT(_name) \
+	PHPC_OBJ_HANDLER_CLONE_DECLARE(); \
+	PHPC_THIS_DECLARE(_name); \
+	PHPC_THAT_DECLARE(_name); \
+	PHPC_THIS = PHPC_OBJ_FROM_SELF(_name); \
+	PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, PHPC_THAT, PHPC_THIS)
+#define PHPC_OBJ_HANDLER_CLONE_RETURN() \
+	PHPC_OBJ_HANDLER_CLONE_RETURN_EX(PHPC_THAT)
+
+/* object handler free */
+#define PHPC_OBJ_HANDLER_FREE_INIT(_name) \
+	PHPC_OBJ_STRUCT_DECLARE_AND_FETCH_FROM_ZOBJ(_name, PHPC_THIS);
+#define PHPC_OBJ_HANDLER_FREE_DESTROY() \
+	PHPC_OBJ_HANDLER_FREE_DTOR(PHPC_THIS);
+
+/* object handler compare */
+#define PHPC_OBJ_HANDLER_COMPARE_INIT(_name) \
+	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 1, PHPC_THIS); \
+	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 2, PHPC_THAT)
 
 #endif	/* PHPC_H */
 
