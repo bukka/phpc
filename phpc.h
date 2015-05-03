@@ -42,7 +42,7 @@
 	static _rtype PHPC_OBJ_GET_HANDLER_FCE(_name, _type)
 #define PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(_rtype, _name, _type) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(inline _rtype, _name, _type)
-#define PHPC_OBJ_GET_HANDLER_VAR_NAME(_name) _name##___handler
+#define PHPC_OBJ_GET_HANDLER_VAR_NAME(_name) _phpc_##_name##__handlers
 #define PHPC_OBJ_DEFINE_HANDLER_VAR(_name) \
 	static zend_object_handlers PHPC_OBJ_GET_HANDLER_VAR_NAME(_name)
 #define PHPC_OBJ_INIT_HANDLERS(_name) \
