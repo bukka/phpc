@@ -255,6 +255,15 @@ typedef zval * phpc_val;
 #define PHPC_VAL_TO_PZVAL(_pv, _zv) (void) _pv
 #define PHPC_PVAL_TO_PZVAL(_pv, _zv) _zv = *(_pv)
 
+#define PHPC_VAL_MAKE MAKE_STD_ZVAL
+
+#define PHPC_VAL_STR(_pv, _str) \
+	ZVAL_STRINGL(_pv, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
+#define PHPC_VAL_CSTR(_pv, _cstr) \
+    ZVAL_STRING(_pv, _cstr, 1)
+#define PHPC_VAL_CSTRL(_pv, _cstr_len) \
+	ZVAL_STRINGL(_pv, _cstr, _cstr_len, 1)
+
 /* Function end */
 #if (PHP_MINOR_VERSION == 3 && PHP_RELEASE_VERSION >= 7) || (PHP_MINOR_VERSION >= 4)
 #define PHPC_FE_END PHP_FE_END
@@ -419,6 +428,12 @@ typedef zval  phpc_val;
 #define PHPC_VAL_TO_ZVAL(_pv, _zv) (void) _pv
 #define PHPC_VAL_TO_PZVAL(_pv, _zv) _zv = &(_pv)
 #define PHPC_PVAL_TO_PZVAL(_pv, _zv) (void) _pv
+
+#define PHPC_VAL_MAKE(_pv) PHPC_NOOP
+
+#define PHPC_VAL_STR    ZVAL_STR
+#define PHPC_VAL_CSTR   ZVAL_STRING
+#define PHPC_VAL_CSTRL  ZVAL_STRINGL
 
 #define PHPC_FE_END PHP_FE_END
 
