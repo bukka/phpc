@@ -74,6 +74,11 @@
   - 5: `efree(intern)`
   - 7: do nothing
 
+#### read_property
+- `zval *rv` as a last parameter in 7
+- also zend_read_property
+
+
 ### Methods
 - all have the common issue for getting object from zval (see above)
 
