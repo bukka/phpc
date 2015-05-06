@@ -198,6 +198,18 @@ typedef int  phpc_str_size_t;
 
 
 /* HASH */
+
+/* update */
+#define PHPC_HASH_STR_UPDATE(_ht, _str, _pzv) \
+	zend_hash_update(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1, &_pzv, sizeof(_pzv), NULL)
+#define PHPC_HASH_CSTRL_UPDATE(_ht, _cstr_value, _cstr_len, _pzv) \
+	zend_hash_update(_ht, _cstr_value, (_cstr_len) + 1, &_pzv, sizeof(_pzv), NULL)
+#define PHPC_HASH_CSTR_UPDATE(_ht, _cstr_value, _pzv) \
+	zend_hash_update(_ht, _cstr_value, strlen(_cstr_value) + 1, &_pzv, sizeof(_pzv), NULL)
+#define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
+	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
+
+/* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
 	HashPosition _pos; \
 	for (zend_hash_internal_pointer_reset_ex((ht), &_pos); \
@@ -398,6 +410,15 @@ typedef size_t    phpc_str_size_t;
 
 
 /* HASH */
+
+/* update */
+#define PHPC_HASH_INDEX_UPDATE zend_hash_index_update
+#define PHPC_HASH_STR_UPDATE   zend_hash_update
+#define PHPC_HASH_CSTRL_UPDATE zend_hash_str_update
+#define PHPC_HASH_CSTR_UPDATE(_ht, _cstr_value, _pzv) \
+	zend_hash_str_update(_ht, _cstr_value, strlen(_cstr_value), _pzv)
+
+/* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL
 #define PHPC_HASH_FOREACH_KEY_VAL         ZEND_HASH_FOREACH_KEY_VAL
 #define PHPC_HASH_FOREACH_STR_KEY_VAL     ZEND_HASH_FOREACH_STR_KEY_VAL

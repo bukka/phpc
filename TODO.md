@@ -8,7 +8,6 @@
 - Z is not supported
 
 ## HashTable
-- wrap update macros
 - fix possible overflow for key length (cast from `uint` to `int`)
 - add possibility to duplicate key (`zend_hash_get_current_key_ex`)
 
