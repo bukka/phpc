@@ -110,6 +110,26 @@ typedef int  phpc_str_size_t;
 #define PHPC_ZPP_PATH_FLAG "p"
 #endif
 
+/* Smart string */
+#if defined(PHPC_SMART_STR_INCLUDE) || defined(PHPC_SMART_CSTR_INCLUDE)
+#include "ext/standard/php_smart_str.h"
+
+#ifdef PHPC_SMART_CSTR_INCLUDE
+/* smart_str for C string has been renamed in PHP 7 so we have to wrap it */
+#define phpc_smart_cstr                 smart_str
+#define phpc_smart_cstr_alloc           smart_str_alloc
+#define phpc_smart_cstr_free            smart_str_free
+#define phpc_smart_cstr_append          smart_str_append
+#define phpc_smart_cstr_appends         smart_str_appends
+#define phpc_smart_cstr_appendl         smart_str_appendl
+#define phpc_smart_cstr_appendc         smart_str_appendc
+#define phpc_smart_cstr_append_long     smart_str_append_long
+#define phpc_smart_cstr_append_unsigned smart_str_append_unsigned
+#define phpc_smart_cstr_0               smart_str_0
+#endif /* PHPC_SMART_CSTR_INCLUDE */
+
+#endif /* PHPC_SMART_STR_INCLUDE || PHPC_SMART_CSTR_INCLUDE */
+
 
 /* OBJECT */
 #define PHPC_CLASS_REGISTER_EX(_orig_class_entry, _parent_ce, _parent_name) \
@@ -328,6 +348,26 @@ typedef size_t    phpc_str_size_t;
 
 /* ZPP path flag */
 #define PHPC_PATH_ZPP_FLAG "p"
+
+/* Smart string */
+#ifdef PHPC_SMART_STR_INCLUDE
+#include "zend_smart_str.h"
+#endif /* PHPC_SMART_STR_INCLUDE */
+
+#ifdef PHPC_SMART_CSTR_INCLUDE
+#include "ext/standard/php_smart_string.h"
+/* smart_str for C string has been renamed in PHP 7 so we have to wrap it */
+#define phpc_smart_cstr                 smart_string
+#define phpc_smart_cstr_alloc           smart_string_alloc
+#define phpc_smart_cstr_free            smart_string_free
+#define phpc_smart_cstr_append          smart_string_append
+#define phpc_smart_cstr_appends         smart_string_appends
+#define phpc_smart_cstr_appendl         smart_string_appendl
+#define phpc_smart_cstr_appendc         smart_string_appendc
+#define phpc_smart_cstr_append_long     smart_string_append_long
+#define phpc_smart_cstr_append_unsigned smart_string_append_unsigned
+#define phpc_smart_cstr_0               smart_string_0
+#endif /* PHPC_SMART_CSTR_INCLUDE */
 
 
 /* OBJECT */
