@@ -8,6 +8,16 @@
 - Z is not supported
 
 ## HashTable
+- wrap str based functions
+  - zend_hash_del
+  - zend_hash_find
+  - zend_hash_exists
+- wrap util functions
+  - zend_hash_copy
+  - zend_hash_merge
+  - zend_hash_sort
+  - zend_hash_compare
+  - zend_hash_minmax
 - fix possible overflow for key length (cast from `uint` to `int`)
 - add possibility to duplicate key (`zend_hash_get_current_key_ex`)
 
