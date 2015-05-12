@@ -146,14 +146,14 @@ typedef int  phpc_str_size_t;
 	PHPC_OBJ_STRUCT_MEMBER_LAST };
 
 /* object convertors */
-#define PHPC_OBJ_FROM_ZOBJ(_object, _name) \
+#define PHPC_OBJ_FROM_ZOBJ(_name, _object) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *) _object
-#define PHPC_OBJ_FROM_ZVAL(_zv, _name) \
+#define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *) zend_object_store_get_object(_zv TSRMLS_CC)
 #define PHPC_OBJ_FROM_SELF(_name) \
-	PHPC_OBJ_FROM_ZVAL(_phpc_self, _name)
+	PHPC_OBJ_FROM_ZVAL(_name, _phpc_self)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
-	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _name)
+	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 
 /* create_ex object handler helper */
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
@@ -211,7 +211,7 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(int, _name, compare)(zval *_phpc_obj1, zval *_phpc_obj2 TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, _id, _obj) \
-	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
+	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_name, _phpc_obj ## _id)
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
@@ -400,14 +400,14 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_STRUCT_END() \
 	PHPC_OBJ_STRUCT_MEMBER_LAST };
 
-#define PHPC_OBJ_FROM_ZOBJ(_object, _name) \
+#define PHPC_OBJ_FROM_ZOBJ(_name, _object) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *)((char*)(_object) - XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std))
-#define PHPC_OBJ_FROM_ZVAL(_zv, _name) \
-	PHPC_OBJ_FROM_ZOBJ(Z_OBJ_P(_zv), _name)
+#define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
+	PHPC_OBJ_FROM_ZOBJ(_name, Z_OBJ_P(_zv))
 #define PHPC_OBJ_FROM_SELF(_name) \
-	PHPC_OBJ_FROM_ZVAL(_phpc_self, _name)
+	PHPC_OBJ_FROM_ZVAL(_name, _phpc_self)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
-	PHPC_OBJ_FROM_ZOBJ(_phpc_object, _name)
+	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 
 /* create_ex object handler helper */
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
@@ -442,7 +442,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_CLONE_DECLARE() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
-		_new_obj = PHPC_OBJ_FROM_ZOBJ(PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, 0), _name); \
+		_new_obj = PHPC_OBJ_FROM_ZOBJ(_name, PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, 0)); \
 		zend_objects_clone_members(&_new_obj->std, &_old_obj->std); \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CLONE_RETURN_EX(_new_obj) return &_new_obj->std;
@@ -457,7 +457,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(int, _name, compare)(zval *_phpc_obj1, zval *_phpc_obj2)
 #define PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, _id, _obj) \
-	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_phpc_obj ## _id, _name)
+	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_name, _phpc_obj ## _id)
 
 /* handler setters */
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
@@ -538,10 +538,15 @@ typedef zval  phpc_val;
 /* this object */
 #define PHPC_THIS _phpc_this
 #define PHPC_THIS_DECLARE(_name) PHPC_OBJ_STRUCT_DECLARE(_name, PHPC_THIS)
-#define PHPC_THIS_FETCH(_name) PHPC_THIS = PHPC_OBJ_FROM_ZVAL(getThis(), _name)
-#define PHPC_THIS_DECLARE_AND_FETCH(_name) \
+#define PHPC_THIS_FETCH_FROM_ZVAL(_name, _zv) \
+	PHPC_THIS = PHPC_OBJ_FROM_ZVAL(_name, _zv)
+#define PHPC_THIS_FETCH(_name) \
+	PHPC_THIS_FETCH_FROM_ZVAL(_name, getThis())
+#define PHPC_THIS_DECLARE_AND_FETCH_FROM_ZVAL(_name, _zv) \
 	PHPC_THIS_DECLARE(_name); \
-	PHPC_THIS_FETCH(_name);
+	PHPC_THIS_FETCH_FROM_ZVAL(_name, _zv)
+#define PHPC_THIS_DECLARE_AND_FETCH(_name) \
+	PHPC_THIS_DECLARE_AND_FETCH_FROM_ZVAL(_name, getThis())
 
 /* that object */
 #define PHPC_THAT _phpc_that
