@@ -230,6 +230,12 @@ typedef int  phpc_str_size_t;
 #define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
 	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
 
+/* key and data getter */
+#define PHPC_HASH_GET_CURRENT_KEY_EX(_ht, _str, _num_index, _pos) \
+	zend_hash_get_current_key_ex(_ht, &PHPC_STR_VAL(_str), &PHPC_STR_LEN(_str), &_num_index, 0, _pos)
+#define PHPC_HASH_GET_CURRENT_DATA_EX(_ht, _val, _pos) \
+	zend_hash_get_current_data_ex(_ht, (void **) &(_val), _pos)
+
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
 	HashPosition _pos; \
@@ -481,6 +487,11 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_HASH_FOREACH_STR_KEY_VAL     ZEND_HASH_FOREACH_STR_KEY_VAL
 #define PHPC_HASH_FOREACH_END             ZEND_HASH_FOREACH_END
 
+/* key and data getter */
+#define PHPC_HASH_GET_CURRENT_KEY_EX(_ht, _str, _num_index, _pos) \
+	zend_hash_get_current_key_ex(_ht, &_str, &_num_index, _pos)
+#define PHPC_HASH_GET_CURRENT_DATA_EX(_ht, _val, _pos) \
+	_val = zend_hash_get_current_data_ex(_ht, _pos)
 
 /* ZVAL */
 typedef zval  phpc_val;
@@ -581,6 +592,23 @@ typedef zval  phpc_val;
 #define PHPC_OBJ_HANDLER_COMPARE_INIT(_name) \
 	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 1, PHPC_THIS); \
 	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 2, PHPC_THAT)
+
+/* hash */
+#define PHPC_HASH_HAS_MORE_ELEMENTS_EX      zend_hash_has_more_elements_ex
+#define PHPC_HASH_MOVE_FORWARD_EX           zend_hash_move_forward_ex
+#define PHPC_HASH_MOVE_BACKWARDS_EX         zend_hash_move_backwards_ex
+#define PHPC_HASH_GET_CURRENT_KEY_ZVAL_EX   zend_hash_get_current_key_zval_ex
+#define PHPC_HASH_GET_CURRENT_KEY_TYPE_EX   zend_hash_get_current_key_type_ex
+#define PHPC_HASH_INTERNAL_POINTER_RESET_EX zend_hash_internal_pointer_reset_ex
+#define PHPC_HASH_INTERNAL_POINTER_END_EX   zend_hash_internal_pointer_end_ex
+
+#define PHPC_HASH_HAS_MORE_ELEMENTS         zend_hash_has_more_elements
+#define PHPC_HASH_MOVE_FORWARD              zend_hash_move_forward
+#define PHPC_HASH_MOVE_BACKWARDS            zend_hash_move_backwards
+#define PHPC_HASH_GET_CURRENT_KEY_ZVAL      zend_hash_get_current_key_zval
+#define PHPC_HASH_GET_CURRENT_KEY_TYPE      zend_hash_get_current_key_type
+#define PHPC_HASH_INTERNAL_POINTER_RESET    zend_hash_internal_pointer_reset
+#define PHPC_HASH_INTERNAL_POINTER_END      zend_hash_internal_pointer_end
 
 #endif	/* PHPC_H */
 
