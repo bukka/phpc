@@ -236,6 +236,11 @@ typedef int  phpc_str_size_t;
 #define PHPC_HASH_GET_CURRENT_DATA_EX(_ht, _val, _pos) \
 	zend_hash_get_current_data_ex(_ht, (void **) &(_val), _pos)
 
+#define PHPC_HASH_GET_CURRENT_KEY(_ht, _str, _num_index) \
+	zend_hash_get_current_key(_ht, &PHPC_STR_VAL(_str), &_num_index, 0)
+#define PHPC_HASH_GET_CURRENT_DATA(_ht, _val) \
+	zend_hash_get_current_data(_ht, (void **) &(_val))
+
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
 	HashPosition _pos; \
@@ -492,6 +497,11 @@ typedef size_t    phpc_str_size_t;
 	zend_hash_get_current_key_ex(_ht, &_str, &_num_index, _pos)
 #define PHPC_HASH_GET_CURRENT_DATA_EX(_ht, _val, _pos) \
 	_val = zend_hash_get_current_data_ex(_ht, _pos)
+
+#define PHPC_HASH_GET_CURRENT_KEY(_ht, _str, _num_index) \
+	zend_hash_get_current_key(_ht, &_str, &_num_index)
+#define PHPC_HASH_GET_CURRENT_DATA(_ht, _val) \
+	_val = zend_hash_get_current_data(_ht)
 
 /* ZVAL */
 typedef zval  phpc_val;
