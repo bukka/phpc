@@ -221,14 +221,44 @@ typedef int  phpc_str_size_t;
 /* HASH */
 
 /* update */
+#define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
+	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
 #define PHPC_HASH_STR_UPDATE(_ht, _str, _pzv) \
 	zend_hash_update(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1, &_pzv, sizeof(_pzv), NULL)
 #define PHPC_HASH_CSTRL_UPDATE(_ht, _cstr_value, _cstr_len, _pzv) \
 	zend_hash_update(_ht, _cstr_value, (_cstr_len) + 1, &_pzv, sizeof(_pzv), NULL)
 #define PHPC_HASH_CSTR_UPDATE(_ht, _cstr_value, _pzv) \
 	zend_hash_update(_ht, _cstr_value, strlen(_cstr_value) + 1, &_pzv, sizeof(_pzv), NULL)
-#define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
-	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
+
+/* delete */
+#define PHPC_HASH_INDEX_DELETE(_ht, _idx) \
+	zend_hash_index_del(_ht, _idx)
+#define PHPC_HASH_STR_DELETE(_ht, _str) \
+	 zend_hash_del(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1)
+#define PHPC_HASH_CSTRL_DELETE(_ht, _cstr_value, _cstr_len) \
+	zend_hash_del(_ht, _cstr_value, (_cstr_len) + 1)
+#define PHPC_HASH_CSTR_DELETE(_ht, _cstr_value) \
+	zend_hash_del(_ht, _cstr_value, strlen(_cstr_value) + 1)
+
+/* exists */
+#define PHPC_HASH_INDEX_EXISTS(_ht, _idx) \
+	zend_hash_index_exists(_ht, _idx)
+#define PHPC_HASH_STR_EXISTS(_ht, _str) \
+	 zend_hash_exists(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1)
+#define PHPC_HASH_CSTRL_EXISTS(_ht, _cstr_value, _cstr_len) \
+	zend_hash_exists(_ht, _cstr_value, (_cstr_len) + 1)
+#define PHPC_HASH_CSTR_EXISTS(_ht, _cstr_value) \
+	zend_hash_exists(_ht, _cstr_value, strlen(_cstr_value) + 1)
+
+/* find */
+#define PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv) \
+	zend_hash_index_find(_ht, _idx, (void **) &_ppv)
+#define PHPC_HASH_STR_FIND(_ht, _str, _ppv) \
+	 zend_hash_find(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1, (void **) &_ppv)
+#define PHPC_HASH_CSTRL_FIND(_ht, _cstr_value, _cstr_len, _ppv) \
+	zend_hash_find(_ht, _cstr_value, (_cstr_len) + 1, (void **) &_ppv)
+#define PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv) \
+	zend_hash_find(_ht, _cstr_value, strlen(_cstr_value) + 1, (void **) &_ppv)
 
 /* key and data getter */
 #define PHPC_HASH_GET_CURRENT_KEY_EX(_ht, _str, _num_index, _pos) \
@@ -242,14 +272,14 @@ typedef int  phpc_str_size_t;
 	zend_hash_get_current_data(_ht, (void **) &(_val))
 
 /* iteration for each element */
-#define PHPC_HASH_FOREACH_VAL(ht, _val) do { \
+#define PHPC_HASH_FOREACH_VAL(ht, _ppv) do { \
 	HashPosition _pos; \
 	for (zend_hash_internal_pointer_reset_ex((ht), &_pos); \
-			zend_hash_get_current_data_ex((ht), (void **) &(_val), &_pos) == SUCCESS; \
+			zend_hash_get_current_data_ex((ht), (void **) &(_ppv), &_pos) == SUCCESS; \
 			zend_hash_move_forward_ex((ht), &_pos) ) {
 
-#define _PHPC_HASH_FOREACH_KEY_VAL(ht, _ph, _key, _val, _use_h) \
-	PHPC_HASH_FOREACH_VAL(ht, _val) \
+#define _PHPC_HASH_FOREACH_KEY_VAL(ht, _ph, _key, _ppv, _use_h) \
+	PHPC_HASH_FOREACH_VAL(ht, _ppv) \
 		uint _str_length; \
 		ulong _num_index, *_pnum_index; \
 		if (_use_h) { \
@@ -265,11 +295,11 @@ typedef int  phpc_str_size_t;
 			PHPC_STR_LEN(_key) = 0; \
 		}
 
-#define PHPC_HASH_FOREACH_KEY_VAL(ht, _h, _key, _val) \
-	_PHPC_HASH_FOREACH_KEY_VAL(ht, &_h, _key, _val, 1)
+#define PHPC_HASH_FOREACH_KEY_VAL(ht, _h, _key, _ppv) \
+	_PHPC_HASH_FOREACH_KEY_VAL(ht, &_h, _key, _ppv, 1)
 
-#define PHPC_HASH_FOREACH_STR_KEY_VAL(ht, _key, _val) \
-	_PHPC_HASH_FOREACH_KEY_VAL(ht, NULL, _key, _val, 0)
+#define PHPC_HASH_FOREACH_STR_KEY_VAL(ht, _key, _ppv) \
+	_PHPC_HASH_FOREACH_KEY_VAL(ht, NULL, _key, _ppv, 0)
 
 #define PHPC_HASH_FOREACH_END() } } while (0)
 
@@ -485,6 +515,30 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_HASH_CSTRL_UPDATE zend_hash_str_update
 #define PHPC_HASH_CSTR_UPDATE(_ht, _cstr_value, _pzv) \
 	zend_hash_str_update(_ht, _cstr_value, strlen(_cstr_value), _pzv)
+
+/* delete */
+#define PHPC_HASH_INDEX_DELETE zend_hash_index_del
+#define PHPC_HASH_STR_DELETE   zend_hash_del
+#define PHPC_HASH_CSTRL_DELETE zend_hash_str_del
+#define PHPC_HASH_CSTR_DELETE(_ht, _cstr_value) \
+	zend_hash_str_del(_ht, _cstr_value, strlen(_cstr_value))
+
+/* exists */
+#define PHPC_HASH_INDEX_EXISTS zend_hash_index_exists
+#define PHPC_HASH_STR_EXISTS   zend_hash_exists
+#define PHPC_HASH_CSTRL_EXISTS zend_hash_str_exists
+#define PHPC_HASH_CSTR_EXISTS(_ht, _cstr_value) \
+	zend_hash_str_exists(_ht, _cstr_value, strlen(_cstr_value))
+
+/* find */
+#define PHPC_HASH_STR_FIND(_ht, _str, _ppv) \
+	_ppv = zend_hash_find(_ht, _str)
+#define PHPC_HASH_CSTRL_FIND(_ht, _cstr_value, _cstr_len, _ppv) \
+	_ppv = zend_hash_str_find(_ht, _cstr_value, _cstr_len)
+#define PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv) \
+	_ppv = zend_hash_str_find(_ht, _cstr_value, strlen(_cstr_value))
+#define PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv) \
+	_ppv = zend_hash_index_find(_ht, _idx)
 
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL

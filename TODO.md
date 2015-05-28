@@ -8,10 +8,6 @@
 - Z is not supported
 
 ## HashTable
-- wrap str based functions
-  - zend_hash_del
-  - zend_hash_find
-  - zend_hash_exists
 - wrap util functions
   - zend_hash_copy
   - zend_hash_merge
