@@ -658,6 +658,8 @@ typedef zval  phpc_val;
 	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 2, PHPC_THAT)
 
 /* hash */
+#define PHPC_HASH_ALLOC                     ALLOC_HASHTABLE
+#define PHPC_HASH_INIT                      zend_hash_init
 #define PHPC_HASH_NUM_ELEMENTS              zend_hash_num_elements
 
 #define PHPC_HASH_HAS_MORE_ELEMENTS_EX      zend_hash_has_more_elements_ex
