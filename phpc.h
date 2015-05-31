@@ -217,6 +217,11 @@ typedef int  phpc_str_size_t;
 #define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
 #define PHPC_OBJ_SET_HANDLER_FREE(_name) PHPC_NOOP
 
+/* read propery */
+#define PHPC_READ_PROPERTY_RV_NAME
+#define PHPC_READ_PROPERTY_RV_DECLARE PHPC_NOOP
+#define PHPC_READ_PROPERTY(_scope, _object, _name, _name_len, _silent) \
+	zend_read_property(_scope, _object, _name, _name_len, _silent TSRMLS_CC)
 
 /* HASH */
 
@@ -505,6 +510,12 @@ typedef size_t    phpc_str_size_t;
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).offset = XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std)
 #define PHPC_OBJ_SET_HANDLER_FREE(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free)
+
+/* read propery */
+#define PHPC_READ_PROPERTY_RV_NAME _phpc_read_property_rv
+#define PHPC_READ_PROPERTY_RV_DECLARE zval PHPC_READ_PROPERTY_RV_NAME
+#define PHPC_READ_PROPERTY(_scope, _object, _name, _name_len, _silent) \
+	zend_read_property(_scope, _object, _name, _name_len, _silent, &PHPC_READ_PROPERTY_RV_NAME)
 
 
 /* HASH */
