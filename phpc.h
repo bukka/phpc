@@ -59,9 +59,10 @@
 
 #if PHP_MAJOR_VERSION == 5
 
-/* LONG */
+/* INT */
 typedef long  phpc_long_t;
 typedef ulong phpc_ulong_t;
+typedef off_t phpc_off_t;
 
 #define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) _lv = _plv
 #define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc, _exc)
@@ -369,9 +370,10 @@ typedef zval * phpc_val;
 
 #else /* PHP 7 */
 
-/* LONG */
+/* INT */
 typedef zend_long  phpc_long_t;
 typedef zend_ulong phpc_ulong_t;
+typedef zend_off_t phpc_off_t;
 
 #define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) \
 	if (_lv > LONG_MAX) { \
