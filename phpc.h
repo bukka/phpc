@@ -324,6 +324,36 @@ typedef int  phpc_str_size_t;
 	} while(0)
 
 
+/* ARRAY */
+#define PHPC_ARRAY_ADD_ASSOC_STR_EX(_arr, _key, _key_len, _str) \
+	add_assoc_stringl_ex(_arr, _key, _key_len, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
+#define PHPC_ARRAY_ADD_ASSOC_CSTR_EX(_arr, _key, _key_len, _cstr) \
+	add_assoc_string_ex(_arr, _key, _key_len, _cstr, 1)
+#define PHPC_ARRAY_ADD_ASSOC_CSTRL_EX(_arr, _key, _key_len, _cstr, _cstr_len) \
+	add_assoc_stringl_ex(_arr, _key, _key_len, _cstr, _cstr_len, 1)
+
+#define PHPC_ARRAY_ADD_ASSOC_STR(_arr, _key, _str) \
+	add_assoc_stringl(_arr, _key, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
+#define PHPC_ARRAY_ADD_ASSOC_CSTR(_arr, _key, _cstr) \
+	add_assoc_string(_arr, _key, _cstr, 1)
+#define PHPC_ARRAY_ADD_ASSOC_CSTRL(_arr, _key, _cstr, _cstr_len) \
+	add_assoc_stringl(_arr, _key, _cstr, _cstr_len, 1)
+
+#define PHPC_ARRAY_ADD_INDEX_STR(_arr, _idx, _str) \
+	add_index_stringl(_arr, _idx, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
+#define PHPC_ARRAY_ADD_INDEX_CSTR(_arr, _idx, _cstr) \
+	add_index_string(_arr, _idx, _cstr, 1)
+#define PHPC_ARRAY_ADD_INDEX_CSTRL(_arr, _idx, _cstr, _cstr_len) \
+	add_index_stringl(_arr, _idx, _cstr, _cstr_len, 1)
+
+#define PHPC_ARRAY_ADD_NEXT_INDEX_STR(_arr, _str) \
+	add_next_index_stringl(_arr, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
+#define PHPC_ARRAY_ADD_NEXT_INDEX_CSTR(_arr, _cstr) \
+	add_next_index_string(_arr, _cstr, 1)
+#define PHPC_ARRAY_ADD_NEXT_INDEX_CSTRL(_arr, _cstr, _cstr_len) \
+	add_next_index_stringl(_arr, _cstr, _cstr_len, 1)
+
+
 /* ZVAL */
 typedef zval * phpc_val;
 
@@ -574,6 +604,25 @@ typedef size_t    phpc_str_size_t;
 	ZVAL_ARR(_pzv, _ht)
 #define PHPC_HASH_RETVAL RETVAL_ARR
 #define PHPC_HASH_RETURN RETURN_ARR
+
+
+/* ARRAY */
+#define PHPC_ARRAY_ADD_ASSOC_STR_EX      add_assoc_str_ex
+#define PHPC_ARRAY_ADD_ASSOC_CSTR_EX     add_assoc_string_ex
+#define PHPC_ARRAY_ADD_ASSOC_CSTRL_EX    add_assoc_stringl_ex
+
+#define PHPC_ARRAY_ADD_ASSOC_STR         add_assoc_str
+#define PHPC_ARRAY_ADD_ASSOC_CSTR        add_assoc_string
+#define PHPC_ARRAY_ADD_ASSOC_CSTRL       add_assoc_stringl
+
+#define PHPC_ARRAY_ADD_INDEX_STR         add_index_str
+#define PHPC_ARRAY_ADD_INDEX_CSTR        add_index_string
+#define PHPC_ARRAY_ADD_INDEX_CSTRL       add_index_stringl
+
+#define PHPC_ARRAY_ADD_NEXT_INDEX_STR    add_next_index_str
+#define PHPC_ARRAY_ADD_NEXT_INDEX_CSTR   add_next_index_string
+#define PHPC_ARRAY_ADD_NEXT_INDEX_CSTRL  add_next_index_stringl
+
 
 /* ZVAL */
 typedef zval  phpc_val;
