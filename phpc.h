@@ -400,7 +400,7 @@ typedef zval * phpc_val;
 	ZVAL_STRINGL(_pv, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
 #define PHPC_VAL_CSTR(_pv, _cstr) \
     ZVAL_STRING(_pv, _cstr, 1)
-#define PHPC_VAL_CSTRL(_pv, _cstr_len) \
+#define PHPC_VAL_CSTRL(_pv, _cstr, _cstr_len) \
 	ZVAL_STRINGL(_pv, _cstr, _cstr_len, 1)
 
 
@@ -683,7 +683,7 @@ typedef zval  phpc_val;
 	ZVAL_STR(&_pv, _str)
 #define PHPC_VAL_CSTR(_pv, _cstr) \
     ZVAL_STRING(&_pv, _cstr)
-#define PHPC_VAL_CSTRL(_pv, _cstr_len) \
+#define PHPC_VAL_CSTRL(_pv, _cstr, _cstr_len) \
 	ZVAL_STRINGL(&_pv, _cstr, _cstr_len)
 
 
