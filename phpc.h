@@ -72,17 +72,32 @@ typedef off_t phpc_off_t;
 /* STRING */
 /* length type */
 typedef int  phpc_str_size_t;
-/* accessor macros */
-#define PHPC_STR_VAL(_name) _name##__val
-#define PHPC_STR_LEN(_name) _name##__len
-#define PHPC_STR_LEN_UNUSED(_name) (void) PHPC_STR_LEN(_name);
-#define PHPC_STR_LEN_FMT "d"
-#define PHPC_STR_EXISTS(_name) PHPC_STR_VAL(_name)
-#define PHPC_STR_DECLARE(_name) char *PHPC_STR_VAL(_name); int PHPC_STR_LEN(_name)
-#define PHPC_STR_ARG(_name) char *PHPC_STR_VAL(_name), int PHPC_STR_LEN(_name)
-#define PHPC_STR_PASS(_name) PHPC_STR_VAL(_name), PHPC_STR_LEN(_name)
-#define PHPC_STR_REF(_name) &PHPC_STR_VAL(_name), &PHPC_STR_LEN(_name)
-#define PHPC_STR_RETURN(_name) RETURN_STRINGL(PHPC_STR_VAL(_name), PHPC_STR_LEN(_name), 0)
+/* accessor and convertor macros */
+#define PHPC_STR_VAL(_name)                   _name##__val
+#define PHPC_STR_LEN(_name)                   _name##__len
+#define PHPC_STR_LEN_FMT                      "d"
+#define PHPC_STR_LEN_UNUSED(_name)            (void) PHPC_STR_LEN(_name)
+#define PHPC_STR_LEN_FROM_VAL(_name)          strlen(PHPC_STR_VAL(_name))
+#define PHPC_STR_LEN_DECLARE(_name)           int PHPC_STR_LEN(_name)
+#define PHPC_STR_LEN_FETCH(_name)             PHPC_STR_LEN(_name) = PHPC_STR_LEN_FROM_VAL(_name)
+#define PHPC_STR_LEN_DECLARE_AND_FETCH(_name) int PHPC_STR_LEN_FETCH(_name)
+#define PHPC_STR_EXISTS(_name)                PHPC_STR_VAL(_name)
+#define PHPC_STR_DECLARE(_name)               char *PHPC_STR_VAL(_name); int PHPC_STR_LEN(_name)
+#define PHPC_STR_ARG                          char *PHPC_STR_VAL(_name), int PHPC_STR_LEN(_name)
+#define PHPC_STR_ARG_PTR(_name)               char **PHPC_STR_VAL(_name), int *PHPC_STR_LEN(_name)
+#define PHPC_STR_ARG_PTR_VAL                  char **PHPC_STR_VAL(_name)
+#define PHPC_STR_PASS(_name)                  PHPC_STR_VAL(_name), PHPC_STR_LEN(_name)
+#define PHPC_STR_PASS_PTR(_name)              &PHPC_STR_VAL(_name), &PHPC_STR_LEN(_name)
+#define PHPC_STR_PASS_PTR_VAL                 &PHPC_STR_VAL(_name)
+#define PHPC_STR_FROM_PTR_STR(_str, _strp) \
+	PHPC_STR_VAL(_name) = *PHPC_STR_VAL(_strpv); \
+	PHPC_STR_LEN(_name) = *PHPC_STR_LEN(_strpv)
+#define PHPC_STR_FROM_PTR_VAL(_str, _strpv) \
+	PHPC_STR_VAL(_name) = *PHPC_STR_VAL(_strpv); \
+	PHPC_STR_LEN(_name) = strlen(*PHPC_STR_VAL(_strpv))
+#define PHPC_STR_RETURN(_name) \
+	RETURN_STRINGL(PHPC_STR_VAL(_name), PHPC_STR_LEN(_name), 0)
+
 /* wrapper macros */
 #define PHPC_STR_INIT(_name, _cstr, _len) do { \
 		PHPC_STR_VAL(_name) = emalloc(_len + 1); \
@@ -433,18 +448,28 @@ typedef zend_off_t phpc_off_t;
 /* STRING */
 /* length type */
 typedef size_t    phpc_str_size_t;
-/* accessor macros */
-#define PHPC_STR_VAL(_name) (_name)->val
-#define PHPC_STR_LEN(_name) (_name)->len
-#define PHPC_STR_LEN_UNUSED(_name) PHPC_NOOP
-#define PHPC_STR_LEN_FMT "zu"
-#define PHPC_STR_EXISTS(_name) (_name)
-#define PHPC_STR_DECLARE(_name) zend_string *_name
-#define PHPC_STR_ARG(_name) zend_string *_name
-#define PHPC_STR_PASS(_name) _name
-#define PHPC_STR_REF(_name)  _name
-#define PHPC_STR_RETURN(_name) RETURN_STR(_name)
+/* accessor and convertor macros */
+#define PHPC_STR_VAL(_name)                   (_name)->val
+#define PHPC_STR_LEN(_name)                   (_name)->len
+#define PHPC_STR_LEN_FMT                      "zu"
+#define PHPC_STR_LEN_UNUSED(_name)            PHPC_NOOP
+#define PHPC_STR_LEN_FROM_VAL                 PHPC_STR_LEN
+#define PHPC_STR_LEN_DECLARE(_name)           PHPC_NOOP
+#define PHPC_STR_LEN_FETCH(_name)             PHPC_NOOP
+#define PHPC_STR_LEN_DECLARE_AND_FETCH(_name) PHPC_NOOP
+#define PHPC_STR_EXISTS(_name)                (_name)
+#define PHPC_STR_DECLARE(_name)               zend_string *_name
+#define PHPC_STR_ARG(_name)                   zend_string *_name
+#define PHPC_STR_ARG_PTR(_name)               zend_string **_name
+#define PHPC_STR_ARG_PTR_VAL                  PHPC_STR_ARG_PTR
+#define PHPC_STR_PASS(_name)                  _name
+#define PHPC_STR_PASS_PTR(_name)              &_name
+#define PHPC_STR_PASS_PTR_VAL                 PHPC_STR_PASS_PTR
+#define PHPC_STR_FROM_PTR_STR(_str, _strp)    _str = *_strp
+#define PHPC_STR_FROM_PTR_VAL(_str, _strpv)   _str = *_strpv
+#define PHPC_STR_RETURN                       RETURN_STR
 /* wrapper macros */
+
 #define PHPC_STR_INIT(_name, _cstr, _len) _name = zend_string_init(_cstr, _len, 0)
 #define PHPC_STR_ALLOC(_name, _len) _name = zend_string_alloc(_len, 0)
 #define PHPC_STR_REALLOC(_name, _len) _name = zend_string_realloc(_name, _len, 0)
