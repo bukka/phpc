@@ -83,18 +83,20 @@ typedef int  phpc_str_size_t;
 #define PHPC_STR_LEN_DECLARE_AND_FETCH(_name) int PHPC_STR_LEN_FETCH(_name)
 #define PHPC_STR_EXISTS(_name)                PHPC_STR_VAL(_name)
 #define PHPC_STR_DECLARE(_name)               char *PHPC_STR_VAL(_name); int PHPC_STR_LEN(_name)
-#define PHPC_STR_ARG                          char *PHPC_STR_VAL(_name), int PHPC_STR_LEN(_name)
+#define PHPC_STR_ARG(_name)                   char *PHPC_STR_VAL(_name), int PHPC_STR_LEN(_name)
+#define PHPC_STR_ARG_VAL(_name)               char *PHPC_STR_VAL(_name)
 #define PHPC_STR_ARG_PTR(_name)               char **PHPC_STR_VAL(_name), int *PHPC_STR_LEN(_name)
-#define PHPC_STR_ARG_PTR_VAL                  char **PHPC_STR_VAL(_name)
+#define PHPC_STR_ARG_PTR_VAL(_name)           char **PHPC_STR_VAL(_name)
 #define PHPC_STR_PASS(_name)                  PHPC_STR_VAL(_name), PHPC_STR_LEN(_name)
+#define PHPC_STR_PASS_VAL(_name)              PHPC_STR_VAL(_name)
 #define PHPC_STR_PASS_PTR(_name)              &PHPC_STR_VAL(_name), &PHPC_STR_LEN(_name)
-#define PHPC_STR_PASS_PTR_VAL                 &PHPC_STR_VAL(_name)
+#define PHPC_STR_PASS_PTR_VAL(_name)          &PHPC_STR_VAL(_name)
 #define PHPC_STR_FROM_PTR_STR(_str, _strp) \
-	PHPC_STR_VAL(_name) = *PHPC_STR_VAL(_strpv); \
-	PHPC_STR_LEN(_name) = *PHPC_STR_LEN(_strpv)
+	PHPC_STR_VAL(_str) = *PHPC_STR_VAL(_strp); \
+	PHPC_STR_LEN(_str) = *PHPC_STR_LEN(_strp)
 #define PHPC_STR_FROM_PTR_VAL(_str, _strpv) \
-	PHPC_STR_VAL(_name) = *PHPC_STR_VAL(_strpv); \
-	PHPC_STR_LEN(_name) = strlen(*PHPC_STR_VAL(_strpv))
+	PHPC_STR_VAL(_str) = *PHPC_STR_VAL(_strpv); \
+	PHPC_STR_LEN(_str) = strlen(*PHPC_STR_VAL(_strpv))
 #define PHPC_STR_RETURN(_name) \
 	RETURN_STRINGL(PHPC_STR_VAL(_name), PHPC_STR_LEN(_name), 0)
 
@@ -460,9 +462,11 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_STR_EXISTS(_name)                (_name)
 #define PHPC_STR_DECLARE(_name)               zend_string *_name
 #define PHPC_STR_ARG(_name)                   zend_string *_name
+#define PHPC_STR_ARG_VAL                      PHPC_STR_ARG
 #define PHPC_STR_ARG_PTR(_name)               zend_string **_name
 #define PHPC_STR_ARG_PTR_VAL                  PHPC_STR_ARG_PTR
 #define PHPC_STR_PASS(_name)                  _name
+#define PHPC_STR_PASS_VAL                     PHPC_STR_PASS
 #define PHPC_STR_PASS_PTR(_name)              &_name
 #define PHPC_STR_PASS_PTR_VAL                 PHPC_STR_PASS_PTR
 #define PHPC_STR_FROM_PTR_STR(_str, _strp)    _str = *_strp
