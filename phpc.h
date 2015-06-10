@@ -429,6 +429,21 @@ typedef zval * phpc_val;
 #endif
 
 
+/* STREAM */
+#if PHP_VERSION_ID < 50600
+typedef char phpc_stream_opener_char_t;
+#else
+typedef const char phpc_stream_opener_char_t;
+#endif
+#define PHPC_STREAM_WRAPPERDATA_ALLOC(stream) MAKE_STD_ZVAL(stream->wrapperdata)
+#define PHPC_STREAM_WRAPPERDATA_ISSET(stream) stream->wrapperdata
+#define PHPC_STREAM_WRAPPERDATA_UNSET(stream) \
+	do { \
+		zval_ptr_dtor(&stream->wrapperdata); \
+		stream->wrapperdata = NULL; \
+	} while(0)
+
+
 #else /* PHP 7 */
 
 /* INT */
@@ -718,6 +733,16 @@ typedef zval  phpc_val;
 
 #define PHPC_FE_END PHP_FE_END
 
+
+/* STREAM */
+typedef const char phpc_stream_opener_char_t;
+#define PHPC_STREAM_WRAPPERDATA_ALLOC(stream) PHPC_NOOP
+#define PHPC_STREAM_WRAPPERDATA_ISSET(stream) (Z_TYPE(stream->wrapperdata) != IS_UNDEF)
+#define PHPC_STREAM_WRAPPERDATA_UNSET(stream) \
+	do { \
+		zval_ptr_dtor(&stream->wrapperdata); \
+		ZVAL_UNDEF(&stream->wrapperdata); \
+	} while(0)
 
 #endif /* PHP_MAJOR_VERSION */
 
