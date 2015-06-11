@@ -91,6 +91,7 @@ typedef int  phpc_str_size_t;
 #define PHPC_STR_PASS_VAL(_name)              PHPC_STR_VAL(_name)
 #define PHPC_STR_PASS_PTR(_name)              &PHPC_STR_VAL(_name), &PHPC_STR_LEN(_name)
 #define PHPC_STR_PASS_PTR_VAL(_name)          &PHPC_STR_VAL(_name)
+#define PHPC_STR_DEREF_VAL(_name)             *PHPC_STR_VAL(_name)
 #define PHPC_STR_FROM_PTR_STR(_str, _strp) \
 	PHPC_STR_VAL(_str) = *PHPC_STR_VAL(_strp); \
 	PHPC_STR_LEN(_str) = *PHPC_STR_LEN(_strp)
@@ -484,6 +485,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_STR_PASS_VAL                     PHPC_STR_PASS
 #define PHPC_STR_PASS_PTR(_name)              &_name
 #define PHPC_STR_PASS_PTR_VAL                 PHPC_STR_PASS_PTR
+#define PHPC_STR_DEREF_VAL(_name)             *_name
 #define PHPC_STR_FROM_PTR_STR(_str, _strp)    _str = *_strp
 #define PHPC_STR_FROM_PTR_VAL(_str, _strpv)   _str = *_strpv
 #define PHPC_STR_RETURN                       RETURN_STR
