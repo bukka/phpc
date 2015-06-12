@@ -283,6 +283,8 @@ typedef int  phpc_str_size_t;
 	zend_hash_find(_ht, _cstr_value, (_cstr_len) + 1, (void **) &_ppv)
 #define PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv) \
 	zend_hash_find(_ht, _cstr_value, strlen(_cstr_value) + 1, (void **) &_ppv)
+/* not found value */
+#define PHPC_HASH_NOT_FOUND FAILURE
 
 /* key and data getter */
 #define PHPC_HASH_GET_CURRENT_KEY_EX(_ht, _str, _num_index, _pos) \
@@ -443,7 +445,9 @@ typedef const char phpc_stream_opener_char_t;
 		zval_ptr_dtor(&stream->wrapperdata); \
 		stream->wrapperdata = NULL; \
 	} while(0)
-
+#define PHPC_STREAM_CONTEXT_GET_OPTION(_ctx, _wrappername, _optionname, _ppv) \
+	php_stream_context_get_option(_ctx, _wrappername, _optionname, &_ppv)
+#define PHPC_STREAM_CONTEXT_OPTION_NOT_FOUND FAILURE
 
 #else /* PHP 7 */
 
@@ -642,6 +646,8 @@ typedef size_t    phpc_str_size_t;
 	_ppv = zend_hash_str_find(_ht, _cstr_value, strlen(_cstr_value))
 #define PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv) \
 	_ppv = zend_hash_index_find(_ht, _idx)
+/* not found value */
+#define PHPC_HASH_NOT_FOUND NULL
 
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL
@@ -745,6 +751,9 @@ typedef const char phpc_stream_opener_char_t;
 		zval_ptr_dtor(&stream->wrapperdata); \
 		ZVAL_UNDEF(&stream->wrapperdata); \
 	} while(0)
+#define PHPC_STREAM_CONTEXT_GET_OPTION(_ctx, _wrappername, _optionname, _ppv) \
+	_ppv = php_stream_context_get_option(_ctx, _wrappername, _optionname)
+#define PHPC_STREAM_CONTEXT_OPTION_NOT_FOUND NULL
 
 #endif /* PHP_MAJOR_VERSION */
 
@@ -823,6 +832,18 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_HASH_INTERNAL_POINTER_RESET    zend_hash_internal_pointer_reset
 #define PHPC_HASH_INTERNAL_POINTER_END      zend_hash_internal_pointer_end
 
+/* find */
+#define PHPC_HASH_IS_FOUND(_found) ((_found) != PHPC_HASH_NOT_FOUND)
+
+#define PHPC_HASH_STR_FIND_IN_COND(_ht, _str, _ppv) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_STR_FIND(_ht, _str, _ppv))
+#define PHPC_HASH_CSTRL_FIND_IN_COND(_ht, _cstr_value, _cstr_len, _ppv) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_CSTRL_FIND(_ht, _cstr_value, _cstr_len, _ppv))
+#define PHPC_HASH_CSTR_FIND_IN_COND(_ht, _cstr_value, _ppv) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv))
+#define PHPC_HASH_INDEX_FIND_IN_COND(_ht, _idx, _ppv) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv))
+
 /* array */
 #define PHPC_ARRAY_INIT array_init
 #if PHP_VERSION_ID < 50299
@@ -848,6 +869,12 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_ARRAY_ADD_NEXT_INDEX_LONG     add_next_index_long
 #define PHPC_ARRAY_ADD_NEXT_INDEX_RESOURCE add_next_index_resource
 #define PHPC_ARRAY_ADD_NEXT_INDEX_DOUBLE   add_next_index_double
+
+/* stream */
+#define PHPC_STREAM_CONTEXT_GET_OPTION_IN_COND(_ctx, _wrappername, _optionname, _ppv) \
+	((PHPC_STREAM_CONTEXT_GET_OPTION(_ctx, _wrappername, _optionname, _ppv)) != \
+		PHPC_STREAM_CONTEXT_OPTION_NOT_FOUND)
+
 
 #endif	/* PHPC_H */
 
