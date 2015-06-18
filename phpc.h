@@ -696,13 +696,14 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_ARRAY_ADD_INDEX_CSTR        add_index_string
 #define PHPC_ARRAY_ADD_INDEX_CSTRL       add_index_stringl
 #define PHPC_ARRAY_ADD_INDEX_VAL(_arr, _idx, _pv) \
-	add_assoc_zval(_arr, _idx, &_pv)
+	add_index_zval(_arr, _idx, &_pv)
 
 #define PHPC_ARRAY_ADD_NEXT_INDEX_STR    add_next_index_str
 #define PHPC_ARRAY_ADD_NEXT_INDEX_CSTR   add_next_index_string
 #define PHPC_ARRAY_ADD_NEXT_INDEX_CSTRL  add_next_index_stringl
 #define PHPC_ARRAY_ADD_NEXT_INDEX_VAL(_arr, _pv) \
-	add_assoc_zval(_arr, &_pv)
+	add_next_index_zval(_arr, &_pv)
+
 
 /* ZVAL */
 typedef zval  phpc_val;
