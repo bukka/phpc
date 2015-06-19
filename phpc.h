@@ -124,9 +124,9 @@ typedef int  phpc_str_size_t;
 
 /* ZPP path flag */
 #if PHP_VERSION_ID < 50399
-#define PHPC_ZPP_PATH_FLAG "s"
+#define PHPC_PATH_ZPP_FLAG "s"
 #else
-#define PHPC_ZPP_PATH_FLAG "p"
+#define PHPC_PATH_ZPP_FLAG "p"
 #endif
 
 /* Smart string */
