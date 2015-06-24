@@ -56,22 +56,55 @@
 #define PHPC_OBJ_SET_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
 
+/* integer conversions */
+#define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type, _max, _min) \
+	if (_pn > _max) { \
+		_exc_over; \
+	} else if (_pn < _min) { \
+		_exc_under; \
+	} \
+	_n = (_type) _pn
+
+#define PHPC_LONG_TO_INT_EX2(_plv, _lv, _exc_over, _exc_under) \
+	PHPC_CONVERT_NUMBER(_plv, _lv, _exc_over, _exc_under, int, INT_MAX, INT_MIN)
+#define PHPC_LONG_TO_INT_EX(_plv, _lv, _exc) \
+	PHPC_LONG_TO_INT_EX2(_plv, _lv, _exc, _exc)
+#define PHPC_LONG_TO_INT(_plv, _lv) \
+	PHPC_LONG_TO_INT_EX2(_plv, _lv, _lv = INT_MAX, _lv = INT_MIN)
+
 
 #if PHP_MAJOR_VERSION == 5
 
-/* INT */
-typedef long  phpc_long_t;
-typedef ulong phpc_ulong_t;
-typedef off_t phpc_off_t;
 
-#define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) _lv = _plv
-#define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc, _exc)
-#define PHPC_LONG_TO_LONG(_plv, _lv) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _lv = LONG_MAX, _lv = LONG_MIN)
+/* INTEGER */
+
+/* long type */
+typedef long  phpc_long_t;
+/* unsigned long type */
+typedef unsigned long phpc_ulong_t;
+/* offset type */
+typedef off_t phpc_off_t;
+/* string length type */
+typedef int phpc_str_size_t;
+
+#define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) \
+	_lv = _plv
+#define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) \
+	_lv = _plv
+#define PHPC_LONG_TO_LONG(_plv, _lv) \
+	_lv = _plv
+
+#define PHPC_SIZE_TO_LONG_EX2 PHPC_LONG_TO_LONG_EX2
+#define PHPC_SIZE_TO_LONG_EX  PHPC_LONG_TO_LONG_EX
+#define PHPC_SIZE_TO_LONG     PHPC_LONG_TO_LONG
+
+#define PHPC_SIZE_TO_INT_EX2 PHPC_LONG_TO_LONG_EX2
+#define PHPC_SIZE_TO_INT_EX  PHPC_LONG_TO_LONG_EX
+#define PHPC_SIZE_TO_INT     PHPC_LONG_TO_LONG
 
 
 /* STRING */
-/* length type */
-typedef int  phpc_str_size_t;
+
 /* accessor and convertor macros */
 #define PHPC_STR_VAL(_name)                   _name##__val
 #define PHPC_STR_LEN(_name)                   _name##__len
@@ -451,25 +484,36 @@ typedef const char phpc_stream_opener_char_t;
 
 #else /* PHP 7 */
 
-/* INT */
+
+/* INTEGER */
+
+/* long type */
 typedef zend_long  phpc_long_t;
+/* unsigned long type */
 typedef zend_ulong phpc_ulong_t;
+/* offset type */
 typedef zend_off_t phpc_off_t;
+/* string length type */
+typedef size_t    phpc_str_size_t;
 
 #define PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc_over, _exc_under) \
-	if (_lv > LONG_MAX) { \
-		_exc_over; \
-	} else if (_lv < LONG_MIN) { \
-		_exc_under; \
-	} \
-	_lv = (long) _plv
-#define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc, _exc)
-#define PHPC_LONG_TO_LONG(_plv, _lv) PHPC_LONG_TO_LONG_EX2(_plv, _lv, _lv = LONG_MAX, _lv = LONG_MIN)
+	PHPC_CONVERT_NUMBER(_plv, _lv, _exc_over, _exc_under, long, LONG_MAX, LONG_MIN)
+#define PHPC_LONG_TO_LONG_EX(_plv, _lv, _exc) \
+	PHPC_LONG_TO_LONG_EX2(_plv, _lv, _exc, _exc)
+#define PHPC_LONG_TO_LONG(_plv, _lv) \
+	PHPC_LONG_TO_LONG_EX2(_plv, _lv, _lv = LONG_MAX, _lv = LONG_MIN)
+
+#define PHPC_SIZE_TO_LONG_EX2 PHPC_LONG_TO_LONG_EX2
+#define PHPC_SIZE_TO_LONG_EX  PHPC_LONG_TO_LONG_EX
+#define PHPC_SIZE_TO_LONG     PHPC_LONG_TO_LONG
+
+#define PHPC_SIZE_TO_INT_EX2 PHPC_LONG_TO_INT_EX2
+#define PHPC_SIZE_TO_INT_EX  PHPC_LONG_TO_INT_EX
+#define PHPC_SIZE_TO_INT     PHPC_LONG_TO_INT
 
 
 /* STRING */
-/* length type */
-typedef size_t    phpc_str_size_t;
+
 /* accessor and convertor macros */
 #define PHPC_STR_VAL(_name)                   (_name)->val
 #define PHPC_STR_LEN(_name)                   (_name)->len
