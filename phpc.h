@@ -55,6 +55,8 @@
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).clone_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, clone)
 #define PHPC_OBJ_SET_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
+#define PHPC_OBJ_SET_HANDLER_GET_GC(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_gc = PHPC_OBJ_GET_HANDLER_FCE(_name, get_gc)
 
 /* integer conversions */
 #define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type, _max, _min) \
@@ -855,6 +857,13 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_OBJ_HANDLER_COMPARE_INIT(_name) \
 	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 1, PHPC_THIS); \
 	PHPC_OBJ_HANDLER_COMPARE_FETCH(_name, 2, PHPC_THAT)
+
+/* object handler get_gc */
+#define PHPC_GC_TABLE _phpc_gc_table
+#define PHPC_GC_N _phpc_gc_n
+#define PHPC_OBJ_HANDLER_GET_GC(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_gc)\
+		(zval *_phpc_self, phpc_val **PHPC_GC_TABLE, int *PHPC_GC_N)
 
 /* hash */
 #define PHPC_HASH_ALLOC                     ALLOC_HASHTABLE
