@@ -36,6 +36,7 @@
 
 /* common object macros */
 #define PHPC_CLASS_TYPE _phpc_class_type
+#define PHPC_SELF       _phpc_self
 #define PHPC_OBJ_STRUCT_NAME(_name) struct _phpc_##_name##__obj
 #define PHPC_OBJ_STRUCT_DECLARE(_name, _ptr) PHPC_OBJ_STRUCT_NAME(_name) *_ptr
 #define PHPC_OBJ_GET_HANDLER_FCE(_name, _type) _name##__##_type
@@ -205,7 +206,7 @@ typedef int phpc_str_size_t;
 #define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *) zend_object_store_get_object(_zv TSRMLS_CC)
 #define PHPC_OBJ_FROM_SELF(_name) \
-	PHPC_OBJ_FROM_ZVAL(_name, _phpc_self)
+	PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
 	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 
@@ -243,12 +244,12 @@ typedef int phpc_str_size_t;
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *_phpc_self TSRMLS_DC)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *PHPC_SELF TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_CLONE_DECLARE() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
 		_phpc_retval = PHPC_OBJ_GET_HANDLER_FCE(_name, create_ex)(_old_obj->std.ce, &_new_obj TSRMLS_CC); \
-		zend_objects_clone_members(&_new_obj->std, _phpc_retval, &_old_obj->std, Z_OBJ_HANDLE_P(_phpc_self) TSRMLS_CC); \
+		zend_objects_clone_members(&_new_obj->std, _phpc_retval, &_old_obj->std, Z_OBJ_HANDLE_P(PHPC_SELF) TSRMLS_CC); \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CLONE_RETURN_EX(_new_obj) return _phpc_retval
 
@@ -593,7 +594,7 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
 	PHPC_OBJ_FROM_ZOBJ(_name, Z_OBJ_P(_zv))
 #define PHPC_OBJ_FROM_SELF(_name) \
-	PHPC_OBJ_FROM_ZVAL(_name, _phpc_self)
+	PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
 #define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
 	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 
@@ -626,7 +627,7 @@ typedef size_t    phpc_str_size_t;
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *_phpc_self)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *PHPC_SELF)
 #define PHPC_OBJ_HANDLER_CLONE_DECLARE() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
@@ -863,7 +864,7 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_GC_N _phpc_gc_n
 #define PHPC_OBJ_HANDLER_GET_GC(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_gc)\
-		(zval *_phpc_self, phpc_val **PHPC_GC_TABLE, int *PHPC_GC_N)
+		(zval *PHPC_SELF, phpc_val **PHPC_GC_TABLE, int *PHPC_GC_N TSRMLS_DC)
 
 /* hash */
 #define PHPC_HASH_ALLOC                     ALLOC_HASHTABLE
