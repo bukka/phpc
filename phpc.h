@@ -68,6 +68,12 @@
 	} \
 	_n = (_type) _pn
 
+#define PHPC_CONVERT_NUMBER_SIGNED(_pn, _n, _exc_over, _type, _max) \
+	if (_pn > _max) { \
+		_exc_over; \
+	} \
+	_n = (_type) _pn
+
 #define PHPC_LONG_TO_INT_EX2(_plv, _lv, _exc_over, _exc_under) \
 	PHPC_CONVERT_NUMBER(_plv, _lv, _exc_over, _exc_under, int, INT_MAX, INT_MIN)
 #define PHPC_LONG_TO_INT_EX(_plv, _lv, _exc) \
@@ -97,11 +103,9 @@ typedef int phpc_str_size_t;
 #define PHPC_LONG_TO_LONG(_plv, _lv) \
 	_lv = _plv
 
-#define PHPC_SIZE_TO_LONG_EX2 PHPC_LONG_TO_LONG_EX2
 #define PHPC_SIZE_TO_LONG_EX  PHPC_LONG_TO_LONG_EX
 #define PHPC_SIZE_TO_LONG     PHPC_LONG_TO_LONG
 
-#define PHPC_SIZE_TO_INT_EX2 PHPC_LONG_TO_LONG_EX2
 #define PHPC_SIZE_TO_INT_EX  PHPC_LONG_TO_LONG_EX
 #define PHPC_SIZE_TO_INT     PHPC_LONG_TO_LONG
 
@@ -506,13 +510,15 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_LONG_TO_LONG(_plv, _lv) \
 	PHPC_LONG_TO_LONG_EX2(_plv, _lv, _lv = LONG_MAX, _lv = LONG_MIN)
 
-#define PHPC_SIZE_TO_LONG_EX2 PHPC_LONG_TO_LONG_EX2
-#define PHPC_SIZE_TO_LONG_EX  PHPC_LONG_TO_LONG_EX
-#define PHPC_SIZE_TO_LONG     PHPC_LONG_TO_LONG
+#define PHPC_SIZE_TO_LONG_EX(_plv, _lv, _exc_over) \
+	PHPC_CONVERT_NUMBER_SIGNED(_plv, _lv, _exc_over, long, LONG_MAX)
+#define PHPC_SIZE_TO_LONG(_plv, _lv) \
+	PHPC_SIZE_TO_LONG_EX(_plv, _lv, _lv = LONG_MAX)
 
-#define PHPC_SIZE_TO_INT_EX2 PHPC_LONG_TO_INT_EX2
-#define PHPC_SIZE_TO_INT_EX  PHPC_LONG_TO_INT_EX
-#define PHPC_SIZE_TO_INT     PHPC_LONG_TO_INT
+#define PHPC_SIZE_TO_INT_EX(_plv, _lv, _exc_over) \
+	PHPC_CONVERT_NUMBER_SIGNED(_plv, _lv, _exc_over, int, INT_MAX)
+#define PHPC_SIZE_TO_INT(_plv, _lv) \
+	PHPC_SIZE_TO_LONG_EX(_plv, _lv, _lv = INT_MAX)
 
 
 /* STRING */
