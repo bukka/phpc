@@ -58,6 +58,10 @@
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
 #define PHPC_OBJ_SET_HANDLER_GET_GC(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_gc = PHPC_OBJ_GET_HANDLER_FCE(_name, get_gc)
+#define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_debug_info = PHPC_OBJ_GET_HANDLER_FCE(_name, get_debug_info)
+#define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
 
 /* integer conversions */
 #define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type, _max, _min) \
@@ -826,8 +830,11 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_THIS_FETCH(_name) \
 	PHPC_THIS_FETCH_FROM_ZVAL(_name, getThis())
 #define PHPC_THIS_DECLARE_AND_FETCH_FROM_ZVAL(_name, _zv) \
-	PHPC_THIS_DECLARE(_name); \
-	PHPC_THIS_FETCH_FROM_ZVAL(_name, _zv)
+	PHPC_THIS_DECLARE(_name) = PHPC_THIS_FETCH_FROM_ZVAL(_name, _zv)
+#define PHPC_THIS_FETCH_FROM_SELF(_name) \
+	PHPC_THIS = PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
+#define PHPC_THIS_DECLARE_AND_FETCH_FROM_SELF(_name) \
+	PHPC_THIS_DECLARE(_name) = PHPC_OBJ_FROM_SELF(_name)
 #define PHPC_THIS_DECLARE_AND_FETCH(_name) \
 	PHPC_THIS_DECLARE_AND_FETCH_FROM_ZVAL(_name, getThis())
 
@@ -871,6 +878,17 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_OBJ_HANDLER_GET_GC(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_gc)\
 		(zval *PHPC_SELF, phpc_val **PHPC_GC_TABLE, int *PHPC_GC_N TSRMLS_DC)
+
+/* object handler get_debug_info */
+#define PHPC_DEBUG_INFO_IS_TEMP _phpc_debug_info_is_temp
+#define PHPC_OBJ_HANDLER_GET_DEBUG_INFO(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_debug_info)\
+		(zval *PHPC_SELF, int *PHPC_DEBUG_INFO_IS_TEMP TSRMLS_DC)
+
+/* object handler get_properties */
+#define PHPC_OBJ_HANDLER_GET_PROPERTIES(_name) \
+	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_properties)\
+		(zval *PHPC_SELF TSRMLS_DC)
 
 /* hash */
 #define PHPC_HASH_ALLOC                     ALLOC_HASHTABLE
