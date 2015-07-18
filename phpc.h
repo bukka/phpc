@@ -530,8 +530,8 @@ typedef size_t    phpc_str_size_t;
 /* STRING */
 
 /* accessor and convertor macros */
-#define PHPC_STR_VAL(_name)                   (_name)->val
-#define PHPC_STR_LEN(_name)                   (_name)->len
+#define PHPC_STR_VAL                          ZSTR_VAL
+#define PHPC_STR_LEN                          ZSTR_LEN
 #define PHPC_STR_LEN_FMT                      "zu"
 #define PHPC_STR_LEN_UNUSED(_name)            PHPC_NOOP
 #define PHPC_STR_LEN_FROM_VAL                 PHPC_STR_LEN
@@ -553,17 +553,20 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_STR_FROM_PTR_VAL(_str, _strpv)   _str = *_strpv
 #define PHPC_STR_RETURN                       RETURN_STR
 /* wrapper macros */
-
-#define PHPC_STR_INIT(_name, _cstr, _len) _name = zend_string_init(_cstr, _len, 0)
-#define PHPC_STR_ALLOC(_name, _len) _name = zend_string_alloc(_len, 0)
-#define PHPC_STR_REALLOC(_name, _len) _name = zend_string_realloc(_name, _len, 0)
-#define PHPC_STR_RELEASE(_name) zend_string_release(_name)
+#define PHPC_STR_INIT(_name, _cstr, _len) \
+	_name = zend_string_init(_cstr, _len, 0)
+#define PHPC_STR_ALLOC(_name, _len) \
+	_name = zend_string_alloc(_len, 0)
+#define PHPC_STR_REALLOC(_name, _len) \
+	_name = zend_string_realloc(_name, _len, 0)
+#define PHPC_STR_RELEASE(_name) \
+	zend_string_release(_name)
 
 /* C string */
-#define PHPC_CSTRL_RETURN(_name, _len) RETURN_STRINGL(_name, _len)
-#define PHPC_CSTR_RETURN(_name)        RETURN_STRING(_name)
-#define PHPC_CSTRL_RETVAL(_name, _len) RETVAL_STRINGL(_name, _len)
-#define PHPC_CSTR_RETVAL(_name)        RETVAL_STRING(_name)
+#define PHPC_CSTRL_RETURN                     RETURN_STRINGL
+#define PHPC_CSTR_RETURN                      RETURN_STRING
+#define PHPC_CSTRL_RETVAL                     RETVAL_STRINGL
+#define PHPC_CSTR_RETVAL                      RETVAL_STRING
 
 /* ZPP path flag */
 #define PHPC_PATH_ZPP_FLAG "p"
