@@ -343,6 +343,10 @@ typedef int phpc_str_size_t;
 #define PHPC_HASH_GET_CURRENT_DATA(_ht, _val) \
 	zend_hash_get_current_data(_ht, (void **) &(_val))
 
+/* copy */
+#define PHPC_HASH_COPY_EX(_target, _source, _copy_ctr) \
+	zend_hash_copy(_target, _source, NULL, NULL, sizeof(zval *))
+
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_VAL(_ht, _ppv) do { \
 	HashPosition _pos; \
@@ -730,6 +734,10 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_HASH_GET_CURRENT_DATA(_ht, _val) \
 	_val = zend_hash_get_current_data(_ht)
 
+/* copy */
+#define PHPC_HASH_COPY_EX(_target, _source, _copy_ctr) \
+	zend_hash_copy(_target, _source, NULL)
+
 /* hash to zval */
 #define PHPC_HASH_PZVAL(_ht, _pzv) \
 	ZVAL_ARR(_pzv, _ht)
@@ -929,6 +937,10 @@ typedef const char phpc_stream_opener_char_t;
 	PHPC_HASH_IS_FOUND(PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv))
 #define PHPC_HASH_INDEX_FIND_IN_COND(_ht, _idx, _ppv) \
 	PHPC_HASH_IS_FOUND(PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv))
+
+/* copy */
+#define PHPC_HASH_COPY(_target, _source) \
+	PHPC_HASH_COPY_EX(_target, _source, NULL)
 
 /* array */
 #define PHPC_ARRAY_INIT array_init
