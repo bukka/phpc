@@ -334,7 +334,12 @@ typedef int phpc_str_size_t;
 
 /* key and data getter */
 #define PHPC_HASH_GET_CURRENT_KEY_EX(_ht, _str, _num_index, _pos) \
-	zend_hash_get_current_key_ex(_ht, &PHPC_STR_VAL(_str), &PHPC_STR_LEN(_str), &_num_index, 0, _pos)
+	do { \
+		unsigned int _phpc_current_key_len; \
+		zend_hash_get_current_key_ex(_ht, &PHPC_STR_VAL(_str), \
+			&_phpc_current_key_len, &_num_index, 0, _pos); \
+		PHPC_STR_LEN(_str) = _phpc_current_key_len - 1; \
+	} while(0)
 #define PHPC_HASH_GET_CURRENT_DATA_EX(_ht, _val, _pos) \
 	zend_hash_get_current_data_ex(_ht, (void **) &(_val), _pos)
 
