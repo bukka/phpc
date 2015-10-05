@@ -444,6 +444,26 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 #define PHPC_ARRAY_ADD_NEXT_INDEX_VAL add_next_index_zval
 
 
+/* FCALL */
+#define _PHPC_FCALL_VARS_NAME(_name) _phpc_fcall_vars__ ## _name
+#define PHPC_FCALL_PARAMS_NAME(_name) _phpc_fcall_params__ ## _name
+
+#define PHPC_FCALL_PARAMS_DECLARE(_name, _count) \
+	int _phpc_fcall_params_count = _count; \
+	zval *_PHPC_FCALL_VARS_NAME(_name)[_count]; \
+	zval **PHPC_FCALL_PARAMS_NAME(_name)[_count]
+
+#define PHPC_FCALL_PARAMS_INIT(_name) \
+	do { \
+		int _idx; \
+		for (_idx = 0; _idx <  _phpc_fcall_params_count; _idx++) \
+			PHPC_FCALL_PARAMS_NAME(_name)[_idx] = &_PHPC_FCALL_VARS_NAME(_name)[_idx]; \
+	} while(0)
+
+#define PHPC_FCALL_PARAM_UNDEF(_idx)
+	_PHPC_FCALL_VARS_NAME(_name)[_idx] = NULL
+
+
 /* ZVAL */
 typedef zval * phpc_val;
 
