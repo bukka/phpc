@@ -63,6 +63,9 @@
 #define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
 
+/* common fcall macros */
+#define PHPC_FCALL_PARAMS_NAME(_name) _phpc_fcall_params__ ## _name
+
 /* integer conversions */
 #define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type_from, _type_to, _max, _min) \
 	if (_pn > (_type_from) _max) { \
@@ -446,7 +449,6 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 
 /* FCALL */
 #define _PHPC_FCALL_VARS_NAME(_name) _phpc_fcall_vars__ ## _name
-#define PHPC_FCALL_PARAMS_NAME(_name) _phpc_fcall_params__ ## _name
 
 #define PHPC_FCALL_PARAMS_DECLARE(_name, _count) \
 	int _phpc_fcall_params_count = _count; \
@@ -460,8 +462,8 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 			PHPC_FCALL_PARAMS_NAME(_name)[_idx] = &_PHPC_FCALL_VARS_NAME(_name)[_idx]; \
 	} while(0)
 
-#define PHPC_FCALL_PARAM_UNDEF(_idx)
-	_PHPC_FCALL_VARS_NAME(_name)[_idx] = NULL
+#define PHPC_FCALL_PARAM_PZVAL(_idx) \
+	_PHPC_FCALL_VARS_NAME(_name)[_idx]
 
 
 /* ZVAL */
@@ -800,6 +802,15 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_ARRAY_ADD_NEXT_INDEX_CSTRL  add_next_index_stringl
 #define PHPC_ARRAY_ADD_NEXT_INDEX_VAL(_arr, _pv) \
 	add_next_index_zval(_arr, &_pv)
+
+/* FCALL */
+#define PHPC_FCALL_PARAMS_DECLARE(_name, _count) \
+	zval PHPC_FCALL_PARAMS_NAME(_name)[_count]
+
+#define PHPC_FCALL_PARAMS_INIT(_name) PHPC_NOOP
+
+#define PHPC_FCALL_PARAM_PZVAL(_idx) \
+	&PHPC_FCALL_PARAMS_NAME(_name)[_idx]
 
 
 /* ZVAL */
