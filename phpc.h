@@ -465,6 +465,9 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 #define PHPC_FCALL_PARAM_PZVAL(_pname, _idx) \
 	_PHPC_FCALL_VARS_NAME(_pname)[_idx]
 
+#define PHPC_FCALL_PARAM_VAL(_pname, _idx) \
+	_PHPC_FCALL_VARS_NAME(_pname)[_idx]
+
 #define PHPC_FCALL_RETVAL(_fci, _pv) \
 	(_fci).retval_ptr_ptr = &(_pv)
 
@@ -815,6 +818,9 @@ typedef size_t    phpc_str_size_t;
 
 #define PHPC_FCALL_PARAM_PZVAL(_pname, _idx) \
 	&PHPC_FCALL_PARAMS_NAME(_pname)[_idx]
+
+#define PHPC_FCALL_PARAM_VAL(_pname, _idx) \
+	PHPC_FCALL_PARAMS_NAME(_pname)[_idx]
 
 #define PHPC_FCALL_RETVAL(_fci, _pv) \
 	(_fci).retval = (&_pv)
