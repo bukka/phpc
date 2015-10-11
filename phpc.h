@@ -448,22 +448,22 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 
 
 /* FCALL */
-#define _PHPC_FCALL_VARS_NAME(_name) _phpc_fcall_vars__ ## _name
+#define _PHPC_FCALL_VARS_NAME(_pname) _phpc_fcall_vars__ ## _name
 
-#define PHPC_FCALL_PARAMS_DECLARE(_name, _count) \
+#define PHPC_FCALL_PARAMS_DECLARE(_pname, _count) \
 	int _phpc_fcall_params_count = _count; \
-	zval *_PHPC_FCALL_VARS_NAME(_name)[_count]; \
-	zval **PHPC_FCALL_PARAMS_NAME(_name)[_count]
+	zval *_PHPC_FCALL_VARS_NAME(_pname)[_count]; \
+	zval **PHPC_FCALL_PARAMS_NAME(_pname)[_count]
 
-#define PHPC_FCALL_PARAMS_INIT(_name) \
+#define PHPC_FCALL_PARAMS_INIT(_pname) \
 	do { \
 		int _idx; \
 		for (_idx = 0; _idx <  _phpc_fcall_params_count; _idx++) \
-			PHPC_FCALL_PARAMS_NAME(_name)[_idx] = &_PHPC_FCALL_VARS_NAME(_name)[_idx]; \
+			PHPC_FCALL_PARAMS_NAME(_pname)[_idx] = &_PHPC_FCALL_VARS_NAME(_pname)[_idx]; \
 	} while(0)
 
-#define PHPC_FCALL_PARAM_PZVAL(_idx) \
-	_PHPC_FCALL_VARS_NAME(_name)[_idx]
+#define PHPC_FCALL_PARAM_PZVAL(_pname, _idx) \
+	_PHPC_FCALL_VARS_NAME(_pname)[_idx]
 
 #define PHPC_FCALL_RETVAL(_fci, _pv) \
 	(_fci).retval_ptr_ptr = &(_pv)
@@ -808,13 +808,13 @@ typedef size_t    phpc_str_size_t;
 	add_next_index_zval(_arr, &_pv)
 
 /* FCALL */
-#define PHPC_FCALL_PARAMS_DECLARE(_name, _count) \
-	zval PHPC_FCALL_PARAMS_NAME(_name)[_count]
+#define PHPC_FCALL_PARAMS_DECLARE(_pname, _count) \
+	zval PHPC_FCALL_PARAMS_NAME(_pname)[_count]
 
-#define PHPC_FCALL_PARAMS_INIT(_name) PHPC_NOOP
+#define PHPC_FCALL_PARAMS_INIT(_pname) PHPC_NOOP
 
-#define PHPC_FCALL_PARAM_PZVAL(_idx) \
-	&PHPC_FCALL_PARAMS_NAME(_name)[_idx]
+#define PHPC_FCALL_PARAM_PZVAL(_pname, _idx) \
+	&PHPC_FCALL_PARAMS_NAME(_pname)[_idx]
 
 #define PHPC_FCALL_RETVAL(_fci, _pv) \
 	(_fci).retval = (&_pv)
