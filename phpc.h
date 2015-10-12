@@ -64,7 +64,7 @@
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
 
 /* common fcall macros */
-#define PHPC_FCALL_PARAMS_NAME(_name) _phpc_fcall_params__ ## _name
+#define PHPC_FCALL_PARAMS_NAME(_pname) _phpc_fcall_params__ ## _pname
 
 /* integer conversions */
 #define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type_from, _type_to, _max, _min) \
@@ -448,7 +448,7 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 
 
 /* FCALL */
-#define _PHPC_FCALL_VARS_NAME(_pname) _phpc_fcall_vars__ ## _name
+#define _PHPC_FCALL_VARS_NAME(_pname) _phpc_fcall_vars__ ## _pname
 
 #define PHPC_FCALL_PARAMS_DECLARE(_pname, _count) \
 	int _phpc_fcall_params_count = _count; \
