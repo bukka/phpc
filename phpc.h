@@ -67,6 +67,21 @@
 #define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
 
+/* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
+#if PHP_VERSION_ID < 50399
+#define PHPC_OBJ_PROPERTIES_INIT(zo, class_type) \
+	{ \
+		zval *tmp; \
+		zend_hash_copy((*(zo)).properties, \
+			&(class_type)->default_properties, \
+			(copy_ctor_func_t) zval_add_ref, \
+			(void *) &tmp, \
+			sizeof(zval *)); \
+	}
+#else
+#define PHPC_OBJ_PROPERTIES_INIT object_properties_init
+#endif
+
 /* common fcall macros */
 #define PHPC_FCALL_PARAMS_NAME(_pname) _phpc_fcall_params__ ## _pname
 
@@ -240,7 +255,7 @@ typedef int phpc_str_size_t;
 			*_phpc_objptr = _intern; \
 		} \
 		zend_object_std_init(&_intern->std, PHPC_CLASS_TYPE TSRMLS_CC); \
-		object_properties_init(&_intern->std, PHPC_CLASS_TYPE); \
+		PHPC_OBJ_PROPERTIES_INIT(&_intern->std, PHPC_CLASS_TYPE); \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CREATE_EX_RETURN_EX(_name, _intern) \
 	do { \
@@ -672,7 +687,7 @@ typedef size_t    phpc_str_size_t;
 	do { \
 		zend_object_std_init(&_intern->std, PHPC_CLASS_TYPE); \
 		if (_phpc_init_props) { \
-			object_properties_init(&_intern->std, PHPC_CLASS_TYPE); \
+			PHPC_OBJ_PROPERTIES_INIT(&_intern->std, PHPC_CLASS_TYPE); \
 		} \
 	} while(0)
 #define PHPC_OBJ_HANDLER_CREATE_EX_RETURN_EX(_name, _intern) \
