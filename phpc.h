@@ -56,8 +56,12 @@
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).clone_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, clone)
 #define PHPC_OBJ_SET_HANDLER_COMPARE(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
+#if PHP_VERSION_ID < 50399
+#define PHPC_OBJ_SET_HANDLER_GET_GC(_name) PHPC_NOOP
+#else
 #define PHPC_OBJ_SET_HANDLER_GET_GC(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_gc = PHPC_OBJ_GET_HANDLER_FCE(_name, get_gc)
+#endif
 #define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_debug_info = PHPC_OBJ_GET_HANDLER_FCE(_name, get_debug_info)
 #define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
