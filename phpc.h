@@ -217,8 +217,19 @@ typedef int phpc_str_size_t;
 
 #endif /* PHPC_SMART_STR_INCLUDE || PHPC_SMART_CSTR_INCLUDE */
 
+
 /* RESOURCE */
 typedef zend_rsrc_list_entry phpc_res_entry_t;
+typedef long phpc_res_value_t;
+
+#define PHPC_RES_REGISTER zend_list_insert
+
+/* resource to zval */
+#define PHPC_RES_PZVAL(_res, _pzv) \
+	ZVAL_RESOURCE(_pzv, _res)
+#define PHPC_RES_RETVAL RETVAL_RESOURCE
+#define PHPC_RES_RETURN RETURN_RESOURCE
+
 
 /* OBJECT */
 #define PHPC_CLASS_REGISTER_EX(_orig_class_entry, _parent_ce, _parent_name) \
@@ -654,8 +665,19 @@ typedef size_t    phpc_str_size_t;
 #define phpc_smart_cstr_0               smart_string_0
 #endif /* PHPC_SMART_CSTR_INCLUDE */
 
+
 /* RESOURCE */
-typedef phpc_res_entry_t zend_resource;
+typedef zend_resource phpc_res_entry_t;
+typedef zend_resource * phpc_res_value_t;
+
+#define PHPC_RES_REGISTER zend_register_resource
+
+/* resource to zval */
+#define PHPC_RES_PZVAL(_res, _pzv) \
+	ZVAL_RES(_pzv, _res)
+#define PHPC_RES_RETVAL RETVAL_RES
+#define PHPC_RES_RETURN RETURN_RES
+
 
 /* OBJECT */
 #define PHPC_CLASS_REGISTER_EX(_orig_class_entry, _parent_ce, _parent_name) \
