@@ -223,6 +223,8 @@ typedef zend_rsrc_list_entry phpc_res_entry_t;
 typedef long phpc_res_value_t;
 
 #define PHPC_RES_REGISTER zend_list_insert
+#define PHPC_RES_FETCH(_pz_res, _res_type_name, _res_index) \
+	zend_fetch_resource(&(_pz_res) TSRMLS_CC, -1, _res_type_name, NULL, 1, _res_index)
 
 /* resource to zval */
 #define PHPC_RES_PZVAL(_res, _pzv) \
@@ -671,6 +673,8 @@ typedef zend_resource phpc_res_entry_t;
 typedef zend_resource * phpc_res_value_t;
 
 #define PHPC_RES_REGISTER zend_register_resource
+#define PHPC_RES_FETCH(_pz_res, _res_type_name, _res_index) \
+	zend_fetch_resource(Z_RES_P(_pz_res), _res_type_name, _res_index)
 
 /* resource to zval */
 #define PHPC_RES_PZVAL(_res, _pzv) \
