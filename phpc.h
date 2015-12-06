@@ -1086,6 +1086,13 @@ typedef const char phpc_stream_opener_char_t;
 	((PHPC_STREAM_CONTEXT_GET_OPTION(_ctx, _wrappername, _optionname, _ppv)) != \
 		PHPC_STREAM_CONTEXT_OPTION_NOT_FOUND)
 
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 6) || (PHP_MAJOR_VERSION > 5)
+#define PHPC_STREAM_LOCATE_URL_WRAPPER(_path, _path_for_open, _options) \
+	php_stream_locate_url_wrapper(_path, (const char **) _path_for_open, _options TSRMLS_CC)
+#else
+#define PHPC_STREAM_LOCATE_URL_WRAPPER(_path, _path_for_open, _options) \
+	php_stream_locate_url_wrapper(_path, (char **) _path_for_open, _options TSRMLS_CC)
+#endif
 
 #endif	/* PHPC_H */
 
