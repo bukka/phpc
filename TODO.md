@@ -13,7 +13,12 @@
   - zend_hash_sort
   - zend_hash_compare
   - zend_hash_minmax
-- add possibility to duplicate key (`zend_hash_get_current_key_ex`)
+- add apply functions
+  - zend_hash_apply
+  - zend_hash_apply_with_argument
+  - zend_hash_apply_with_arguments
+- add possibility to duplicate key
+  - zend_hash_get_current_key_ex
 
 ## Object
 - Address all differences in [the DIFF list](DIFF.md)
