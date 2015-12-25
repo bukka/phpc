@@ -190,13 +190,6 @@ typedef int phpc_str_size_t;
 #define PHPC_CSTRL_RETVAL(_name, _len) RETVAL_STRINGL(_name, _len, 1)
 #define PHPC_CSTR_RETVAL(_name)        RETVAL_STRING(_name, 1)
 
-/* ZPP path flag */
-#if PHP_VERSION_ID < 50399
-#define PHPC_PATH_ZPP_FLAG "s"
-#else
-#define PHPC_PATH_ZPP_FLAG "p"
-#endif
-
 /* Smart string */
 #if defined(PHPC_SMART_STR_INCLUDE) || defined(PHPC_SMART_CSTR_INCLUDE)
 #include "ext/standard/php_smart_str.h"
@@ -557,6 +550,16 @@ typedef zval * phpc_val;
 #endif
 
 
+/* ZPP */
+
+/* path flag */
+#if PHP_VERSION_ID < 50399
+#define PHPC_ZPP_PATH_FLAG "s"
+#else
+#define PHPC_ZPP_PATH_FLAG "p"
+#endif
+
+
 /* STREAM */
 #if PHP_VERSION_ID < 50600
 typedef char phpc_stream_opener_char_t;
@@ -646,9 +649,6 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_CSTR_RETURN                      RETURN_STRING
 #define PHPC_CSTRL_RETVAL                     RETVAL_STRINGL
 #define PHPC_CSTR_RETVAL                      RETVAL_STRING
-
-/* ZPP path flag */
-#define PHPC_PATH_ZPP_FLAG "p"
 
 /* Smart string */
 #ifdef PHPC_SMART_STR_INCLUDE
@@ -928,6 +928,12 @@ typedef zval  phpc_val;
 #define PHPC_FE_END PHP_FE_END
 
 
+/* ZPP */
+
+/* path flag */
+#define PHPC_ZPP_PATH_FLAG "p"
+
+
 /* STREAM */
 typedef const char phpc_stream_opener_char_t;
 #define PHPC_STREAM_WRAPPERDATA_ALLOC(stream) PHPC_NOOP
@@ -1080,6 +1086,9 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_ARRAY_ADD_NEXT_INDEX_LONG     add_next_index_long
 #define PHPC_ARRAY_ADD_NEXT_INDEX_RESOURCE add_next_index_resource
 #define PHPC_ARRAY_ADD_NEXT_INDEX_DOUBLE   add_next_index_double
+
+/* zpp - alias for path flag */
+#define PHPC_PATH_ZPP_FLAG PHPC_ZPP_PATH_FLAG
 
 /* stream */
 #define PHPC_STREAM_CONTEXT_GET_OPTION_IN_COND(_ctx, _wrappername, _optionname, _ppv) \
