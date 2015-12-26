@@ -559,6 +559,38 @@ typedef zval * phpc_val;
 #define PHPC_ZPP_PATH_FLAG "p"
 #endif
 
+/* args */
+#define PHPC_ZPP_ARGS_DECLARE() \
+	int _phpc_zpp_args_count; \
+	zval ***_phpc_zpp_args_array
+
+#if PHP_API_VERSION < 20090626
+#define PHPC_ZPP_ARGS_LOAD_EX(_flag, _num_args, _return) \
+	do { \
+		const char *_phpc_zpp_args_type_str = #_flag; \
+		_phpc_zpp_args_count = _num_args; \
+		_phpc_zpp_args_array = (zval ***) safe_emalloc(_num_args, sizeof (zval **), 0); \
+		if ((_phpc_zpp_args_type_str[0] == '*' && num_args == 0) || \
+				(_phpc_zpp_args_type_str[0] == '+' && num_args <= 1) || \
+				zend_get_parameters_array_ex(_phpc_zpp_args_count, _phpc_zpp_args_array) == FAILURE) { \
+			efree (args); \
+			zend_wrong_param_count(TSRMLS_C); \
+			_return; \
+		} \
+	while (0)
+#else
+#define PHPC_ZPP_ARGS_LOAD_EX(_flag, _num_args, _return) \
+	do { \
+		if (zend_parse_parameters(_num_args TSRMLS_CC, #_flag, \
+				&_phpc_zpp_args_array, &_phpc_zpp_args_count) == FAILURE) { \
+			_return; \
+		} \
+	} while(0)
+#endif
+
+#define PHPC_ZPP_ARGS_CURRENT_PVAL() \
+	_phpc_zpp_args_array[_phpc_zpp_args_i]
+
 
 /* STREAM */
 #if PHP_VERSION_ID < 50600
@@ -933,6 +965,22 @@ typedef zval  phpc_val;
 /* path flag */
 #define PHPC_ZPP_PATH_FLAG "p"
 
+/* args */
+#define PHPC_ZPP_ARGS_DECLARE() \
+	int _phpc_zpp_args_count; \
+	zval *_phpc_zpp_args_array
+
+#define PHPC_ZPP_ARGS_LOAD_EX(_flag, _num_args, _return) \
+	do { \
+		if (zend_parse_parameters(_num_args, #_flag, \
+				&_phpc_zpp_args_array, &_phpc_zpp_args_count) == FAILURE) { \
+			_return; \
+		} \
+	} while(0)
+
+#define PHPC_ZPP_ARGS_CURRENT_PVAL() \
+	&_phpc_zpp_args_array[_phpc_zpp_args_i]
+
 
 /* STREAM */
 typedef const char phpc_stream_opener_char_t;
@@ -1087,8 +1135,20 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_ARRAY_ADD_NEXT_INDEX_RESOURCE add_next_index_resource
 #define PHPC_ARRAY_ADD_NEXT_INDEX_DOUBLE   add_next_index_double
 
-/* zpp - alias for path flag */
+/* ZPP */
+/* alias for path flag */
 #define PHPC_PATH_ZPP_FLAG PHPC_ZPP_PATH_FLAG
+
+/* args loading */
+#define PHPC_ZPP_ARGS_LOAD(_flag) PHPC_ZPP_ARGS_LOAD_EX(_flag, ZEND_NUM_ARGS(), return)
+
+#define PHPC_ZPP_ARGS_LOOP_START() \
+	do { \
+		int _phpc_zpp_args_i; \
+		for (_phpc_zpp_args_i = 0; _phpc_zpp_args_i < _phpc_zpp_args_count; _phpc_zpp_args_i++)
+
+#define PHPC_ZPP_ARGS_LOOP_END() \
+	} while(0)
 
 /* stream */
 #define PHPC_STREAM_CONTEXT_GET_OPTION_IN_COND(_ctx, _wrappername, _optionname, _ppv) \
