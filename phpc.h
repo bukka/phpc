@@ -561,7 +561,7 @@ typedef zval * phpc_val;
 
 /* args */
 #define PHPC_ZPP_ARGS_DECLARE() \
-	int _phpc_zpp_args_count; \
+	int _phpc_zpp_args_count = 0; \
 	zval ***_phpc_zpp_args_array
 
 #if PHP_API_VERSION < 20090626
@@ -588,8 +588,8 @@ typedef zval * phpc_val;
 	} while(0)
 #endif
 
-#define PHPC_ZPP_ARGS_CURRENT_PVAL() \
-	_phpc_zpp_args_array[_phpc_zpp_args_i]
+#define PHPC_ZPP_ARGS_GET_PVAL(_arg_pos) \
+	_phpc_zpp_args_array[_arg_pos]
 
 
 /* STREAM */
@@ -967,7 +967,7 @@ typedef zval  phpc_val;
 
 /* args */
 #define PHPC_ZPP_ARGS_DECLARE() \
-	int _phpc_zpp_args_count; \
+	int _phpc_zpp_args_count = 0; \
 	zval *_phpc_zpp_args_array
 
 #define PHPC_ZPP_ARGS_LOAD_EX(_flag, _num_args, _return) \
@@ -978,8 +978,8 @@ typedef zval  phpc_val;
 		} \
 	} while(0)
 
-#define PHPC_ZPP_ARGS_CURRENT_PVAL() \
-	&_phpc_zpp_args_array[_phpc_zpp_args_i]
+#define PHPC_ZPP_ARGS_GET_PVAL(_arg_pos) \
+	&_phpc_zpp_args_array[_arg_pos]
 
 
 /* STREAM */
@@ -1142,13 +1142,19 @@ typedef const char phpc_stream_opener_char_t;
 /* args loading */
 #define PHPC_ZPP_ARGS_LOAD(_flag) PHPC_ZPP_ARGS_LOAD_EX(_flag, ZEND_NUM_ARGS(), return)
 
-#define PHPC_ZPP_ARGS_LOOP_START() \
+#define PHPC_ZPP_ARGS_LOOP_START_EX(_start) \
 	do { \
 		int _phpc_zpp_args_i; \
-		for (_phpc_zpp_args_i = 0; _phpc_zpp_args_i < _phpc_zpp_args_count; _phpc_zpp_args_i++)
+		for (_phpc_zpp_args_i = _start; _phpc_zpp_args_i < _phpc_zpp_args_count; _phpc_zpp_args_i++)
+
+#define PHPC_ZPP_ARGS_LOOP_START() PHPC_ZPP_ARGS_LOOP_START_EX(0)
 
 #define PHPC_ZPP_ARGS_LOOP_END() \
 	} while(0)
+
+#define PHPC_ZPP_ARGS_GET_CURRENT_PVAL() PHPC_ZPP_ARGS_GET_PVAL(_phpc_zpp_args_i)
+
+#define PHPC_ZPP_ARGS_COUNT _phpc_zpp_args_count
 
 /* stream */
 #define PHPC_STREAM_CONTEXT_GET_OPTION_IN_COND(_ctx, _wrappername, _optionname, _ppv) \
