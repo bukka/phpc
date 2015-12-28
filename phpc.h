@@ -591,6 +591,10 @@ typedef zval * phpc_val;
 #define PHPC_ZPP_ARGS_GET_PVAL(_arg_pos) \
 	_phpc_zpp_args_array[_arg_pos]
 
+#define PHPC_ZPP_ARGS_FREE() \
+	if (_phpc_zpp_args_count > 0) \
+		efree(_phpc_zpp_args_array)
+
 
 /* STREAM */
 #if PHP_VERSION_ID < 50600
@@ -980,6 +984,8 @@ typedef zval  phpc_val;
 
 #define PHPC_ZPP_ARGS_GET_PVAL(_arg_pos) \
 	&_phpc_zpp_args_array[_arg_pos]
+
+#define PHPC_ZPP_ARGS_FREE() PHPC_NOOP
 
 
 /* STREAM */
