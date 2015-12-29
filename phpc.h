@@ -257,6 +257,7 @@ typedef long phpc_res_value_t;
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
 	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object_value, _name, create_ex) \
 	(zend_class_entry *PHPC_CLASS_TYPE, PHPC_OBJ_STRUCT_NAME(_name) **_phpc_objptr TSRMLS_DC)
+#define PHPC_OBJ_HANDLER_CREATE_EX_IS_NEW() (_phpc_objptr == NULL)
 #define PHPC_OBJ_HANDLER_CREATE_EX_DECLARE() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_name) \
 	 ecalloc(1, sizeof(PHPC_OBJ_STRUCT_NAME(_name)));
@@ -750,6 +751,7 @@ typedef zend_resource * phpc_res_value_t;
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
 	PHPC_OBJ_GET_HANDLER_FCE_INLINE_DEF(zend_object *, _name, create_ex) \
 	(zend_class_entry *PHPC_CLASS_TYPE, int _phpc_init_props)
+#define PHPC_OBJ_HANDLER_CREATE_EX_IS_NEW() _phpc_init_props
 #define PHPC_OBJ_HANDLER_CREATE_EX_DECLARE() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CREATE_EX_ALLOC(_name) \
 	 ecalloc(1, sizeof(PHPC_OBJ_STRUCT_NAME(_name)) + sizeof(zval) * (PHPC_CLASS_TYPE->default_properties_count - 1));
