@@ -1052,7 +1052,7 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_OBJ_HANDLER_FREE_INIT(_name) \
 	PHPC_OBJ_STRUCT_DECLARE_AND_FETCH_FROM_ZOBJ(_name, PHPC_THIS);
 #define PHPC_OBJ_HANDLER_FREE_DESTROY() \
-	PHPC_OBJ_HANDLER_FREE_DTOR(PHPC_THIS);
+	PHPC_OBJ_HANDLER_FREE_DTOR(PHPC_THIS)
 
 /* object handler compare */
 #define PHPC_OBJ_HANDLER_COMPARE_INIT(_name) \
