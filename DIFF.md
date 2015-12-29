@@ -74,6 +74,17 @@
   - 5: `efree(intern)`
   - 7: do nothing
 
+#### get_property_ptr_ptr
+- return
+  - 5: `zval **`: ptr of ptr to the engine zval or NULL if overloaded
+  - 7: `zval *`: ptr to engine zval or NULL if overloaded
+- 4th parameter
+  - 5: `const zend_literal *key`
+  - 7: `void **cache_slot`
+- member name handling (2nd param)
+  - 5: convert it to string zval if needed and free it if conversion changed zval
+  - 7: get zend_string from zval and release the string at the end
+
 #### read_property
 - `zval *rv` as a last parameter in 7
 - also zend_read_property
