@@ -1163,6 +1163,15 @@ typedef const char phpc_stream_opener_char_t;
 
 #define PHPC_ZPP_ARGS_COUNT _phpc_zpp_args_count
 
+/* FCALL */
+#if PHP_API_VERSION < 20090626
+#define PHPC_FCALL_INFO_INIT(_callable, _check_flags, _fci, _fci_cache, _callable_name, _error) \
+	zend_fcall_info_init(_callable, &fci, &fci_cache TSRMLS_CC)
+#else
+#define PHPC_FCALL_INFO_INIT(_callable, _check_flags, _fci, _fci_cache, _callable_name, _error) \
+	zend_fcall_info_init(_callable, _check_flags, _fci, _fci_cache, _callable_name, _error TSRMLS_CC)
+#endif
+
 /* stream */
 #define PHPC_STREAM_CONTEXT_GET_OPTION_IN_COND(_ctx, _wrappername, _optionname, _ppv) \
 	((PHPC_STREAM_CONTEXT_GET_OPTION(_ctx, _wrappername, _optionname, _ppv)) != \
