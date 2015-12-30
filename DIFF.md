@@ -86,8 +86,20 @@
   - 7: get zend_string from zval and release the string at the end
 
 #### read_property
-- `zval *rv` as a last parameter in 7
-- also zend_read_property
+- return
+  - 5: `zval **`: ptr of ptr to the engine zval or NULL if overloaded
+  - 7: `zval *`: ptr to engine zval or NULL if overloaded
+- 4th parameter
+	- 5: `const zend_literal *key`
+	- 7: `void **cache_slot`
+- extra `zval *rv` last (5th) parameter in 7
+  - the same as zend_read_property
+  - also when calling std handler
+- member name handling (2nd param)
+  - 5: convert it to string zval if needed and free it if conversion changed zval
+  - 7: get zend_string from zval and release the string at the end
+- we need to ensure in 5 that retval is temporary variable
+  - `Z_SET_REFCOUNT_P(retval, 0); Z_UNSET_ISREF_P(retval);`
 
 
 ### Methods
