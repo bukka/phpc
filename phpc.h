@@ -526,9 +526,13 @@ typedef zval * phpc_val;
 #define PHPC_ARRVAL      Z_ARRVAL_P
 #define PHPC_ARRVAL_P    Z_ARRVAL_PP
 
-#define PHPC_VAL_TO_ZVAL(_pv, _zv) _zv = *(_pv)
-#define PHPC_VAL_TO_PZVAL(_pv, _zv) _zv = _pv
-#define PHPC_PVAL_TO_PZVAL(_pv, _zv) _zv = *(_pv)
+#define PHPC_VAL_CAST_TO_ZVAL(_pv)    *(_pv)
+#define PHPC_VAL_CAST_TO_PZVAL(_pv)   _pv
+#define PHPC_PVAL_CAST_TO_PZVAL(_ppv) *(_ppv)
+
+#define PHPC_VAL_TO_ZVAL(_pv, _zv)    _zv = *(_pv)
+#define PHPC_VAL_TO_PZVAL(_pv, _zv)   _zv = _pv
+#define PHPC_PVAL_TO_PZVAL(_ppv, _zv) _zv = *(_ppv)
 
 #define PHPC_VAL_MAKE         MAKE_STD_ZVAL
 #define PHPC_VAL_FREE         FREE_ZVAL
@@ -945,9 +949,13 @@ typedef zval  phpc_val;
 #define PHPC_ARRVAL      Z_ARRVAL
 #define PHPC_ARRVAL_P    Z_ARRVAL_P
 
-#define PHPC_VAL_TO_ZVAL(_pv, _zv) _zv = _pv
-#define PHPC_VAL_TO_PZVAL(_pv, _zv) _zv = &(_pv)
-#define PHPC_PVAL_TO_PZVAL(_pv, _zv) _zv = _pv
+#define PHPC_VAL_CAST_TO_ZVAL(_pv)    _pv
+#define PHPC_VAL_CAST_TO_PZVAL(_pv)   &(_pv)
+#define PHPC_PVAL_CAST_TO_PZVAL(_ppv) _ppv
+
+#define PHPC_VAL_TO_ZVAL(_pv, _zv)    _zv = _pv
+#define PHPC_VAL_TO_PZVAL(_pv, _zv)   _zv = &(_pv)
+#define PHPC_PVAL_TO_PZVAL(_ppv, _zv) _zv = _ppv
 
 #define PHPC_VAL_MAKE(_pv)  PHPC_NOOP
 #define PHPC_VAL_FREE(_pv)  PHPC_NOOP
