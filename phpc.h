@@ -450,6 +450,8 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 	add_assoc_string_ex(_arr, _key, (_key_len) + 1, _cstr, 1)
 #define PHPC_ARRAY_ADD_ASSOC_CSTRL_EX(_arr, _key, _key_len, _cstr, _cstr_len) \
 	add_assoc_stringl_ex(_arr, _key, (_key_len) + 1, _cstr, _cstr_len, 1)
+#define PHPC_ARRAY_ADD_ASSOC_ZVAL_EX(_arr, _key, _key_len, _zv) \
+	add_assoc_zval_ex(_arr, _key, (_key_len) + 1, _zv)
 #define PHPC_ARRAY_ADD_ASSOC_VAL_EX(_arr, _key, _key_len, _pv) \
 	add_assoc_zval_ex(_arr, _key, (_key_len) + 1, _pv)
 
@@ -888,6 +890,7 @@ typedef zend_resource * phpc_res_value_t;
 #define PHPC_ARRAY_ADD_ASSOC_STR_EX      add_assoc_str_ex
 #define PHPC_ARRAY_ADD_ASSOC_CSTR_EX     add_assoc_string_ex
 #define PHPC_ARRAY_ADD_ASSOC_CSTRL_EX    add_assoc_stringl_ex
+#define PHPC_ARRAY_ADD_ASSOC_ZVAL_EX     add_assoc_zval_ex
 #define PHPC_ARRAY_ADD_ASSOC_VAL_EX(_arr, _key, _key_len, _pv) \
 	add_assoc_zval_ex(_arr, _key, _key_len, &_pv)
 
@@ -1137,18 +1140,21 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_ARRAY_ADD_ASSOC_LONG          add_assoc_long
 #define PHPC_ARRAY_ADD_ASSOC_RESOURCE      add_assoc_resource
 #define PHPC_ARRAY_ADD_ASSOC_DOUBLE        add_assoc_double
+#define PHPC_ARRAY_ADD_ASSOC_ZVAL          add_assoc_zval
 
 #define PHPC_ARRAY_ADD_INDEX_NULL          add_index_null
 #define PHPC_ARRAY_ADD_INDEX_BOOL          add_index_bool
 #define PHPC_ARRAY_ADD_INDEX_LONG          add_index_long
 #define PHPC_ARRAY_ADD_INDEX_RESOURCE      add_index_resource
 #define PHPC_ARRAY_ADD_INDEX_DOUBLE        add_index_double
+#define PHPC_ARRAY_ADD_INDEX_ZVAL          add_index_zval
 
 #define PHPC_ARRAY_ADD_NEXT_INDEX_NULL     add_next_index_null
 #define PHPC_ARRAY_ADD_NEXT_INDEX_BOOL     add_next_index_bool
 #define PHPC_ARRAY_ADD_NEXT_INDEX_LONG     add_next_index_long
 #define PHPC_ARRAY_ADD_NEXT_INDEX_RESOURCE add_next_index_resource
 #define PHPC_ARRAY_ADD_NEXT_INDEX_DOUBLE   add_next_index_double
+#define PHPC_ARRAY_ADD_NEXT_INDEX_ZVAL     add_next_index_zval
 
 /* ZPP */
 /* alias for path flag */
