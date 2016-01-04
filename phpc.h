@@ -110,6 +110,16 @@
 
 #if PHP_MAJOR_VERSION == 5
 
+/* GLOBALS */
+
+#ifdef ZTS
+#define PHPC_MODULE_GLOBALS_ACCESSOR(_module, _v) \
+	TSRMG(_module ## _globals_id, zend_ ## _module ## _globals *, _v)
+#else
+#define PHPC_MODULE_GLOBALS_ACCESSOR(_module, _v) \
+	(_module ## _globals._v)
+#endif
+
 
 /* INTEGER */
 
@@ -620,6 +630,10 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_STREAM_CONTEXT_OPTION_NOT_FOUND FAILURE
 
 #else /* PHP 7 */
+
+/* GLOBALS */
+
+#define PHPC_MODULE_GLOBALS_ACCESSOR ZEND_MODULE_GLOBALS_ACCESSOR
 
 
 /* INTEGER */
