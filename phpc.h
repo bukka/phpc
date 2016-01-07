@@ -110,7 +110,7 @@
 
 #if PHP_MAJOR_VERSION == 5
 
-/* GLOBALS */
+/* MODULE */
 
 #ifdef ZTS
 #define PHPC_MODULE_GLOBALS_ACCESSOR(_module, _v) \
@@ -119,6 +119,8 @@
 #define PHPC_MODULE_GLOBALS_ACCESSOR(_module, _v) \
 	(_module ## _globals._v)
 #endif
+
+#define PHPC_MODULE_HAS_THREAD_CACHE 0
 
 
 /* INTEGER */
@@ -632,11 +634,14 @@ typedef const char phpc_stream_opener_char_t;
 	php_stream_context_get_option(_ctx, _wrappername, _optionname, &_ppv)
 #define PHPC_STREAM_CONTEXT_OPTION_NOT_FOUND FAILURE
 
+
 #else /* PHP 7 */
 
-/* GLOBALS */
+/* MODULE */
 
 #define PHPC_MODULE_GLOBALS_ACCESSOR ZEND_MODULE_GLOBALS_ACCESSOR
+
+#define PHPC_MODULE_HAS_THREAD_CACHE defined(ZTS) && defined(COMPILE_DL_JSON)
 
 
 /* INTEGER */
