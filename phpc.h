@@ -377,6 +377,11 @@ typedef long phpc_res_value_t;
 	zend_hash_find(_ht, _cstr_value, (_cstr_len) + 1, (void **) &_ppv)
 #define PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv) \
 	zend_hash_find(_ht, _cstr_value, strlen(_cstr_value) + 1, (void **) &_ppv)
+/* find ptr */
+#define PHPC_HASH_STR_FIND_PTR   PHPC_HASH_INDEX_FIND
+#define PHPC_HASH_CSTRL_FIND_PTR PHPC_HASH_CSTRL_FIND
+#define PHPC_HASH_CSTR_FIND_PTR  PHPC_HASH_CSTR_FIND
+#define PHPC_HASH_INDEX_FIND_PTR PHPC_HASH_INDEX_FIND
 /* not found value */
 #define PHPC_HASH_NOT_FOUND FAILURE
 
@@ -875,6 +880,15 @@ typedef zend_resource * phpc_res_value_t;
 	_ppv = zend_hash_str_find(_ht, _cstr_value, strlen(_cstr_value))
 #define PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv) \
 	_ppv = zend_hash_index_find(_ht, _idx)
+/* find ptr */
+#define PHPC_HASH_STR_FIND_PTR(_ht, _str, _ptr) \
+	_ptr = zend_hash_find_ptr(_ht, _str)
+#define PHPC_HASH_CSTRL_FIND_PTR(_ht, _cstr_value, _cstr_len, _ptr) \
+	_ptr = zend_hash_str_find_ptr(_ht, _cstr_value, _cstr_len)
+#define PHPC_HASH_CSTR_FIND_PTR(_ht, _cstr_value, _ptr) \
+	_ptr = zend_hash_str_find_ptr(_ht, _cstr_value, strlen(_cstr_value))
+#define PHPC_HASH_INDEX_FIND_PTR(_ht, _idx, _ptr) \
+	_ptr = zend_hash_index_find_ptr(_ht, _idx)
 /* not found value */
 #define PHPC_HASH_NOT_FOUND NULL
 
@@ -1142,7 +1156,7 @@ typedef const char phpc_stream_opener_char_t;
 
 /* find */
 #define PHPC_HASH_IS_FOUND(_found) ((_found) != PHPC_HASH_NOT_FOUND)
-
+/* find in cond */
 #define PHPC_HASH_STR_FIND_IN_COND(_ht, _str, _ppv) \
 	PHPC_HASH_IS_FOUND(PHPC_HASH_STR_FIND(_ht, _str, _ppv))
 #define PHPC_HASH_CSTRL_FIND_IN_COND(_ht, _cstr_value, _cstr_len, _ppv) \
@@ -1151,6 +1165,15 @@ typedef const char phpc_stream_opener_char_t;
 	PHPC_HASH_IS_FOUND(PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv))
 #define PHPC_HASH_INDEX_FIND_IN_COND(_ht, _idx, _ppv) \
 	PHPC_HASH_IS_FOUND(PHPC_HASH_INDEX_FIND(_ht, _idx, _ppv))
+/* find ptr in cond */
+#define PHPC_HASH_STR_FIND_PTR_IN_COND(_ht, _str, _ptr) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_STR_FIND_PTR(_ht, _str, _ptr))
+#define PHPC_HASH_CSTRL_FIND_PTR_IN_COND(_ht, _cstr_value, _cstr_len, _ptr) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_CSTRL_FIND_PTR(_ht, _cstr_value, _cstr_len, _ptr))
+#define PHPC_HASH_CSTR_FIND_PTR_IN_COND(_ht, _cstr_value, _ptr) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_CSTR_FIND_PTR(_ht, _cstr_value, _ptr))
+#define PHPC_HASH_INDEX_FIND_PTR_IN_COND(_ht, _idx, _ptr) \
+	PHPC_HASH_IS_FOUND(PHPC_HASH_INDEX_FIND_PTR(_ht, _idx, _ptr))
 
 /* copy */
 #define PHPC_HASH_COPY(_target, _source) \
