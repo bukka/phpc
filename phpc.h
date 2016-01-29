@@ -571,6 +571,11 @@ typedef zval * phpc_val;
 #define PHPC_VAL_CSTRL(_pv, _cstr, _cstr_len) \
 	ZVAL_STRINGL(_pv, _cstr, _cstr_len, 1)
 
+#define PHPC_ZVAL_IS_TRUE(_zv) \
+	(Z_TYPE(_zv) == IS_BOOL && Z_BVAL(_zv))
+#define PHPC_ZVAL_IS_FALSE(_zv) \
+	(Z_TYPE(_zv) == IS_BOOL && !Z_BVAL(_zv))
+
 
 /* Function end */
 #if (PHP_MINOR_VERSION == 3 && PHP_RELEASE_VERSION >= 7) || (PHP_MINOR_VERSION >= 4)
@@ -1016,6 +1021,11 @@ typedef zval  phpc_val;
     ZVAL_STRING(&_pv, _cstr)
 #define PHPC_VAL_CSTRL(_pv, _cstr, _cstr_len) \
 	ZVAL_STRINGL(&_pv, _cstr, _cstr_len)
+
+#define PHPC_ZVAL_IS_TRUE(_zv) \
+	(Z_TYPE(_zv) == IS_TRUE)
+#define PHPC_ZVAL_IS_FALSE(_zv) \
+	(Z_TYPE(_zv) == IS_FALSE)
 
 
 #define PHPC_FE_END PHP_FE_END
