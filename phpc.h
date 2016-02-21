@@ -627,13 +627,13 @@ typedef zval * phpc_val;
 		const char *_phpc_zpp_args_type_str = #_flag; \
 		_phpc_zpp_args_count = _num_args; \
 		_phpc_zpp_args_array = (zval ***) safe_emalloc(_num_args, sizeof (zval **), 0); \
-		if ((_phpc_zpp_args_type_str[0] == '+' && num_args == 0) || \
+		if ((_phpc_zpp_args_type_str[0] == '+' && _num_args == 0) || \
 				zend_get_parameters_array_ex(_phpc_zpp_args_count, _phpc_zpp_args_array) == FAILURE) { \
-			efree (args); \
+			efree(_phpc_zpp_args_array); \
 			zend_wrong_param_count(TSRMLS_C); \
 			_return; \
 		} \
-	while (0)
+	} while (0)
 #else
 #define PHPC_ZPP_ARGS_LOAD_EX(_flag, _num_args, _return) \
 	do { \
