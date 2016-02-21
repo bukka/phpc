@@ -70,8 +70,14 @@
 #else
 #define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) PHPC_NOOP
 #endif
+/* there is such handler in 5.2 but we would have to re-implement zend_std_get_properties */
+#define PHPC_OBJ_HAS_HANDLER_GET_PROPERTIES (PHP_VERSION_ID > 50299)
+#if PHPC_OBJ_HAS_HANDLER_GET_PROPERTIES
 #define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
 	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
+#else
+#define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) PHPC_NOOP
+#endif
 
 /* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
 #if PHP_VERSION_ID < 50399
