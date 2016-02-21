@@ -79,6 +79,13 @@
 #define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) PHPC_NOOP
 #endif
 
+#if PHP_VERSION_ID < 50299
+#define phpc_function_entry zend_function_entry
+#else
+#define phpc_function_entry const zend_function_entry
+#endif
+
+
 /* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
 #if PHP_VERSION_ID < 50399
 #define PHPC_OBJ_PROPERTIES_INIT(zo, class_type) \
