@@ -434,7 +434,7 @@ typedef long phpc_res_value_t;
 				(_ht), &PHPC_STR_VAL(_key), &_str_length, &_h, 0, &_pos)) != HASH_KEY_NON_EXISTENT; \
 			zend_hash_move_forward_ex((_ht), &_pos) ) { \
 		if (_key_type == HASH_KEY_IS_STRING) { \
-			PHPC_STR_LEN(_key) = (int) _str_length; \
+			PHPC_STR_LEN(_key) = (int) _str_length - 1; \
 		} else { \
 			PHPC_STR_VAL(_key) = NULL; \
 			PHPC_STR_LEN(_key) = 0; \
@@ -448,6 +448,7 @@ typedef long phpc_res_value_t;
 
 #define _PHPC_HASH_FOREACH_KEY_VAL(_ht, _ph, _key, _ppv, _use_h) \
 	PHPC_HASH_FOREACH_VAL(_ht, _ppv) \
+		int _key_type; \
 		uint _str_length; \
 		ulong _num_index, *_pnum_index; \
 		if (_use_h) { \
@@ -455,9 +456,9 @@ typedef long phpc_res_value_t;
 		} else { \
 			_pnum_index = &_num_index; \
 		} \
-		int _key_type = zend_hash_get_current_key_ex(_ht, &PHPC_STR_VAL(_key), &_str_length, _pnum_index, 0, &_pos); \
+		_key_type = zend_hash_get_current_key_ex(_ht, &PHPC_STR_VAL(_key), &_str_length, _pnum_index, 0, &_pos); \
 		if (_key_type == HASH_KEY_IS_STRING) { \
-			PHPC_STR_LEN(_key) = (int) _str_length; \
+			PHPC_STR_LEN(_key) = (int) _str_length - 1; \
 		} else { \
 			PHPC_STR_VAL(_key) = NULL; \
 			PHPC_STR_LEN(_key) = 0; \
