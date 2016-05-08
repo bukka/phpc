@@ -425,6 +425,21 @@ typedef long phpc_res_value_t;
 	zend_hash_copy(_target, _source, NULL, NULL, sizeof(zval *))
 
 /* iteration for each element */
+#define PHPC_HASH_FOREACH_KEY(_ht, _h, _key) do { \
+	HashPosition _pos; \
+	uint _str_length; \
+	int _key_type; \
+	for (zend_hash_internal_pointer_reset_ex((_ht), &_pos); \
+			(_key_type = zend_hash_get_current_key_ex( \
+				(_ht), &PHPC_STR_VAL(_key), &_str_length, &_h, 0, &_pos)) != HASH_KEY_NON_EXISTENT; \
+			zend_hash_move_forward_ex((_ht), &_pos) ) { \
+		if (_key_type == HASH_KEY_IS_STRING) { \
+			PHPC_STR_LEN(_key) = (int) _str_length; \
+		} else { \
+			PHPC_STR_VAL(_key) = NULL; \
+			PHPC_STR_LEN(_key) = 0; \
+		}
+
 #define PHPC_HASH_FOREACH_VAL(_ht, _ppv) do { \
 	HashPosition _pos; \
 	for (zend_hash_internal_pointer_reset_ex((_ht), &_pos); \
@@ -921,6 +936,7 @@ typedef zend_resource * phpc_res_value_t;
 #define PHPC_HASH_NOT_FOUND NULL
 
 /* iteration for each element */
+#define PHPC_HASH_FOREACH_KEY             ZEND_HASH_FOREACH_KEY
 #define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL
 #define PHPC_HASH_FOREACH_KEY_VAL         ZEND_HASH_FOREACH_KEY_VAL
 #define PHPC_HASH_FOREACH_STR_KEY_VAL     ZEND_HASH_FOREACH_STR_KEY_VAL
