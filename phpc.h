@@ -361,6 +361,7 @@ typedef long phpc_res_value_t;
 #define PHPC_HASH_GET_APPLY_COUNT(_ht) _ht->nApplyCount
 #define PHPC_HASH_INC_APPLY_COUNT(_ht) _ht->nApplyCount++
 #define PHPC_HASH_DEC_APPLY_COUNT(_ht) _ht->nApplyCount--
+#define PHPC_HASH_APPLY_PROTECTION     1
 
 /* update */
 #define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
@@ -903,9 +904,10 @@ typedef zend_resource * phpc_res_value_t;
 /* HASH */
 
 /* apply count */
-#define PHPC_HASH_GET_APPLY_COUNT ZEND_HASH_GET_APPLY_COUNT
-#define PHPC_HASH_INC_APPLY_COUNT ZEND_HASH_INC_APPLY_COUNT
-#define PHPC_HASH_DEC_APPLY_COUNT ZEND_HASH_DEC_APPLY_COUNT
+#define PHPC_HASH_GET_APPLY_COUNT  ZEND_HASH_GET_APPLY_COUNT
+#define PHPC_HASH_INC_APPLY_COUNT  ZEND_HASH_INC_APPLY_COUNT
+#define PHPC_HASH_DEC_APPLY_COUNT  ZEND_HASH_DEC_APPLY_COUNT
+#define PHPC_HASH_APPLY_PROTECTION ZEND_HASH_APPLY_PROTECTION
 
 /* update */
 #define PHPC_HASH_INDEX_UPDATE zend_hash_index_update
