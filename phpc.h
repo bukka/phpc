@@ -357,6 +357,11 @@ typedef long phpc_res_value_t;
 
 /* HASH */
 
+/* apply count */
+#define PHPC_HASH_GET_APPLY_COUNT(_ht) _ht->nApplyCount
+#define PHPC_HASH_INC_APPLY_COUNT(_ht) _ht->nApplyCount++
+#define PHPC_HASH_DEC_APPLY_COUNT(_ht) _ht->nApplyCount--
+
 /* update */
 #define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
 	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
@@ -896,6 +901,11 @@ typedef zend_resource * phpc_res_value_t;
 
 
 /* HASH */
+
+/* apply count */
+#define PHPC_HASH_GET_APPLY_COUNT ZEND_HASH_GET_APPLY_COUNT
+#define PHPC_HASH_INC_APPLY_COUNT ZEND_HASH_INC_APPLY_COUNT
+#define PHPC_HASH_DEC_APPLY_COUNT ZEND_HASH_DEC_APPLY_COUNT
 
 /* update */
 #define PHPC_HASH_INDEX_UPDATE zend_hash_index_update
