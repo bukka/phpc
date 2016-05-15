@@ -452,6 +452,8 @@ typedef long phpc_res_value_t;
 			zend_hash_get_current_data_ex((_ht), (void **) &(_ppv), &_pos) == SUCCESS; \
 			zend_hash_move_forward_ex((_ht), &_pos) ) {
 
+#define PHPC_HASH_FOREACH_VAL_IND PHPC_HASH_FOREACH_VAL
+
 #define _PHPC_HASH_FOREACH_KEY_VAL(_ht, _ph, _key, _ppv, _use_h) \
 	PHPC_HASH_FOREACH_VAL(_ht, _ppv) \
 		int _key_type; \
@@ -473,8 +475,13 @@ typedef long phpc_res_value_t;
 #define PHPC_HASH_FOREACH_KEY_VAL(_ht, _h, _key, _ppv) \
 	_PHPC_HASH_FOREACH_KEY_VAL(_ht, &_h, _key, _ppv, 1)
 
+
+#define PHPC_HASH_FOREACH_KEY_VAL_IND PHPC_HASH_FOREACH_KEY_VAL
+
 #define PHPC_HASH_FOREACH_STR_KEY_VAL(_ht, _key, _ppv) \
 	_PHPC_HASH_FOREACH_KEY_VAL(_ht, NULL, _key, _ppv, 0)
+
+#define PHPC_HASH_FOREACH_STR_KEY_VAL_IND PHPC_HASH_FOREACH_STR_KEY_VAL
 
 #define PHPC_HASH_FOREACH_END() } } while (0)
 
@@ -956,8 +963,11 @@ typedef zend_resource * phpc_res_value_t;
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_KEY             ZEND_HASH_FOREACH_KEY
 #define PHPC_HASH_FOREACH_VAL             ZEND_HASH_FOREACH_VAL
+#define PHPC_HASH_FOREACH_VAL_IND         ZEND_HASH_FOREACH_VAL_IND
 #define PHPC_HASH_FOREACH_KEY_VAL         ZEND_HASH_FOREACH_KEY_VAL
+#define PHPC_HASH_FOREACH_KEY_VAL_IND     ZEND_HASH_FOREACH_KEY_VAL_IND
 #define PHPC_HASH_FOREACH_STR_KEY_VAL     ZEND_HASH_FOREACH_STR_KEY_VAL
+#define PHPC_HASH_FOREACH_STR_KEY_VAL_IND ZEND_HASH_FOREACH_STR_KEY_VAL_IND
 #define PHPC_HASH_FOREACH_END             ZEND_HASH_FOREACH_END
 
 /* key and data getter */
