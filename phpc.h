@@ -585,6 +585,9 @@ typedef zval * phpc_val;
 #define PHPC_OBJCE       Z_OBJCE_P
 #define PHPC_OBJCE_P     Z_OBJCE_PP
 
+#define PHPC_OBJPROP     Z_OBJPROP_P
+#define PHPC_OBJPROP_P   Z_OBJPROP_PP
+
 #define PHPC_VAL_CAST_TO_ZVAL(_pv)    *(_pv)
 #define PHPC_VAL_CAST_TO_PZVAL(_pv)   _pv
 #define PHPC_PVAL_CAST_TO_PZVAL(_ppv) *(_ppv)
@@ -1039,6 +1042,9 @@ typedef zval  phpc_val;
 
 #define PHPC_OBJCE       Z_OBJCE
 #define PHPC_OBJCE_P     Z_OBJCE_P
+
+#define PHPC_OBJPROP     Z_OBJPROP
+#define PHPC_OBJPROP_P   Z_OBJPROP_P
 
 #define PHPC_VAL_CAST_TO_ZVAL(_pv)    _pv
 #define PHPC_VAL_CAST_TO_PZVAL(_pv)   &(_pv)
