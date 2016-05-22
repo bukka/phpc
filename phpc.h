@@ -363,6 +363,21 @@ typedef long phpc_res_value_t;
 #define PHPC_HASH_DEC_APPLY_COUNT(_ht)  _ht->nApplyCount--
 #define PHPC_HASH_APPLY_PROTECTION(_ht) 1
 
+/* add */
+#define PHPC_HASH_INDEX_ADD(_ht, _idx, _pzv) \
+	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
+#define PHPC_HASH_STR_ADD(_ht, _str, _pzv) \
+	zend_hash_add(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1, &_pzv, sizeof(_pzv), NULL)
+#define PHPC_HASH_CSTRL_ADD(_ht, _cstr_value, _cstr_len, _pzv) \
+	zend_hash_add(_ht, _cstr_value, (_cstr_len) + 1, &_pzv, sizeof(_pzv), NULL)
+#define PHPC_HASH_CSTR_ADD(_ht, _cstr_value, _pzv) \
+	zend_hash_add(_ht, _cstr_value, strlen(_cstr_value) + 1, &_pzv, sizeof(_pzv), NULL)
+/* add ptr */
+#define PHPC_HASH_INDEX_ADD_PTR PHPC_HASH_INDEX_ADD
+#define PHPC_HASH_STR_ADD_PTR   PHPC_HASH_STR_ADD
+#define PHPC_HASH_CSTRL_ADD_PTR PHPC_HASH_CSTRL_ADD
+#define PHPC_HASH_CSTR_ADD_PTR  PHPC_HASH_CSTR_ADD
+
 /* update */
 #define PHPC_HASH_INDEX_UPDATE(_ht, _idx, _pzv) \
 	zend_hash_index_update(_ht, _idx, &_pzv, sizeof(_pzv), NULL)
@@ -372,6 +387,11 @@ typedef long phpc_res_value_t;
 	zend_hash_update(_ht, _cstr_value, (_cstr_len) + 1, &_pzv, sizeof(_pzv), NULL)
 #define PHPC_HASH_CSTR_UPDATE(_ht, _cstr_value, _pzv) \
 	zend_hash_update(_ht, _cstr_value, strlen(_cstr_value) + 1, &_pzv, sizeof(_pzv), NULL)
+/* update ptr */
+#define PHPC_HASH_INDEX_UPDATE_PTR PHPC_HASH_INDEX_UPDATE
+#define PHPC_HASH_STR_UPDATE_PTR   PHPC_HASH_STR_UPDATE
+#define PHPC_HASH_CSTRL_UPDATE_PTR PHPC_HASH_CSTRL_UPDATE
+#define PHPC_HASH_CSTR_UPDATE_PTR  PHPC_HASH_CSTR_UPDATE
 
 /* delete */
 #define PHPC_HASH_INDEX_DELETE(_ht, _idx) \
@@ -403,10 +423,10 @@ typedef long phpc_res_value_t;
 #define PHPC_HASH_CSTR_FIND(_ht, _cstr_value, _ppv) \
 	zend_hash_find(_ht, _cstr_value, strlen(_cstr_value) + 1, (void **) &_ppv)
 /* find ptr */
-#define PHPC_HASH_STR_FIND_PTR   PHPC_HASH_INDEX_FIND
+#define PHPC_HASH_STR_FIND_PTR   PHPC_HASH_STR_FIND
+#define PHPC_HASH_INDEX_FIND_PTR PHPC_HASH_INDEX_FIND
 #define PHPC_HASH_CSTRL_FIND_PTR PHPC_HASH_CSTRL_FIND
 #define PHPC_HASH_CSTR_FIND_PTR  PHPC_HASH_CSTR_FIND
-#define PHPC_HASH_INDEX_FIND_PTR PHPC_HASH_INDEX_FIND
 /* not found value */
 #define PHPC_HASH_NOT_FOUND FAILURE
 
@@ -920,12 +940,31 @@ typedef zend_resource * phpc_res_value_t;
 #define PHPC_HASH_DEC_APPLY_COUNT  ZEND_HASH_DEC_APPLY_COUNT
 #define PHPC_HASH_APPLY_PROTECTION ZEND_HASH_APPLY_PROTECTION
 
+/* add */
+#define PHPC_HASH_INDEX_ADD zend_hash_index_add
+#define PHPC_HASH_STR_ADD   zend_hash_add
+#define PHPC_HASH_CSTRL_ADD zend_hash_str_add
+#define PHPC_HASH_CSTR_ADD(_ht, _cstr_value, _pzv) \
+	zend_hash_str_add(_ht, _cstr_value, strlen(_cstr_value), _pzv)
+/* add ptr */
+#define PHPC_HASH_INDEX_ADD_PTR zend_hash_index_add_ptr
+#define PHPC_HASH_STR_ADD_PTR   zend_hash_add_ptr
+#define PHPC_HASH_CSTRL_ADD_PTR zend_hash_str_add_ptr
+#define PHPC_HASH_CSTR_ADD_PTR(_ht, _cstr_value, _pzv) \
+	zend_hash_str_add_ptr(_ht, _cstr_value, strlen(_cstr_value), _pzv)
+
 /* update */
 #define PHPC_HASH_INDEX_UPDATE zend_hash_index_update
 #define PHPC_HASH_STR_UPDATE   zend_hash_update
 #define PHPC_HASH_CSTRL_UPDATE zend_hash_str_update
 #define PHPC_HASH_CSTR_UPDATE(_ht, _cstr_value, _pzv) \
 	zend_hash_str_update(_ht, _cstr_value, strlen(_cstr_value), _pzv)
+/* update ptr */
+#define PHPC_HASH_INDEX_UPDATE_PTR zend_hash_index_update_ptr
+#define PHPC_HASH_STR_UPDATE_PTR   zend_hash_update_ptr
+#define PHPC_HASH_CSTRL_UPDATE_PTR zend_hash_str_update_ptr
+#define PHPC_HASH_CSTR_UPDATE_PTR(_ht, _cstr_value, _pzv) \
+	zend_hash_str_update_ptr(_ht, _cstr_value, strlen(_cstr_value), _pzv)
 
 /* delete */
 #define PHPC_HASH_INDEX_DELETE zend_hash_index_del
