@@ -650,7 +650,7 @@ typedef zval * phpc_val;
 
 #define PHPC_PZVAL_STR   PHPC_VAL_STR
 #define PHPC_PZVAL_CSTR  PHPC_VAL_CSTR
-#define PHPC_PZVAL_CSTRL PHPC_VAL_CSTR
+#define PHPC_PZVAL_CSTRL PHPC_VAL_CSTRL
 
 #define PHPC_ZVAL_IS_TRUE(_zv) \
 	(Z_TYPE(_zv) == IS_BOOL && Z_BVAL(_zv))
