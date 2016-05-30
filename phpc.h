@@ -606,29 +606,41 @@ add_assoc_resource_ex(_arr, _key, (_key_len) + 1, _r)
 /* ZVAL */
 typedef zval * phpc_val;
 
-#define PHPC_TYPE        Z_TYPE_P
-#define PHPC_TYPE_P      Z_TYPE_PP
+#define PHPC_TYPE           Z_TYPE_P
+#define PHPC_TYPE_P         Z_TYPE_PP
 
-#define PHPC_LVAL        Z_LVAL_P
-#define PHPC_LVAL_P      Z_LVAL_PP
+#define PHPC_LVAL           Z_LVAL_P
+#define PHPC_LVAL_P         Z_LVAL_PP
 
-#define PHPC_DVAL        Z_DVAL_P
-#define PHPC_DVAL_P      Z_DVAL_PP
+#define PHPC_DVAL           Z_DVAL_P
+#define PHPC_DVAL_P         Z_DVAL_PP
 
-#define PHPC_STRVAL      Z_STRVAL_P
-#define PHPC_STRVAL_P    Z_STRVAL_PP
+#define PHPC_STRVAL         Z_STRVAL_P
+#define PHPC_STRVAL_P       Z_STRVAL_PP
 
-#define PHPC_STRLEN      Z_STRLEN_P
-#define PHPC_STRLEN_P    Z_STRLEN_PP
+#define PHPC_STRLEN         Z_STRLEN_P
+#define PHPC_STRLEN_P       Z_STRLEN_PP
 
-#define PHPC_ARRVAL      Z_ARRVAL_P
-#define PHPC_ARRVAL_P    Z_ARRVAL_PP
+#define PHPC_ARRVAL         Z_ARRVAL_P
+#define PHPC_ARRVAL_P       Z_ARRVAL_PP
 
-#define PHPC_OBJCE       Z_OBJCE_P
-#define PHPC_OBJCE_P     Z_OBJCE_PP
+#define PHPC_OBJ_HT         Z_OBJ_HT_P
+#define PHPC_OBJ_HT_P       Z_OBJ_HT_PP
 
-#define PHPC_OBJPROP     Z_OBJPROP_P
-#define PHPC_OBJPROP_P   Z_OBJPROP_PP
+#define PHPC_OBJ_HANDLER    Z_OBJ_HANDLER_P
+#define PHPC_OBJ_HANDLER_P  Z_OBJ_HANDLER_PP
+
+#define PHPC_OBJ_HANDLE     Z_OBJ_HANDLE_P
+#define PHPC_OBJ_HANDLE_P   Z_OBJ_HANDLE_PP
+
+#define PHPC_OBJCE          Z_OBJCE_P
+#define PHPC_OBJCE_P        Z_OBJCE_PP
+
+#define PHPC_OBJPROP        Z_OBJPROP_P
+#define PHPC_OBJPROP_P      Z_OBJPROP_PP
+
+#define PHPC_OBJDEBUG       Z_OBJDEBUG_P
+#define PHPC_OBJDEBUG_P     Z_OBJDEBUG_PP
 
 #define PHPC_PZVAL_CAST_TO_PVAL(_pzv) &_pzv
 
@@ -1109,29 +1121,41 @@ typedef zend_resource * phpc_res_value_t;
 /* ZVAL */
 typedef zval  phpc_val;
 
-#define PHPC_TYPE        Z_TYPE
-#define PHPC_TYPE_P      Z_TYPE_P
+#define PHPC_TYPE           Z_TYPE
+#define PHPC_TYPE_P         Z_TYPE_P
 
-#define PHPC_LVAL        Z_LVAL
-#define PHPC_LVAL_P      Z_LVAL_P
+#define PHPC_LVAL           Z_LVAL
+#define PHPC_LVAL_P         Z_LVAL_P
 
-#define PHPC_DVAL        Z_DVAL
-#define PHPC_DVAL_P      Z_DVAL_P
+#define PHPC_DVAL           Z_DVAL
+#define PHPC_DVAL_P         Z_DVAL_P
 
-#define PHPC_STRVAL      Z_STRVAL
-#define PHPC_STRVAL_P    Z_STRVAL_P
+#define PHPC_STRVAL         Z_STRVAL
+#define PHPC_STRVAL_P       Z_STRVAL_P
 
-#define PHPC_STRLEN      Z_STRLEN
-#define PHPC_STRLEN_P    Z_STRLEN_P
+#define PHPC_STRLEN         Z_STRLEN
+#define PHPC_STRLEN_P       Z_STRLEN_P
 
-#define PHPC_ARRVAL      Z_ARRVAL
-#define PHPC_ARRVAL_P    Z_ARRVAL_P
+#define PHPC_ARRVAL         Z_ARRVAL
+#define PHPC_ARRVAL_P       Z_ARRVAL_P
 
-#define PHPC_OBJCE       Z_OBJCE
-#define PHPC_OBJCE_P     Z_OBJCE_P
+#define PHPC_OBJ_HT         Z_OBJ_HT
+#define PHPC_OBJ_HT_P       Z_OBJ_HT_P
 
-#define PHPC_OBJPROP     Z_OBJPROP
-#define PHPC_OBJPROP_P   Z_OBJPROP_P
+#define PHPC_OBJ_HANDLER    Z_OBJ_HANDLER
+#define PHPC_OBJ_HANDLER_P  Z_OBJ_HANDLER_P
+
+#define PHPC_OBJ_HANDLE     Z_OBJ_HANDLE
+#define PHPC_OBJ_HANDLE_P   Z_OBJ_HANDLE_P
+
+#define PHPC_OBJCE          Z_OBJCE
+#define PHPC_OBJCE_P        Z_OBJCE_P
+
+#define PHPC_OBJPROP        Z_OBJPROP
+#define PHPC_OBJPROP_P      Z_OBJPROP_P
+
+#define PHPC_OBJDEBUG       Z_OBJDEBUG
+#define PHPC_OBJDEBUG_P     Z_OBJDEBUG_P
 
 #define PHPC_PZVAL_CAST_TO_PVAL(_pzv) _pzv
 
