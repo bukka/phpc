@@ -254,8 +254,7 @@ typedef long phpc_res_value_t;
 	zend_fetch_resource(&(_pz_res) TSRMLS_CC, -1, _res_type_name, NULL, 2, _res_type_1, _res_type_2)
 #define PHPC_RES_DELETE(_pz_res) \
 	zend_list_delete(Z_LVAL_P(_pz_res))
-#define PHPC_RES_CLOSE(_pz_res) \
-	zend_list_close(Z_RES_P(_pz_res))
+#define PHPC_RES_CLOSE PHPC_RES_DELETE
 
 /* resource to zval */
 #define PHPC_RES_PZVAL(_res, _pzv) \
@@ -852,7 +851,8 @@ typedef zend_resource * phpc_res_value_t;
 	zend_fetch_resource2(Z_RES_P(_pz_res), _res_type_name, _res_type_1, _res_type_2)
 #define PHPC_RES_DELETE(_pz_res) \
 	zend_list_delete(Z_RES_P(_pz_res))
-#define PHPC_RES_CLOSE PHPC_RES_DELETE
+#define PHPC_RES_CLOSE(_pz_res) \
+	zend_list_close(Z_RES_P(_pz_res))
 
 /* resource to zval */
 #define PHPC_RES_PZVAL(_res, _pzv) \
