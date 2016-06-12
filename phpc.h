@@ -459,6 +459,13 @@ typedef long phpc_res_value_t;
 #define PHPC_HASH_COPY_EX(_target, _source, _copy_ctr) \
 	zend_hash_copy(_target, _source, NULL, NULL, sizeof(zval *))
 
+/* key result constant has been renamed in 5.4 */
+#if PHP_VERSION_ID < 50399
+#define _PHPC_HASH_KEY_NON_EXISTENT HASH_KEY_NON_EXISTANT
+#else
+#define _PHPC_HASH_KEY_NON_EXISTENT HASH_KEY_NON_EXISTENT
+#endif
+
 /* iteration for each element */
 #define PHPC_HASH_FOREACH_KEY(_ht, _h, _key) do { \
 	HashPosition _pos; \
@@ -466,7 +473,7 @@ typedef long phpc_res_value_t;
 	int _key_type; \
 	for (zend_hash_internal_pointer_reset_ex((_ht), &_pos); \
 			(_key_type = zend_hash_get_current_key_ex( \
-				(_ht), &PHPC_STR_VAL(_key), &_str_length, &_h, 0, &_pos)) != HASH_KEY_NON_EXISTENT; \
+				(_ht), &PHPC_STR_VAL(_key), &_str_length, &_h, 0, &_pos)) != _PHPC_HASH_KEY_NON_EXISTENT; \
 			zend_hash_move_forward_ex((_ht), &_pos) ) { \
 		if (_key_type == HASH_KEY_IS_STRING) { \
 			PHPC_STR_LEN(_key) = (int) _str_length - 1; \
