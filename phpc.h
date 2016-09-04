@@ -392,7 +392,7 @@ typedef long phpc_res_value_t;
 /* next insert */
 #define PHPC_HASH_NEXT_INDEX_INSERT_PTR(_ht, _ptr, _ptr_size) \
 	zend_hash_next_index_insert(_ht, _ptr, _ptr_size, NULL)
-#define PHPC_HASH_NEXT_INDEX_INSERT(_ht, _ptr) \
+#define PHPC_HASH_NEXT_INDEX_INSERT(_ht, _pzv) \
 	zend_hash_next_index_insert(_ht, _pzv, sizeof(_pzv), NULL)
 
 /* update ptr */
