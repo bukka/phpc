@@ -657,6 +657,9 @@ typedef zval * phpc_val;
 #define PHPC_OBJDEBUG       Z_OBJDEBUG_P
 #define PHPC_OBJDEBUG_P     Z_OBJDEBUG_PP
 
+#define PHPC_REFCOUNTED(_zv)    1
+#define PHPC_REFCOUNTED_P(_pzv) 1
+
 #define PHPC_PZVAL_CAST_TO_PVAL(_pzv) &_pzv
 
 #define PHPC_VAL_CAST_TO_ZVAL(_pv)    *(_pv)
@@ -1186,6 +1189,9 @@ typedef zval  phpc_val;
 
 #define PHPC_OBJDEBUG       Z_OBJDEBUG
 #define PHPC_OBJDEBUG_P     Z_OBJDEBUG_P
+
+#define PHPC_REFCOUNTED     Z_REFCOUNTED
+#define PHPC_REFCOUNTED_P   Z_REFCOUNTED_P
 
 #define PHPC_PZVAL_CAST_TO_PVAL(_pzv) _pzv
 
