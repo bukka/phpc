@@ -536,7 +536,15 @@ typedef long phpc_res_value_t;
 	} while(0)
 
 
+/* SYMTABLE */
+
+/* update*/
+#define PHPC_SYMTABLE_UPDATE(_ht, _str, _pzv) \
+	zend_symtable_update(_ht, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str) + 1, &_pzv, sizeof(_pzv), NULL)
+
+
 /* ARRAY */
+
 #define PHPC_ARRAY_ADD_ASSOC_NULL_EX(_arr, _key, _key_len) \
     add_assoc_null_ex(_arr, _key, (_key_len) + 1)
 #define PHPC_ARRAY_ADD_ASSOC_BOOL_EX(_arr, _key, _key_len, _b) \
@@ -1072,6 +1080,12 @@ typedef zend_resource * phpc_res_value_t;
 	ZVAL_ARR(_pzv, _ht)
 #define PHPC_HASH_RETVAL RETVAL_ARR
 #define PHPC_HASH_RETURN RETURN_ARR
+
+
+/* SYMTABLE */
+
+/* update*/
+#define PHPC_SYMTABLE_UPDATE zend_symtable_update
 
 
 /* ARRAY */
