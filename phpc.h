@@ -383,6 +383,12 @@ typedef long phpc_res_value_t;
 #define PHPC_HASH_CSTR_ADD(_ht, _cstr_value, _pzv) \
 	zend_hash_add(_ht, _cstr_value, strlen(_cstr_value) + 1, &_pzv, sizeof(_pzv), NULL)
 
+/* next insert */
+#define PHPC_HASH_NEXT_INDEX_INSERT_PTR(_ht, _ptr, _ptr_size) \
+	zend_hash_next_index_insert(_ht, _ptr, _ptr_size, NULL)
+#define PHPC_HASH_NEXT_INDEX_INSERT(_ht, _ptr) \
+	zend_hash_next_index_insert(_ht, _pzv, sizeof(_pzv), NULL)
+
 /* update ptr */
 #define PHPC_HASH_INDEX_UPDATE_PTR(_ht, _idx, _ptr, _ptr_size) \
 	zend_hash_index_update(_ht, _idx, _ptr, _ptr_size, NULL)
@@ -1010,6 +1016,11 @@ typedef zend_resource * phpc_res_value_t;
 #define PHPC_HASH_CSTRL_ADD zend_hash_str_add
 #define PHPC_HASH_CSTR_ADD(_ht, _cstr_value, _pzv) \
 	zend_hash_str_add(_ht, _cstr_value, strlen(_cstr_value), _pzv)
+
+/* next insert */
+#define PHPC_HASH_NEXT_INDEX_INSERT_PTR(_ht, _ptr, _ptr_size) \
+	zend_hash_next_index_insert_ptr(_ht, _ptr)
+#define PHPC_HASH_NEXT_INDEX_INSERT zend_hash_next_index_insert
 
 /* update ptr */
 #define PHPC_HASH_INDEX_UPDATE_PTR(_ht, _idx, _ptr, _ptr_size) \
