@@ -195,6 +195,12 @@ typedef int phpc_str_size_t;
 #define PHPC_STR_FROM_PTR_VAL(_str, _strpv) \
 	PHPC_STR_VAL(_str) = *PHPC_STR_VAL(_strpv); \
 	PHPC_STR_LEN(_str) = strlen(*PHPC_STR_VAL(_strpv))
+#define PHPC_STR_FROM_ZVAL(_str, _zv) \
+	PHPC_STR_VAL(_str) = Z_STRVAL(_zv); \
+	PHPC_STR_LEN(_str) = Z_STRLEN(_zv)
+#define PHPC_STR_FROM_PZVAL(_str, _pzv) \
+	PHPC_STR_VAL(_str) = Z_STRVAL_P(_pzv); \
+	PHPC_STR_LEN(_str) = Z_STRLEN_P(_pzv)
 #define PHPC_STR_RETURN(_name) \
 	RETURN_STRINGL(PHPC_STR_VAL(_name), PHPC_STR_LEN(_name), 0)
 
@@ -850,6 +856,8 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_STR_FROM_PTR_STR(_str, _strp)    _str = *_strp
 #define PHPC_STR_FROM_PTR_VAL(_str, _strpv)   _str = *_strpv
 #define PHPC_STR_RETURN                       RETURN_STR
+#define PHPC_STR_FROM_ZVAL(_str, _zv)         _str = Z_STR(_zv)
+#define PHPC_STR_FROM_PZVAL(_str, _pzv)       _str = Z_STR_P(_pzv)
 /* wrapper macros */
 #define PHPC_STR_INIT(_name, _cstr, _len) \
 	_name = zend_string_init(_cstr, _len, 0)
