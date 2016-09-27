@@ -695,6 +695,10 @@ typedef zval * phpc_val;
 #define PHPC_PVAL_DEREF(_pv)      PHPC_NOOP
 #define PHPC_PZVAL_DEREF(_pv)     PHPC_NOOP
 
+#define PHPC_PZVAL_COPY_INIT      INIT_PZVAL_COPY
+#define PHPC_PZVAL_COPY(_pzv_dst, _pzv_src) \
+	*_pzv_dst = *_pzv_src
+
 #define PHPC_VAL_STR(_pv, _str) \
 	ZVAL_STRINGL(_pv, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
 #define PHPC_VAL_CSTR(_pv, _cstr) \
@@ -706,6 +710,9 @@ typedef zval * phpc_val;
 #define PHPC_PZVAL_CSTR    PHPC_VAL_CSTR
 #define PHPC_PZVAL_CSTRL   PHPC_VAL_CSTRL
 #define PHPC_PZVAL_NEW_STR PHPC_VAL_STR
+
+#define PHPC_ZVAL_COPY(_zv_dst, _zv_src) \
+	_zv_dst = _zv_src
 
 #define PHPC_ZVAL_STR(_zv, _str) \
 	PHPC_VAL_STR(&_zv, _str)
@@ -1238,6 +1245,9 @@ typedef zval  phpc_val;
 #define PHPC_PVAL_DEREF          ZVAL_DEREF
 #define PHPC_PZVAL_DEREF         ZVAL_DEREF
 
+#define PHPC_PZVAL_COPY_INIT     ZVAL_COPY_VALUE
+#define PHPC_PZVAL_COPY          ZVAL_COPY_VALUE
+
 #define PHPC_VAL_STR(_pv, _str) \
 	ZVAL_STR(&_pv, _str)
 #define PHPC_VAL_CSTR(_pv, _cstr) \
@@ -1251,6 +1261,9 @@ typedef zval  phpc_val;
 #define PHPC_PZVAL_CSTR    ZVAL_STRING
 #define PHPC_PZVAL_CSTRL   ZVAL_STRINGL
 #define PHPC_PZVAL_NEW_STR ZVAL_NEW_STR
+
+#define PHPC_ZVAL_COPY(_zv_dst, _zv_src) \
+	ZVAL_COPY_VALUE(&_zv_dst, &_zv_src)
 
 #define PHPC_ZVAL_STR      PHPC_VAL_STR
 #define PHPC_ZVAL_CSTR     PHPC_VAL_CSTR
