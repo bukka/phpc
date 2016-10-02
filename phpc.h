@@ -699,28 +699,29 @@ typedef zval * phpc_val;
 #define PHPC_PZVAL_COPY(_pzv_dst, _pzv_src) \
 	*_pzv_dst = *_pzv_src
 
-#define PHPC_VAL_STR(_pv, _str) \
+#define PHPC_VAL_NEW_STR(_pv, _str) \
 	ZVAL_STRINGL(_pv, PHPC_STR_VAL(_str), PHPC_STR_LEN(_str), 0)
+#define PHPC_VAL_STR PHPC_VAL_NEW_STR
 #define PHPC_VAL_CSTR(_pv, _cstr) \
     ZVAL_STRING(_pv, _cstr, 1)
 #define PHPC_VAL_CSTRL(_pv, _cstr, _cstr_len) \
 	ZVAL_STRINGL(_pv, _cstr, _cstr_len, 1)
 
+#define PHPC_PZVAL_NEW_STR PHPC_VAL_NEW_STR
 #define PHPC_PZVAL_STR     PHPC_VAL_STR
 #define PHPC_PZVAL_CSTR    PHPC_VAL_CSTR
 #define PHPC_PZVAL_CSTRL   PHPC_VAL_CSTRL
-#define PHPC_PZVAL_NEW_STR PHPC_VAL_STR
 
 #define PHPC_ZVAL_COPY(_zv_dst, _zv_src) \
 	_zv_dst = _zv_src
 
-#define PHPC_ZVAL_STR(_zv, _str) \
+#define PHPC_ZVAL_NEW_STR(_zv, _str) \
 	PHPC_VAL_STR(&_zv, _str)
+#define PHPC_ZVAL_STR PHPC_ZVAL_NEW_STR
 #define PHPC_ZVAL_CSTR(_zv, _cstr) \
 	PHPC_VAL_CSTR(&_zv, _cstr)
 #define PHPC_ZVAL_CSTRL(_zv, _cstr, _cstr_len) \
 	PHPC_VAL_CSTRL(&_zv, _cstr, _cstr_len)
-#define PHPC_ZVAL_NEW_STR PHPC_ZVAL_STR
 
 #define PHPC_ZVAL_IS_TRUE(_zv) \
 	(Z_TYPE(_zv) == IS_BOOL && Z_BVAL(_zv))
@@ -1248,27 +1249,27 @@ typedef zval  phpc_val;
 #define PHPC_PZVAL_COPY_INIT     ZVAL_COPY_VALUE
 #define PHPC_PZVAL_COPY          ZVAL_COPY_VALUE
 
+#define PHPC_VAL_NEW_STR(_pv, _str) \
+	ZVAL_NEW_STR(&_pv, _str)
 #define PHPC_VAL_STR(_pv, _str) \
 	ZVAL_STR(&_pv, _str)
 #define PHPC_VAL_CSTR(_pv, _cstr) \
     ZVAL_STRING(&_pv, _cstr)
 #define PHPC_VAL_CSTRL(_pv, _cstr, _cstr_len) \
 	ZVAL_STRINGL(&_pv, _cstr, _cstr_len)
-#define PHPC_VAL_NEW_STR(_pv, _cstr, _cstr_len) \
-	ZVAL_STRINGL(&_pv, _cstr, _cstr_len)
 
+#define PHPC_PZVAL_NEW_STR ZVAL_NEW_STR
 #define PHPC_PZVAL_STR     ZVAL_STR
 #define PHPC_PZVAL_CSTR    ZVAL_STRING
 #define PHPC_PZVAL_CSTRL   ZVAL_STRINGL
-#define PHPC_PZVAL_NEW_STR ZVAL_NEW_STR
 
 #define PHPC_ZVAL_COPY(_zv_dst, _zv_src) \
 	ZVAL_COPY_VALUE(&_zv_dst, &_zv_src)
 
+#define PHPC_ZVAL_NEW_STR  PHPC_VAL_NEW_STR
 #define PHPC_ZVAL_STR      PHPC_VAL_STR
 #define PHPC_ZVAL_CSTR     PHPC_VAL_CSTR
 #define PHPC_ZVAL_CSTRL    PHPC_VAL_CSTRL
-#define PHPC_ZVAL_NEW_STR  PHPC_VAL_NEW_STR
 
 #define PHPC_ZVAL_IS_TRUE(_zv) \
 	(Z_TYPE(_zv) == IS_TRUE)
