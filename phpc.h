@@ -86,17 +86,17 @@
 #endif
 
 
-/* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
 #if PHP_VERSION_ID < 50399
-#define PHPC_OBJ_PROPERTIES_INIT(zo, class_type) \
-	{ \
-		zval *tmp; \
-		zend_hash_copy((*(zo)).properties, \
-			&(class_type)->default_properties, \
+/* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
+#define PHPC_OBJ_PROPERTIES_INIT(_zo, _class_type) \
+	do { \
+		zval *_phpc_tmp; \
+		zend_hash_copy((*(_zo)).properties, \
+			&(_class_type)->default_properties, \
 			(copy_ctor_func_t) zval_add_ref, \
-			(void *) &tmp, \
+			(void *) &_phpc_tmp, \
 			sizeof(zval *)); \
-	}
+	} while(0)
 #else
 #define PHPC_OBJ_PROPERTIES_INIT object_properties_init
 #endif
