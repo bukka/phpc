@@ -97,8 +97,14 @@
 			(void *) &_phpc_tmp, \
 			sizeof(zval *)); \
 	} while(0)
+
+/* write property */
+#define PHPC_OBJ_STD_WRITE_PROPERTY(_obj, _member, _value) \
+	Z_OBJ_HT_P(_obj)->write_property(_obj, _member, _value TSRMLS_CC)
 #else
 #define PHPC_OBJ_PROPERTIES_INIT object_properties_init
+#define PHPC_OBJ_STD_WRITE_PROPERTY(_obj, _member, _value) \
+	zend_std_write_property(_obj, _member, _value, NULL TSRMLS_CC)
 #endif
 
 /* common fcall macros */
