@@ -50,41 +50,12 @@
 #define PHPC_OBJ_INIT_HANDLERS(_name) \
 	memcpy(&PHPC_OBJ_GET_HANDLER_VAR_NAME(_name), \
 		zend_get_std_object_handlers(), sizeof(zend_object_handlers))
-#define PHPC_CLASS_SET_HANDLER_CREATE(_class_entry, _name) \
-	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE(_name, create)
-#define PHPC_OBJ_SET_HANDLER_CLONE(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).clone_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, clone)
-#define PHPC_OBJ_SET_HANDLER_COMPARE(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
-#define PHPC_OBJ_HAS_HANDLER_GET_GC (PHP_VERSION_ID > 50399)
-#if PHPC_OBJ_HAS_HANDLER_GET_GC
-#define PHPC_OBJ_SET_HANDLER_GET_GC(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_gc = PHPC_OBJ_GET_HANDLER_FCE(_name, get_gc)
-#else
-#define PHPC_OBJ_SET_HANDLER_GET_GC(_name) PHPC_NOOP
-#endif
-#define PHPC_OBJ_HAS_HANDLER_GET_DEBUG_INFO (PHP_VERSION_ID > 50299)
-#if PHPC_OBJ_HAS_HANDLER_GET_DEBUG_INFO
-#define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_debug_info = PHPC_OBJ_GET_HANDLER_FCE(_name, get_debug_info)
-#else
-#define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) PHPC_NOOP
-#endif
-/* there is such handler in 5.2 but we would have to re-implement zend_std_get_properties */
-#define PHPC_OBJ_HAS_HANDLER_GET_PROPERTIES (PHP_VERSION_ID > 50299)
-#if PHPC_OBJ_HAS_HANDLER_GET_PROPERTIES
-#define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
-#else
-#define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) PHPC_NOOP
-#endif
 
 #if PHP_VERSION_ID < 50299
 #define phpc_function_entry zend_function_entry
 #else
 #define phpc_function_entry const zend_function_entry
 #endif
-
 
 #if PHP_VERSION_ID < 50399
 /* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
@@ -359,8 +330,8 @@ typedef long phpc_res_value_t;
 	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_name, _phpc_obj ## _id)
 
 /* handler setters */
-#define PHPC_OBJ_SET_HANDLER_OFFSET(_name) PHPC_NOOP
-#define PHPC_OBJ_SET_HANDLER_FREE(_name) PHPC_NOOP
+#define PHPC_OBJ_SET_SPECIFIC_HANDLER_OFFSET(_handlers, _name) PHPC_NOOP
+#define PHPC_OBJ_SET_SPECIFIC_HANDLER_FREE(_handlers, _name) PHPC_NOOP
 
 /* read propery */
 #define PHPC_READ_PROPERTY_RV_NAME
@@ -1006,10 +977,10 @@ typedef zend_resource * phpc_res_value_t;
 	PHPC_OBJ_STRUCT_DECLARE(_name, _obj) = PHPC_OBJ_FROM_ZVAL(_name, _phpc_obj ## _id)
 
 /* handler setters */
-#define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).offset = XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std)
-#define PHPC_OBJ_SET_HANDLER_FREE(_name) \
-	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free)
+#define PHPC_OBJ_SET_SPECIFIC_HANDLER_OFFSET(_handlers, _name) \
+	(_handlers).offset = XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std)
+#define PHPC_OBJ_SET_SPECIFIC_HANDLER_FREE(_handlers, _name) \
+	(_handlers).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free)
 
 /* read propery */
 #define PHPC_READ_PROPERTY_RV_NAME _phpc_read_property_rv
@@ -1401,6 +1372,42 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_OBJ_HANDLER_GET_PROPERTIES(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_properties)\
 		(zval *PHPC_SELF TSRMLS_DC)
+
+/* object handler setters */
+#define PHPC_CLASS_SET_HANDLER_CREATE(_class_entry, _name) \
+	_class_entry.create_object = PHPC_OBJ_GET_HANDLER_FCE(_name, create)
+#define PHPC_OBJ_SET_SPECIFIC_HANDLER_CLONE(_handlers, _name) \
+	(_handlers).clone_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, clone)
+#define PHPC_OBJ_SET_HANDLER_CLONE(_name) \
+	PHPC_OBJ_SET_SPECIFIC_HANDLER_CLONE(PHPC_OBJ_GET_HANDLER_VAR_NAME(_name), _name)
+#define PHPC_OBJ_SET_HANDLER_COMPARE(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).compare_objects = PHPC_OBJ_GET_HANDLER_FCE(_name, compare)
+#define PHPC_OBJ_HAS_HANDLER_GET_GC (PHP_VERSION_ID > 50399)
+#if PHPC_OBJ_HAS_HANDLER_GET_GC
+#define PHPC_OBJ_SET_HANDLER_GET_GC(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_gc = PHPC_OBJ_GET_HANDLER_FCE(_name, get_gc)
+#else
+#define PHPC_OBJ_SET_HANDLER_GET_GC(_name) PHPC_NOOP
+#endif
+#define PHPC_OBJ_HAS_HANDLER_GET_DEBUG_INFO (PHP_VERSION_ID > 50299)
+#if PHPC_OBJ_HAS_HANDLER_GET_DEBUG_INFO
+#define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_debug_info = PHPC_OBJ_GET_HANDLER_FCE(_name, get_debug_info)
+#else
+#define PHPC_OBJ_SET_HANDLER_GET_DEBUG_INFO(_name) PHPC_NOOP
+#endif
+/* there is such handler in 5.2 but we would have to re-implement zend_std_get_properties */
+#define PHPC_OBJ_HAS_HANDLER_GET_PROPERTIES (PHP_VERSION_ID > 50299)
+#if PHPC_OBJ_HAS_HANDLER_GET_PROPERTIES
+#define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) \
+	PHPC_OBJ_GET_HANDLER_VAR_NAME(_name).get_properties = PHPC_OBJ_GET_HANDLER_FCE(_name, get_properties)
+#else
+#define PHPC_OBJ_SET_HANDLER_GET_PROPERTIES(_name) PHPC_NOOP
+#endif
+#define PHPC_OBJ_SET_HANDLER_OFFSET(_name) \
+	PHPC_OBJ_SET_SPECIFIC_HANDLER_OFFSET(PHPC_OBJ_GET_HANDLER_VAR_NAME(_name), _name)
+#define PHPC_OBJ_SET_HANDLER_FREE(_name) \
+	PHPC_OBJ_SET_SPECIFIC_HANDLER_FREE(PHPC_OBJ_GET_HANDLER_VAR_NAME(_name), _name)
 
 /* hash */
 #define PHPC_HASH_ALLOC                     ALLOC_HASHTABLE
