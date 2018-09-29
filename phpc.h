@@ -51,6 +51,14 @@
 	memcpy(&PHPC_OBJ_GET_HANDLER_VAR_NAME(_name), \
 		zend_get_std_object_handlers(), sizeof(zend_object_handlers))
 
+/* ZEND_ACC_CTOR and ZEND_ACC_DTOR is removed in 7.4 */
+#ifndef ZEND_ACC_CTOR
+#define ZEND_ACC_CTOR 0
+#endif
+#ifndef ZEND_ACC_DTOR
+#define ZEND_ACC_DTOR 0
+#endif
+
 #if PHP_VERSION_ID < 50299
 #define phpc_function_entry zend_function_entry
 #else
