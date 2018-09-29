@@ -342,6 +342,7 @@ typedef long phpc_res_value_t;
 /* HASH */
 
 /* apply count */
+#define PHPC_HASH_HAS_APPLY_COUNT(_ht)  (_ht->nApplyCount > 1)
 #define PHPC_HASH_GET_APPLY_COUNT(_ht)  _ht->nApplyCount
 #define PHPC_HASH_INC_APPLY_COUNT(_ht)  _ht->nApplyCount++
 #define PHPC_HASH_DEC_APPLY_COUNT(_ht)  _ht->nApplyCount--
