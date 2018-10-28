@@ -1002,7 +1002,7 @@ typedef zend_resource * phpc_res_value_t;
 
 /* recursion protection */
 #if PHP_VERSION_ID < 70299
-#define PHPC_HASH_HAS_APPLY_COUNT(_tht)  (ZEND_HASH_GET_APPLY_COUNT(_tht) > 1)
+#define PHPC_HASH_HAS_APPLY_COUNT(_tht)  (ZEND_HASH_GET_APPLY_COUNT(_tht) > 0)
 #define PHPC_HASH_GET_APPLY_COUNT        ZEND_HASH_GET_APPLY_COUNT
 #define PHPC_HASH_INC_APPLY_COUNT        ZEND_HASH_INC_APPLY_COUNT
 #define PHPC_HASH_DEC_APPLY_COUNT        ZEND_HASH_DEC_APPLY_COUNT
