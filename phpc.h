@@ -65,6 +65,18 @@
 #define phpc_function_entry const zend_function_entry
 #endif
 
+#if PHP_MAJOR_VERSION < 8
+#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
+#else
+#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
+/* ZTS */
+#define TSRMLS_D void
+#define TSRMLS_DC
+#define TSRMLS_C
+#define TSRMLS_CC
+#define TSRMLS_FETCH()
+#endif
+
 #if PHP_VERSION_ID < 50399
 /* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
 #define PHPC_OBJ_PROPERTIES_INIT(_zo, _class_type) \
@@ -88,6 +100,22 @@
 
 /* common fcall macros */
 #define PHPC_FCALL_PARAMS_NAME(_pname) _phpc_fcall_params__ ## _pname
+
+#if PHP_MAJOR_VERSION == 8
+#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+	do { \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
+		(_fci).param_count = (count); \
+	} while (0)
+#else
+#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+	do { \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
+		(_fci).param_count = (count); \
+		(_fci).no_separation = (no_separ); \
+	} while (0)
+#endif
+
 
 /* integer conversions */
 #define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type_from, _type_to, _max, _min) \
@@ -995,7 +1023,7 @@ typedef zend_resource * phpc_res_value_t;
 #define PHPC_READ_PROPERTY_RV_NAME _phpc_read_property_rv
 #define PHPC_READ_PROPERTY_RV_DECLARE zval PHPC_READ_PROPERTY_RV_NAME
 #define PHPC_READ_PROPERTY(_scope, _object, _name, _name_len, _silent) \
-	zend_read_property(_scope, _object, _name, _name_len, _silent, &PHPC_READ_PROPERTY_RV_NAME)
+	zend_read_property(_scope, PHPC_OBJ_FOR_PROP(_object), _name, _name_len, _silent, &PHPC_READ_PROPERTY_RV_NAME)
 
 
 /* HASH */
