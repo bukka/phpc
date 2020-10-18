@@ -65,18 +65,6 @@
 #define phpc_function_entry const zend_function_entry
 #endif
 
-#if PHP_MAJOR_VERSION < 8
-#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
-#else
-#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
-/* ZTS */
-#define TSRMLS_D void
-#define TSRMLS_DC
-#define TSRMLS_C
-#define TSRMLS_CC
-#define TSRMLS_FETCH()
-#endif
-
 #if PHP_VERSION_ID < 50399
 /* initializing properties in obejct (object_properties_init was added in PHP 5.4) */
 #define PHPC_OBJ_PROPERTIES_INIT(_zo, _class_type) \
@@ -101,22 +89,6 @@
 /* common fcall macros */
 #define PHPC_FCALL_PARAMS_NAME(_pname) _phpc_fcall_params__ ## _pname
 
-#if PHP_MAJOR_VERSION == 8
-#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
-	do { \
-		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
-		(_fci).param_count = (count); \
-	} while (0)
-#else
-#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
-	do { \
-		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
-		(_fci).param_count = (count); \
-		(_fci).no_separation = (no_separ); \
-	} while (0)
-#endif
-
-
 /* integer conversions */
 #define PHPC_CONVERT_NUMBER(_pn, _n, _exc_over, _exc_under, _type_from, _type_to, _max, _min) \
 	if (_pn > (_type_from) _max) { \
@@ -138,6 +110,56 @@
 	PHPC_LONG_TO_INT_EX2(_plv, _lv, _exc, _exc)
 #define PHPC_LONG_TO_INT(_plv, _lv) \
 	PHPC_LONG_TO_INT_EX2(_plv, _lv, _lv = INT_MAX, _lv = INT_MIN)
+
+
+#if PHP_MAJOR_VERSION < 8
+/* PHP 5 and 7 */
+#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
+
+#define PHPC_OBJ_STD_GET_PROPERTIES(_obj) zend_std_get_properties(_obj TSRMLS_CC)
+
+#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+	do { \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
+		(_fci).param_count = (count); \
+		(_fci).no_separation = (no_separ); \
+	} while (0)
+#else
+/* PHP 8 */
+#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
+
+/* fcall */
+#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+	do { \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
+		(_fci).param_count = (count); \
+	} while (0)
+/* ZTS */
+#define TSRMLS_D void
+#define TSRMLS_DC
+#define TSRMLS_C
+#define TSRMLS_CC
+#define TSRMLS_FETCH()
+#endif
+
+#define PHPC_OBJ_STD_GET_PROPERTIES(_obj) \
+	zend_std_get_properties(PHPC_OBJ_FOR_PROP(_obj) TSRMLS_CC)
+
+
+#if PHP_MAJOR_VERSION > 8
+#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+	do { \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
+		(_fci).param_count = (count); \
+	} while (0)
+#else
+#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+	do { \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
+		(_fci).param_count = (count); \
+		(_fci).no_separation = (no_separ); \
+	} while (0)
+#endif
 
 
 #if PHP_MAJOR_VERSION == 5
