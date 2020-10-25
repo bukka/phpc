@@ -146,22 +146,6 @@
 	zend_std_get_properties(PHPC_OBJ_FOR_PROP(_obj) TSRMLS_CC)
 
 
-#if PHP_MAJOR_VERSION > 8
-#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
-	do { \
-		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
-		(_fci).param_count = (count); \
-	} while (0)
-#else
-#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
-	do { \
-		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
-		(_fci).param_count = (count); \
-		(_fci).no_separation = (no_separ); \
-	} while (0)
-#endif
-
-
 #if PHP_MAJOR_VERSION == 5
 
 /* MODULE */
