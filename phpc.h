@@ -114,9 +114,9 @@
 
 #if PHP_MAJOR_VERSION < 8
 /* PHP 5 and 7 */
-#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
-
-#define PHPC_OBJ_STD_GET_PROPERTIES(_obj) zend_std_get_properties(_obj TSRMLS_CC)
+/* object */
+#define phpc_self_t zval
+#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
 
 #define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
 	do { \
@@ -126,7 +126,10 @@
 	} while (0)
 #else
 /* PHP 8 */
-#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
+
+/* object */
+#define phpc_self_t zend_object
+#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
 
 /* fcall */
 #define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
@@ -307,10 +310,6 @@ typedef long phpc_res_value_t;
 	(PHPC_OBJ_STRUCT_NAME(_name) *) _object
 #define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
 	(PHPC_OBJ_STRUCT_NAME(_name) *) zend_object_store_get_object(_zv TSRMLS_CC)
-#define PHPC_OBJ_FROM_SELF(_name) \
-	PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
-#define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
-	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 
 /* create_ex object handler helper */
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
@@ -347,7 +346,7 @@ typedef long phpc_res_value_t;
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(zval *PHPC_SELF TSRMLS_DC)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object_value, _name, clone)(phpc_self_t *PHPC_SELF TSRMLS_DC)
 #define PHPC_OBJ_HANDLER_CLONE_DECLARE() zend_object_value _phpc_retval
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
@@ -963,10 +962,6 @@ typedef zend_resource * phpc_res_value_t;
 	(PHPC_OBJ_STRUCT_NAME(_name) *)((char*)(_object) - XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std))
 #define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
 	PHPC_OBJ_FROM_ZOBJ(_name, Z_OBJ_P(_zv))
-#define PHPC_OBJ_FROM_SELF(_name) \
-	PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
-#define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
-	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 
 /* create_ex object handler helper */
 #define PHPC_OBJ_HANDLER_CREATE_EX(_name) \
@@ -998,7 +993,7 @@ typedef zend_resource * phpc_res_value_t;
 
 /* clone object handler */
 #define PHPC_OBJ_HANDLER_CLONE(_name) \
-	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(zval *PHPC_SELF)
+	PHPC_OBJ_DEFINE_HANDLER_FCE(zend_object *, _name, clone)(phpc_self_t *PHPC_SELF)
 #define PHPC_OBJ_HANDLER_CLONE_DECLARE() PHPC_NOOP
 #define PHPC_OBJ_HANDLER_CLONE_MEMBERS(_name, _new_obj, _old_obj) \
 	do { \
@@ -1353,8 +1348,18 @@ typedef const char phpc_stream_opener_char_t;
 /* COMMON (dependent definitions) */
 
 /* object structure */
+#define PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name) \
+	PHPC_OBJ_FROM_ZOBJ(_name, _phpc_object)
 #define PHPC_OBJ_STRUCT_DECLARE_AND_FETCH_FROM_ZOBJ(_name, _ptr) \
 	PHPC_OBJ_STRUCT_DECLARE(_name, _ptr) = PHP_OBJ_GET_HANDLER_OBJ_FROM_ZOBJ(_name)
+#if PHP_MAJOR_VERSION < 8
+#define PHPC_OBJ_FROM_SELF(_name) \
+	PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
+#else
+#define PHPC_OBJ_FROM_SELF(_name) \
+	PHPC_OBJ_FROM_ZOBJ(_name, PHPC_SELF)
+#endif
+
 
 /* this object */
 #define PHPC_THIS _phpc_this
@@ -1366,7 +1371,7 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_THIS_DECLARE_AND_FETCH_FROM_ZVAL(_name, _zv) \
 	PHPC_THIS_DECLARE(_name) = PHPC_THIS_FETCH_FROM_ZVAL(_name, _zv)
 #define PHPC_THIS_FETCH_FROM_SELF(_name) \
-	PHPC_THIS = PHPC_OBJ_FROM_ZVAL(_name, PHPC_SELF)
+	PHPC_THIS = PHPC_OBJ_FROM_SELF(_name)
 #define PHPC_THIS_DECLARE_AND_FETCH_FROM_SELF(_name) \
 	PHPC_THIS_DECLARE(_name) = PHPC_OBJ_FROM_SELF(_name)
 #define PHPC_THIS_DECLARE_AND_FETCH(_name) \
@@ -1411,18 +1416,18 @@ typedef const char phpc_stream_opener_char_t;
 #define PHPC_GC_N _phpc_gc_n
 #define PHPC_OBJ_HANDLER_GET_GC(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_gc)\
-		(zval *PHPC_SELF, phpc_val **PHPC_GC_TABLE, int *PHPC_GC_N TSRMLS_DC)
+		(phpc_self_t *PHPC_SELF, phpc_val **PHPC_GC_TABLE, int *PHPC_GC_N TSRMLS_DC)
 
 /* object handler get_debug_info */
 #define PHPC_DEBUG_INFO_IS_TEMP _phpc_debug_info_is_temp
 #define PHPC_OBJ_HANDLER_GET_DEBUG_INFO(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_debug_info)\
-		(zval *PHPC_SELF, int *PHPC_DEBUG_INFO_IS_TEMP TSRMLS_DC)
+		(phpc_self_t *PHPC_SELF, int *PHPC_DEBUG_INFO_IS_TEMP TSRMLS_DC)
 
 /* object handler get_properties */
 #define PHPC_OBJ_HANDLER_GET_PROPERTIES(_name) \
 	PHPC_OBJ_DEFINE_HANDLER_FCE(HashTable *, _name, get_properties)\
-		(zval *PHPC_SELF TSRMLS_DC)
+		(phpc_self_t *PHPC_SELF TSRMLS_DC)
 
 /* object handler setters */
 #define PHPC_CLASS_SET_HANDLER_CREATE(_class_entry, _name) \
