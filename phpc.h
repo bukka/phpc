@@ -116,7 +116,8 @@
 /* PHP 5 and 7 */
 /* object */
 #define phpc_obj_t zval
-#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
+#define PHPC_OBJ_TO_POBJ(_obj) Z_OBJ_P(_obj)
+#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
 #define PHPC_OBJ_HANDLER_COMPARE_NAME compare_objects
 
 #define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
@@ -130,7 +131,8 @@
 
 /* object */
 #define phpc_obj_t zend_object
-#define PHPC_OBJ_FOR_PROP(_obj) (_obj)
+#define PHPC_OBJ_TO_POBJ(_obj) (_obj)
+#define PHPC_OBJ_FOR_PROP(_obj) Z_OBJ_P(_obj)
 #define PHPC_OBJ_HANDLER_COMPARE_NAME compare
 
 /* fcall */
@@ -148,7 +150,7 @@
 #endif
 
 #define PHPC_OBJ_STD_GET_PROPERTIES(_obj) \
-	zend_std_get_properties(PHPC_OBJ_FOR_PROP(_obj) TSRMLS_CC)
+	zend_std_get_properties(PHPC_OBJ_TO_POBJ(_obj) TSRMLS_CC)
 
 
 #if PHP_MAJOR_VERSION == 5
