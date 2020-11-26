@@ -120,11 +120,11 @@
 #define PHPC_OBJ_FOR_PROP(_obj) (_obj)
 #define PHPC_OBJ_HANDLER_COMPARE_NAME compare_objects
 
-#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+#define PHPC_FCALL_FCI_INIT(_fci, _callback, _count, _no_separ) \
 	do { \
-		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
-		(_fci).param_count = (count); \
-		(_fci).no_separation = (no_separ); \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(_callback); \
+		(_fci).param_count = (_count); \
+		(_fci).no_separation = (_no_separ); \
 	} while (0)
 #else
 /* PHP 8 */
@@ -136,10 +136,10 @@
 #define PHPC_OBJ_HANDLER_COMPARE_NAME compare
 
 /* fcall */
-#define PHPC_FCALL_FCI_INIT(_fci, callback, count, no_separ) \
+#define PHPC_FCALL_FCI_INIT(_fci, _callback, _count, _no_separ) \
 	do { \
-		(_fci).params = PHPC_FCALL_PARAMS_NAME(callback); \
-		(_fci).param_count = (count); \
+		(_fci).params = PHPC_FCALL_PARAMS_NAME(_callback); \
+		(_fci).param_count = (_count); \
 	} while (0)
 /* ZTS */
 #define TSRMLS_D void
