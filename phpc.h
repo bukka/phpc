@@ -939,8 +939,16 @@ typedef zend_resource * phpc_res_value_t;
 	zend_fetch_resource2(Z_RES_P(_pz_res), _res_type_name, _res_type_1, _res_type_2)
 #define PHPC_RES_DELETE(_pz_res) \
 	zend_list_delete(Z_RES_P(_pz_res))
+#if PHP_MAJOR_VERSION < 8
 #define PHPC_RES_CLOSE(_pz_res) \
 	zend_list_close(Z_RES_P(_pz_res))
+#else
+inline int _phpc_res_close(zval *zres) {
+	zend_list_close(Z_RES_P(zres));
+	return SUCCESS;
+}
+#define PHPC_RES_CLOSE _phpc_res_close
+#endif
 
 /* resource to zval */
 #define PHPC_RES_PZVAL(_res, _pzv) \
