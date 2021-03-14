@@ -150,7 +150,7 @@
 #endif
 
 #define PHPC_OBJ_STD_GET_PROPERTIES(_obj) \
-	zend_std_get_properties(PHPC_OBJ_TO_POBJ(_obj) TSRMLS_CC)
+	zend_std_get_properties((_obj) TSRMLS_CC)
 
 
 #if PHP_MAJOR_VERSION == 5
