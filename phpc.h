@@ -253,6 +253,9 @@ typedef int phpc_str_size_t;
 #define PHPC_CSTRL_RETVAL(_name, _len) RETVAL_STRINGL(_name, _len, 1)
 #define PHPC_CSTR_RETVAL(_name)        RETVAL_STRING(_name, 1)
 
+/* ZSTR */
+#define PHPC_ZSTR_VAL(_name) _name
+
 /* Smart string */
 #if defined(PHPC_SMART_STR_INCLUDE) || defined(PHPC_SMART_CSTR_INCLUDE)
 #include "ext/standard/php_smart_str.h"
@@ -906,6 +909,9 @@ typedef size_t    phpc_str_size_t;
 #define PHPC_CSTR_RETURN                      RETURN_STRING
 #define PHPC_CSTRL_RETVAL                     RETVAL_STRINGL
 #define PHPC_CSTR_RETVAL                      RETVAL_STRING
+
+/* ZSTR */
+#define PHPC_ZSTR_VAL ZSTR_VAL
 
 /* Smart string */
 #ifdef PHPC_SMART_STR_INCLUDE
