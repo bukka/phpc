@@ -1595,5 +1595,16 @@ typedef const char phpc_stream_opener_char_t;
 	php_stream_locate_url_wrapper(_path, (char **) _path_for_open, _options TSRMLS_CC)
 #endif
 
+#if (PHP_MAJOR_VERSION == 8 && PHP_MINOR_VERSION >= 1) || (PHP_MAJOR_VERSION > 8)
+#define PHPC_PHP_STAT(filename, filename_length, type, return_value) do { \
+		zend_string *str = zend_string_init(filename, filename_length, 0); \
+		php_stat(str, type, return_value); \
+		zend_string_release(str); \
+	} while (0)
+
+#else
+#define PHPC_PHP_STAT php_stat
+#endif
+
 #endif	/* PHPC_H */
 
