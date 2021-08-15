@@ -1596,10 +1596,10 @@ typedef const char phpc_stream_opener_char_t;
 #endif
 
 #if (PHP_MAJOR_VERSION == 8 && PHP_MINOR_VERSION >= 1) || (PHP_MAJOR_VERSION > 8)
-#define PHPC_PHP_STAT(filename, filename_length, type, return_value) do { \
-		zend_string *str = zend_string_init(filename, filename_length, 0); \
-		php_stat(str, type, return_value); \
-		zend_string_release(str); \
+#define PHPC_PHP_STAT(_filename, _filename_length, _type, _return_value) do { \
+		zend_string *_phpc_stat_str = zend_string_init(_filename, _filename_length, 0); \
+		php_stat(_phpc_stat_str, _type, _return_value); \
+		zend_string_release(_phpc_stat_str); \
 	} while (0)
 
 #else
