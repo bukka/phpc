@@ -51,6 +51,12 @@
 	memcpy(&PHPC_OBJ_GET_HANDLER_VAR_NAME(_name), \
 		zend_get_std_object_handlers(), sizeof(zend_object_handlers))
 
+/* for arginfo */
+#ifndef ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX
+#define ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null) \
+        ZEND_BEGIN_ARG_INFO_EX(name, 0, return_reference, required_num_args)
+#endif
+
 /* ZEND_ACC_CTOR and ZEND_ACC_DTOR is removed in 7.4 */
 #ifndef ZEND_ACC_CTOR
 #define ZEND_ACC_CTOR 0
