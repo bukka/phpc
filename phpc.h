@@ -256,6 +256,7 @@ typedef int phpc_str_size_t;
 /* C string */
 #define PHPC_CSTRL_RETURN(_name, _len) RETURN_STRINGL(_name, _len, 1)
 #define PHPC_CSTR_RETURN(_name)        RETURN_STRING(_name, 1)
+#define PHPC_CSTR_EMPTY_RETURN         RETURN_EMPTY_STRING
 #define PHPC_CSTRL_RETVAL(_name, _len) RETVAL_STRINGL(_name, _len, 1)
 #define PHPC_CSTR_RETVAL(_name)        RETVAL_STRING(_name, 1)
 #define PHPC_CSTR_EMPTY_RETVAL         RETVAL_EMPTY_STRING
@@ -914,6 +915,7 @@ typedef size_t    phpc_str_size_t;
 /* C string */
 #define PHPC_CSTRL_RETURN                     RETURN_STRINGL
 #define PHPC_CSTR_RETURN                      RETURN_STRING
+#define PHPC_CSTR_EMPTY_RETURN                RETURN_EMPTY_STRING
 #define PHPC_CSTRL_RETVAL                     RETVAL_STRINGL
 #define PHPC_CSTR_RETVAL                      RETVAL_STRING
 #define PHPC_CSTR_EMPTY_RETVAL                RETVAL_EMPTY_STRING
