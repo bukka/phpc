@@ -266,7 +266,11 @@ typedef int phpc_str_size_t;
 
 /* Smart string */
 #if defined(PHPC_SMART_STR_INCLUDE) || defined(PHPC_SMART_CSTR_INCLUDE)
+#if PHP_VERSION_ID < 70200
 #include "ext/standard/php_smart_str.h"
+#else
+#include "Zend/zend_smart_str.h"
+#endif
 
 #ifdef PHPC_SMART_CSTR_INCLUDE
 /* smart_str for C string has been renamed in PHP 7 so we have to wrap it */
@@ -929,7 +933,11 @@ typedef size_t    phpc_str_size_t;
 #endif /* PHPC_SMART_STR_INCLUDE */
 
 #ifdef PHPC_SMART_CSTR_INCLUDE
+#if PHP_VERSION_ID < 70200
 #include "ext/standard/php_smart_string.h"
+#else
+#include "Zend/zend_smart_string.h"
+#endif
 /* smart_str for C string has been renamed in PHP 7 so we have to wrap it */
 #define phpc_smart_cstr                 smart_string
 #define phpc_smart_cstr_alloc           smart_string_alloc
