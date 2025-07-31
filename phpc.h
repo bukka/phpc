@@ -161,6 +161,10 @@
 
 #if PHP_MAJOR_VERSION == 5
 
+/* EXCEPTIONS */
+
+#define zend_ce_exception zend_exception_get_default(TSRMLS_C)
+
 /* MODULE */
 
 #ifdef ZTS
