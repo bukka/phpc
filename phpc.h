@@ -992,7 +992,7 @@ typedef zend_resource * phpc_res_value_t;
 	PHPC_OBJ_STRUCT_MEMBER_LAST };
 
 #define PHPC_OBJ_FROM_ZOBJ(_name, _object) \
-	(PHPC_OBJ_STRUCT_NAME(_name) *)((char*)(_object) - XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std))
+	(PHPC_OBJ_STRUCT_NAME(_name) *)((char*)(_object) - offsetof(PHPC_OBJ_STRUCT_NAME(_name), std))
 #define PHPC_OBJ_FROM_ZVAL(_name, _zv) \
 	PHPC_OBJ_FROM_ZOBJ(_name, Z_OBJ_P(_zv))
 #if PHP_MAJOR_VERSION < 8
@@ -1054,7 +1054,7 @@ typedef zend_resource * phpc_res_value_t;
 
 /* handler setters */
 #define PHPC_OBJ_SET_SPECIFIC_HANDLER_OFFSET(_handlers, _name) \
-	(_handlers).offset = XtOffsetOf(PHPC_OBJ_STRUCT_NAME(_name), std)
+	(_handlers).offset = offsetof(PHPC_OBJ_STRUCT_NAME(_name), std)
 #define PHPC_OBJ_SET_SPECIFIC_HANDLER_FREE(_handlers, _name) \
 	(_handlers).free_obj = PHPC_OBJ_GET_HANDLER_FCE(_name, free)
 
